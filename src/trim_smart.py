@@ -70,13 +70,43 @@ async def get_transcript_with_words(
     Returns:
         Tuple of (transcript_text, words_list)
     """
+    import time
+
     # If transcript file provided, read from it
     if transcript_file:
-        return read_word_transcript_file(transcript_file)
+        print(f"🔧 DEBUG [transcript]: Loading transcript from file: {transcript_file}")
+        load_start = time.time()
+        result = read_word_transcript_file(transcript_file)
+        load_duration = time.time() - load_start
+        print(f"🔧 DEBUG [transcript]: Loaded transcript ({load_duration:.2f}s)")
+        return result
 
     # Otherwise, transcribe the video
-    result = await get_transcript(video_path)
-    return result["transcript"], result["words"]
+    print(f"🔧 DEBUG [transcript]: Transcribing video: {video_path}")
+    transcript_start = time.time()
+    try:
+        result = await get_transcript(video_path)
+        transcript_duration = time.time() - transcript_start
+        print(
+            f"🔧 DEBUG [transcript]: Transcription completed ({transcript_duration:.2f}s)"
+        )
+        print(f"🔧 DEBUG [transcript]: Got {len(result.get('words', []))} words")
+        return result["transcript"], result["words"]
+    except Exception as e:
+        transcript_duration = time.time() - transcript_start
+        print(
+            f"❌ ERROR [transcript]: Transcription failed after {transcript_duration:.2f}s"
+        )
+        print(f"❌ ERROR [transcript]: Exception: {type(e).__name__}: {str(e)}")
+        raise
+
+
+# Default edit prompt (can be overridden with custom_prompt)
+DEFAULT_EDIT_PROMPT = (
+    "Remove mistakes, fumbles, retakes, ramblings, and asides to create a clean, tight video. "
+    "Keep all core narrative, key structural elements, and ensure completeness. "
+    "Maintain logical flow and fulfill any promises made in the opening."
+)
 
 
 async def find_sections_to_keep(
@@ -84,6 +114,7 @@ async def find_sections_to_keep(
     target_duration: float | None = 60.0,
     tolerance: float = 20.0,
     brand_brief: str | None = None,
+    custom_prompt: str | None = None,
 ) -> tuple[list[dict], str]:
     """Use LLM to identify which sections to keep from the word-level transcript.
 
@@ -92,10 +123,13 @@ async def find_sections_to_keep(
         target_duration: Target duration in seconds. If None, just "tighten up" without duration constraint.
         tolerance: Acceptable margin in seconds (e.g., 20 means ±20s, so 60s target = 40-80s range). Ignored if target_duration is None.
         brand_brief: Optional brand brief to guide cut planning (e.g., brand voice, audience, content preferences)
+        custom_prompt: Optional custom edit prompt. If None, uses DEFAULT_EDIT_PROMPT.
 
     Returns:
         Tuple of (list of segment dicts with 'text', 'start', 'end', 'duration', edit_summary string)
     """
+    # Use custom prompt or default
+    edit_prompt = custom_prompt if custom_prompt else DEFAULT_EDIT_PROMPT
     import json
 
     openrouter_api_key = os.getenv("OPENROUTER_API_KEY")
@@ -119,7 +153,7 @@ async def find_sections_to_keep(
         # "Tighten up" mode: remove mistakes/fumbles/ramblings but no duration constraint
         min_duration = 0
         max_duration = total_duration
-        duration_instruction = "Remove mistakes, fumbles, retakes, ramblings, and asides to create a clean, tight video. There is NO duration target - keep everything that's good content, just remove the fluff."
+        duration_instruction = f"Apply these edits to the video: {edit_prompt}\n\nThere is NO duration target - keep everything that's good content, just apply the edits specified."
     else:
         # Normal mode with duration target
         # If target is longer than video, use most/all of the video (allow cutting up to min(10, tolerance) seconds)
@@ -249,6 +283,7 @@ async def critique_cuts(
     segments: list[dict],
     target_duration: float,
     brand_brief: str | None = None,
+    custom_prompt: str | None = None,
 ) -> CritiqueResponse:
     """Use LLM to critique the quality of the cuts.
 
@@ -257,10 +292,13 @@ async def critique_cuts(
         segments: List of segment dicts with 'text', 'start', 'end', 'duration'
         target_duration: Target duration in seconds (the constraint we're working within)
         brand_brief: Optional brand brief to guide critique (e.g., brand voice, audience, content preferences)
+        custom_prompt: Optional custom edit prompt. If None, uses DEFAULT_EDIT_PROMPT.
 
     Returns:
         CritiqueResponse with issue_count and critique text
     """
+    # Use custom prompt or default
+    edit_prompt = custom_prompt if custom_prompt else DEFAULT_EDIT_PROMPT
     openrouter_api_key = os.getenv("OPENROUTER_API_KEY")
     if not openrouter_api_key:
         raise ValueError("OPENROUTER_API_KEY environment variable must be set")
@@ -308,7 +346,9 @@ async def critique_cuts(
             )
         ),
         HumanMessage(
-            content=f"Target duration: ~{target_duration} seconds\n"
+            content=f"We were supposed to apply these edits to the video: {edit_prompt}\n\n"
+            f"Critique how well we did.\n\n"
+            f"Target duration: ~{target_duration} seconds\n"
             f"Actual cut duration: {total_duration:.1f} seconds\n\n"
             f"ORIGINAL FULL TRANSCRIPT:\n{original_transcript}\n\n"
             f"CUT PLAN:\n{chr(10).join(segments_info)}\n\n"
@@ -341,6 +381,7 @@ async def apply_critique(
     target_duration: float,
     tolerance: float,
     brand_brief: str | None = None,
+    custom_prompt: str | None = None,
 ) -> tuple[list[dict], str]:
     """Apply critique feedback to improve the cut plan.
 
@@ -352,10 +393,13 @@ async def apply_critique(
         target_duration: Target duration in seconds
         tolerance: Acceptable margin in seconds
         brand_brief: Optional brand brief to guide cut planning (e.g., brand voice, audience, content preferences)
+        custom_prompt: Optional custom edit prompt. If None, uses DEFAULT_EDIT_PROMPT.
 
     Returns:
         Tuple of (improved list of segment dicts, edit_summary string)
     """
+    # Use custom prompt or default
+    edit_prompt = custom_prompt if custom_prompt else DEFAULT_EDIT_PROMPT
     import json
 
     openrouter_api_key = os.getenv("OPENROUTER_API_KEY")
@@ -429,7 +473,9 @@ async def apply_critique(
             )
         ),
         HumanMessage(
-            content=f"DURATION REQUIREMENT: Your improved cut must be between {min_duration:.0f} and {max_duration:.0f} seconds.\n"
+            content=f"We were supposed to apply these edits to the video: {edit_prompt}\n\n"
+            f"The critique said we fell short in these ways: {critique.critique}\n\n"
+            f"DURATION REQUIREMENT: Your improved cut must be between {min_duration:.0f} and {max_duration:.0f} seconds.\n"
             f"  - Completeness and fixing the critique issues are MORE important than hitting {target_duration:.0f}s exactly\n"
             f"  - If you need {max_duration:.0f} seconds to include all missing elements, use them\n"
             f"  - Don't cut important content just to stay close to {target_duration:.0f}s\n"
@@ -437,7 +483,6 @@ async def apply_critique(
             f"ORIGINAL FULL TRANSCRIPT:\n{original_transcript}\n\n"
             f"INITIAL CUT PLAN (had {critique.issue_count} issues):\n{chr(10).join(initial_segments_info)}\n"
             f"Initial cut duration: {initial_total:.1f} seconds\n\n"
-            f"CRITIQUE FEEDBACK:\n{critique.critique}\n\n"
             f"Word-level transcript (JSON):\n{json.dumps(words, indent=2)}\n\n"
             f"Based on the critique, create an IMPROVED cut plan that:\n"
             f"- Addresses ALL issues mentioned in the critique (this is the top priority)\n"
@@ -501,11 +546,12 @@ def trim_video_segments(
     with tempfile.TemporaryDirectory() as tmpdir:
         tmp = Path(tmpdir)
 
-        # Extract each segment
+        # Extract each segment (re-encode video so segments end on keyframes; copy causes frozen/glitchy video)
         segment_files = []
         for i, seg in enumerate(segments):
             segment_file = tmp / f"segment_{i}.mp4"
             duration = seg["end"] - seg["start"] + END_MARGIN_SECONDS
+            # -ss after -i for accurate boundaries when re-encoding
             subprocess.run(
                 [
                     "ffmpeg",
@@ -516,7 +562,13 @@ def trim_video_segments(
                     str(seg["start"]),
                     "-t",
                     str(duration),
-                    "-c",
+                    "-c:v",
+                    "libx264",
+                    "-preset",
+                    "fast",
+                    "-crf",
+                    "23",
+                    "-c:a",
                     "copy",
                     str(segment_file),
                 ],
@@ -577,6 +629,12 @@ async def main() -> None:
         help="Path to word-level transcript JSON file (optional)",
     )
     parser.add_argument(
+        "--prompt",
+        type=str,
+        default=None,
+        help="Custom prompt for LLM edit decisions (optional)",
+    )
+    parser.add_argument(
         "--dry-run",
         action="store_true",
         help="Show cut plan without editing video",
@@ -614,6 +672,7 @@ async def main() -> None:
 
     print(f"Found {len(words)} words")
     tolerance = args.tolerance
+    custom_prompt = args.prompt
 
     # Step 1: Generate initial cut plan
     if target_duration:
@@ -624,8 +683,10 @@ async def main() -> None:
         print(
             "Tightening up video (removing mistakes, fumbles, retakes, ramblings, asides)..."
         )
+    if custom_prompt:
+        print(f"Using custom edit prompt: {custom_prompt}")
     segments, edit_summary = await find_sections_to_keep(
-        words, target_duration, tolerance
+        words, target_duration, tolerance, custom_prompt=custom_prompt
     )
 
     total_duration = sum(seg["duration"] for seg in segments)
@@ -645,7 +706,9 @@ async def main() -> None:
     # Step 2: Critique the cuts (skip if no target duration - just tightening up)
     if target_duration is not None:
         print("Critiquing initial cut plan...")
-        critique = await critique_cuts(transcript, segments, target_duration)
+        critique = await critique_cuts(
+            transcript, segments, target_duration, custom_prompt=custom_prompt
+        )
     else:
         # For tighten-up mode, skip critique (we're not targeting a duration)
         # Create a dummy critique with no issues
@@ -677,7 +740,9 @@ async def main() -> None:
         # Optional: Critique the improved version (but don't iterate again)
         if target_duration is not None:
             print("Critiquing improved cut plan...")
-            final_critique = await critique_cuts(transcript, segments, target_duration)
+            final_critique = await critique_cuts(
+                transcript, segments, target_duration, custom_prompt=custom_prompt
+            )
             if final_critique.issue_count > 0:
                 print(
                     f"⚠️  Improved cut still has {final_critique.issue_count} issues, but proceeding with best available cut."

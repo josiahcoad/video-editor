@@ -1,0 +1,13 @@
+{
+  "title_height": 76,
+  "caption_height": 42,
+  "word_replacements": "",
+  "full_pipeline_duration": 60,
+  "full_pipeline_tolerance": 20,
+  "full_pipeline_words": 3,
+  "custom_trim_prompt": "",
+  "speedup_mode": "Manual (x)",
+  "speedup_value": 1.0,
+  "selected_title": "Social Media is Changing the Car Game",
+  "bookmarked_music": []
+}

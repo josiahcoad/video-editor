@@ -235,7 +235,7 @@ async def generate_titles(transcript: str, count: int = 3) -> list[str]:
         raise ValueError("OPENROUTER_API_KEY environment variable not set")
 
     llm = ChatOpenAI(
-        model="google/gemini-2.0-flash-001",
+        model="google/gemini-3-flash-preview",
         base_url="https://openrouter.ai/api/v1",
         api_key=openrouter_api_key,
         temperature=0.7,

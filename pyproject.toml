@@ -17,6 +17,5 @@ dependencies = [
     "streamlit>=1.30.0",
 ]
 
-[project.scripts]
-process-video = "process_video:main"
-video-editor = "main:main"
+[tool.uv]
+package = false

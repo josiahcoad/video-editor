@@ -1,2 +1,14 @@
 **/*.mp4
 **/*.MOV
+**/*.mp3
+**/*.m4a
+**/*.wav
+**/*.jpg
+**/*.png
+.DS_Store
+__pycache__/
+*.pyc
+.venv/
+.env
+.env.*
+projects/

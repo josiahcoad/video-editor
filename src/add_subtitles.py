@@ -18,6 +18,57 @@ from typing import Any
 from get_transcript import get_transcript
 
 
+def parse_replacements(replace_str: str) -> dict[str, str]:
+    """Parse replacement string into a dictionary.
+
+    Format: "original1:replacement1,original2:replacement2"
+    Example: "Marquee:Marky,Josiah:Josia"
+
+    Returns:
+        Dict mapping original words to replacements (case-insensitive keys)
+    """
+    replacements = {}
+    if not replace_str:
+        return replacements
+
+    for pair in replace_str.split(","):
+        pair = pair.strip()
+        if ":" in pair:
+            original, replacement = pair.split(":", 1)
+            # Store lowercase key for case-insensitive matching
+            replacements[original.strip().lower()] = replacement.strip()
+
+    return replacements
+
+
+def apply_replacements(
+    words: list[dict[str, Any]], replacements: dict[str, str]
+) -> list[dict[str, Any]]:
+    """Apply word replacements to the words list.
+
+    Args:
+        words: List of word dicts with 'word', 'start', 'end' keys
+        replacements: Dict mapping original words (lowercase) to replacements
+
+    Returns:
+        New words list with replacements applied
+    """
+    if not replacements:
+        return words
+
+    result = []
+    for word_dict in words:
+        new_dict = word_dict.copy()
+        original_word = word_dict.get("word", "")
+        # Check if this word (case-insensitive) should be replaced
+        lookup_key = original_word.lower().strip(".,!?;:'\"")
+        if lookup_key in replacements:
+            new_dict["word"] = replacements[lookup_key]
+        result.append(new_dict)
+
+    return result
+
+
 def format_time_srt(seconds: float) -> str:
     """Convert seconds to SRT time format (HH:MM:SS,mmm)."""
     hours = int(seconds // 3600)
@@ -76,6 +127,7 @@ def add_srt_from_utterances(
     words: list[dict[str, Any]],
     word_count: int = 3,
     size: int = 14,
+    replacements: dict[str, str] | None = None,
 ) -> str:
     """Generate SRT subtitle file from utterances, splitting at punctuation.
 
@@ -105,6 +157,19 @@ def add_srt_from_utterances(
 
         # Split utterance into words (preserving punctuation)
         utterance_words = utterance_text.split()
+
+        # Apply word replacements to utterance text (preserving trailing punctuation)
+        if replacements:
+            replaced = []
+            for w in utterance_words:
+                stripped = w.lower().rstrip(".,!?;:'\"")
+                if stripped in replacements:
+                    # Preserve any trailing punctuation from the original word
+                    suffix = w[len(stripped):]
+                    replaced.append(replacements[stripped] + suffix)
+                else:
+                    replaced.append(w)
+            utterance_words = replaced
 
         # Find words within this utterance's time range for precise timing
         utterance_words_list = [
@@ -218,9 +283,10 @@ async def main() -> None:
     """Main entry point."""
     if len(sys.argv) < 2:
         print(
-            "Usage: python add_subtitles.py <video_file> [--output <output_file>] [--title <title_text>] [--height <0-100>]"
+            "Usage: python add_subtitles.py <video_file> [--output <output_file>] [--title <title_text>] [--height <0-100>] [--replace <replacements>]"
         )
         print("  --height: Vertical position (0=bottom, 100=top, default=bottom)")
+        print("  --replace: Word replacements (e.g., 'Marquee:Marky,Josiah:Josia')")
         sys.exit(1)
 
     video_path = Path(sys.argv[1])
@@ -235,12 +301,17 @@ async def main() -> None:
         if idx + 1 < len(sys.argv):
             title_text = sys.argv[idx + 1]
 
-    # Parse height (0-100, where 0 is bottom, 100 is top)
-    caption_height = None  # None = default (bottom)
+    # Parse height (0-100 = % from bottom; 0=bottom, 100=top)
+    caption_height = None
     if "--height" in sys.argv:
         idx = sys.argv.index("--height")
         if idx + 1 < len(sys.argv):
-            caption_height = int(sys.argv[idx + 1])
+            try:
+                caption_height = int(sys.argv[idx + 1])
+            except ValueError:
+                pass
+    if caption_height is None:
+        caption_height = 15  # Default: 15% from bottom
 
     # Get transcript (check if transcript file provided, otherwise transcribe)
     transcript_file = None
@@ -265,6 +336,20 @@ async def main() -> None:
     print(f"Found {len(result['words'])} words")
     if result.get("utterances"):
         print(f"Found {len(result['utterances'])} utterances")
+
+    # Parse word replacements (e.g., "Marquee:Marky,Josiah:Josia")
+    replacements = {}
+    if "--replace" in sys.argv:
+        idx = sys.argv.index("--replace")
+        if idx + 1 < len(sys.argv):
+            replace_str = sys.argv[idx + 1]
+            replacements = parse_replacements(replace_str)
+            if replacements:
+                print(f"Word replacements: {replacements}")
+                # Apply replacements to words
+                result["words"] = apply_replacements(result["words"], replacements)
+                # Also update transcript text
+                result["transcript"] = " ".join([w["word"] for w in result["words"]])
 
     # Determine output paths
     output_video = video_path.parent / f"{video_path.stem}-subtitled.mp4"
@@ -297,9 +382,10 @@ async def main() -> None:
             )
             print(f"Utterance-level transcript written: {utterance_transcript_file}")
 
-    # Parse word_count and font_size from command line (defaults: 3, 14)
+    # Parse word_count and font_size from command line (defaults: 3, 20)
+    # font_size is in ASS PlayRes units (PlayResY=288). 20 ≈ 133px on 1920-high video.
     word_count = 3
-    font_size = 14
+    font_size = 20
 
     if "--word-count" in sys.argv:
         idx = sys.argv.index("--word-count")
@@ -317,7 +403,8 @@ async def main() -> None:
             f"Generating smart SRT subtitle file from utterances (max {word_count} words per line, splits at punctuation, font size {font_size})..."
         )
         srt_content = add_srt_from_utterances(
-            result["utterances"], result["words"], word_count=word_count, size=font_size
+            result["utterances"], result["words"], word_count=word_count, size=font_size,
+            replacements=replacements,
         )
     else:
         print(
@@ -377,9 +464,10 @@ async def main() -> None:
             y_pos = f"h/2-{total_height}/2+{y_offset}"
 
             # Create drawtext filter for this line
+            roboto_bold_path = "/Users/apple/Downloads/Roboto/static/Roboto-Bold.ttf"
             title_filter = (
                 f"drawtext=text='{escaped_line}':"
-                f"font=Helvetica-Bold:"
+                f"fontfile='{roboto_bold_path}':"  # Custom Roboto Bold font
                 f"fontsize={title_font_size}:"
                 f"fontcolor=black:"
                 f"box=1:"
@@ -392,31 +480,46 @@ async def main() -> None:
             )
             filter_parts.append(title_filter)
 
-    # Add subtitle filter (SRT) - configurable font size, all caps, position
-    # If caption_height is set, position subtitles at that height (0-100, where 0=bottom, 100=top)
+    # Add subtitle filter (SRT) - Roboto Bold, semi-transparent background box
+    # caption_height: 0-100 = % from bottom. ASS MarginV = pixels from bottom (only for bottom-aligned subs).
+    # Per ASS spec: MarginV is ignored for midtitles (vertically centered). Set Alignment=2 (bottom center)
+    # so MarginV is always respected: https://stackoverflow.com/questions/57869367/ffmpeg-subtitles-alignment-and-position
+    #
+    # ASS PlayRes defaults (set by ffmpeg SRT→ASS conversion):
+    #   PlayResX=384, PlayResY=288
+    # All margin/size values below are in these units and scale to actual video resolution.
     style_parts = [
-        "FontName=Arial",
-        f"FontSize={font_size}",
-        "PrimaryColour=&Hffffff",
-        "OutlineColour=&H000000",
-        "Outline=2",
+        "Alignment=2",  # Bottom center — required so MarginV (distance from bottom) is applied
+        "FontName=Roboto",  # Font family name (not filename)
+        "Bold=1",  # Select Bold weight — resolves to Roboto-Bold.ttf via fontsdir
+        f"FontSize={max(font_size, 20)}",  # 20 ASS units ≈ 133px on 1920-high video
+        "PrimaryColour=&H00FFFFFF",  # White text (AABBGGRR format)
+        "OutlineColour=&H00000000",  # Black outline
+        "BackColour=&H80000000",  # Semi-transparent black background
+        "Outline=2",  # Moderate outline for readability
+        "Shadow=0",  # No shadow (background box handles contrast)
+        "BorderStyle=4",  # Background box behind each line + outline
+        "MarginL=15",  # ~4% margin each side → ~92% text width
+        "MarginR=15",
     ]
 
-    if caption_height is not None:
-        # Convert height percentage to ASS MarginV (margin from bottom in pixels)
-        # For a 1920px tall video: height=100 (top) → MarginV=1700, height=0 (bottom) → MarginV=100
-        # We'll use a formula: MarginV = 100 + (100 - height) * 16
-        # This gives: height=100 → MarginV=100, height=0 → MarginV=1700
-        # Actually, let's use a simpler approach: height=100 means top, so MarginV should be large
-        # For top positioning: MarginV ≈ video_height * 0.9 (90% from bottom = 10% from top)
-        # We'll use a fixed large value that works for most videos
-        margin_v = int(
-            100 + (100 - caption_height) * 16
-        )  # height=100 → 100, height=0 → 1700
-        style_parts.append(f"MarginV={margin_v}")
+    # MarginV is interpreted relative to ASS PlayResY, NOT the actual video height.
+    # ffmpeg's SRT→ASS conversion uses PlayResY=288 (verified from ffmpeg output header).
+    # So we scale caption_height (0-100%) against PlayResY to get correct placement.
+    ASS_PLAY_RES_Y = 288
+    margin_v = int(caption_height * ASS_PLAY_RES_Y / 100)
+    margin_v = max(10, min(ASS_PLAY_RES_Y - 20, margin_v))
+    style_parts.append(f"MarginV={margin_v}")
+    print(
+        f"Caption position: {caption_height}% from bottom → MarginV={margin_v} (ASS PlayResY={ASS_PLAY_RES_Y})"
+    )
 
     style_str = ",".join(style_parts)
-    filter_parts.append(f"subtitles={srt_file}:force_style='{style_str}'")
+    # Use fontsdir to point to Roboto font directory for ASS subtitles
+    roboto_font_dir = "/Users/apple/Downloads/Roboto/static"
+    filter_parts.append(
+        f"subtitles={srt_file}:fontsdir='{roboto_font_dir}':force_style='{style_str}'"
+    )
 
     # Combine filters
     vf_filter = ",".join(filter_parts)

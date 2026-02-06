@@ -333,7 +333,7 @@ async def generate_title_options_task(
         titles: list[str] = PydanticField(description="3 title options for the video")
 
     llm = ChatOpenAI(
-        model="google/gemini-2.5-flash",
+        model="google/gemini-3-flash-preview",
         base_url="https://openrouter.ai/api/v1",
         api_key=openrouter_api_key,
         temperature=0.7,
@@ -706,7 +706,9 @@ def crop_video_task(
     crop_w = crop_w - (crop_w % 2)
     crop_h = crop_h - (crop_h % 2)
 
-    logger.info(f"Crop filter: {width}x{height} -> {crop_w}x{crop_h} (x={crop_x}, y={crop_y})")
+    logger.info(
+        f"Crop filter: {width}x{height} -> {crop_w}x{crop_h} (x={crop_x}, y={crop_y})"
+    )
 
     # Apply crop with hardware encoding
     subprocess.run(
@@ -1009,23 +1011,15 @@ def add_subtitles_task(
     )
     video_height = int(video_height_result.stdout.strip())
 
-    # Calculate MarginV: Based on testing, MarginV = pixels_from_bottom * 0.3906
-    # Observed: MarginV=200 = 40% from bottom (60% from top)
-    # Formula: MarginV = pixels_from_bottom * 0.3906 (or pixels_from_bottom / 2.56)
+    # ASS MarginV = pixels from bottom (caption_height: 0=bottom, 100=top → % from bottom)
     if caption_height is not None:
-        # Convert caption_height (0-100, % from bottom) to MarginV
-        # caption_height% from bottom = (caption_height * video_height / 100) pixels from bottom
-        pixels_from_bottom = caption_height * video_height / 100
-        margin_v = int(
-            pixels_from_bottom * 0.3906
-        )  # Equivalent to pixels_from_bottom / 2.56
+        margin_v = int(caption_height * video_height / 100)
     else:
-        # Default to 15% from bottom: 192px * 0.3906 = 75
-        margin_v = 75
-    # Ensure reasonable bounds
-    margin_v = max(20, min(200, margin_v))
+        margin_v = int(15 * video_height / 100)  # default 15% from bottom
+    margin_v = max(20, min(video_height - 40, margin_v))
 
-    vf_filter = f"subtitles={srt_file}:force_style='FontName=Arial,FontSize={font_size},PrimaryColour=&Hffffff,OutlineColour=&H000000,Outline=2,MarginV={margin_v}'"
+    roboto_font_dir = "/Users/apple/Downloads/Roboto/static"
+    vf_filter = f"subtitles={srt_file}:fontsdir='{roboto_font_dir}':force_style='Alignment=2,FontName=Roboto-Bold,FontSize={max(font_size, 14)},PrimaryColour=&Hffffff,OutlineColour=&H000000,Outline=3,Shadow=2,BorderStyle=1,MarginV={margin_v},MarginL=80,MarginR=80'"
     subprocess.run(
         [
             "ffmpeg",
@@ -1094,7 +1088,11 @@ async def add_title_task(
     logger.info(f"Adding title: {title_text} (height: {title_height}%)")
 
     add_title(
-        input_video, title_text, output_video, duration=5.0, height_percent=title_height
+        input_video,
+        title_text,
+        output_video,
+        duration=20.0,
+        height_percent=title_height,
     )
 
     await create_markdown_artifact(

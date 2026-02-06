@@ -1,94 +1,100 @@
-# Video Editor Scripts
+# Marky Video Editor
 
-Video editing scripts for Marky video processing pipeline.
+Turn long-form video into short-form clips with AI-driven editorial decisions.
 
-## Setup
+## Quick Start (Docker)
 
-Install dependencies:
+```bash
+docker build -t marky-video-editor .
+
+# From a video file:
+docker run --rm \
+  -e OPENROUTER_API_KEY=your_key \
+  -e DEEPGRAM_API_KEY=your_key \
+  -v $(pwd):/data \
+  marky-video-editor --video /data/video.mp4
+
+# From an existing transcript:
+docker run --rm \
+  -e OPENROUTER_API_KEY=your_key \
+  -v $(pwd):/data \
+  marky-video-editor --transcript /data/words.json
+```
+
+`OPENROUTER_API_KEY` is always required. `DEEPGRAM_API_KEY` is only needed when using `--video` (auto-transcription).
+
+## Local Setup
 
 ```bash
 uv sync
-# or
-pip install -e .
 ```
 
-## Scripts
+Requires `ffmpeg` installed on the system and an `OPENROUTER_API_KEY` in `.env`.
 
-### `add_title.py`
+## CLI
 
-Adds a title overlay to a video.
+### `propose_cuts` — AI-powered segment planning
 
-- Centered, multiline title support
-- White background box with black text
-- Configurable duration (default: 2 seconds)
-- Automatically wraps long titles to multiple lines
-- Can auto-generate title from transcript using LLM (Gemini 3 Flash)
-- Supports `--dry-run` to preview top 3 title suggestions
+Analyzes a video transcript and proposes how to cut it into short-form segments. The LLM classifies the content type (tutorial, interview, opinion, etc.), decides whether to create one or multiple segments, and outputs precise timestamp ranges.
 
-**Usage:**
 ```bash
-python add_title.py <video_file> [title_text] [output_file] [--duration <seconds>] [--transcript <file>] [--dry-run]
-python add_title.py video.mp4 --transcript utterances.txt --dry-run  # Preview titles
+# From a video file (auto-transcribes via Deepgram):
+dotenvx run -f .env -- uv run python src/propose_cuts.py --video <video.mp4>
+
+# From an existing word-level transcript:
+dotenvx run -f .env -- uv run python src/propose_cuts.py --transcript <words.json>
 ```
 
-### `enhance_voice.py`
+#### Options
 
-Enhances voice/speech clarity in a video using ffmpeg's dialoguenhance filter.
+| Flag | Default | Description |
+|------|---------|-------------|
+| `--video <file>` | — | Video file to analyze (will transcribe first) |
+| `--transcript <file>` | — | Word-level transcript JSON (skip transcription) |
+| `--duration <sec>` | 60 | Target duration per segment |
+| `--tolerance <sec>` | 20 | Acceptable duration margin (±) |
+| `--prompt <text>` | — | Custom edit direction for the LLM |
+| `--model <id>` | `google/gemini-3-flash-preview` | OpenRouter model ID |
+| `--count <n>` | auto | Force exactly N segments |
+| `--edl <dir>` | — | Output CMX 3600 EDL files (one per segment) |
 
-- Improves speech intelligibility
-- Uses hardware-accelerated encoding
-- Preserves stereo audio output
+#### Output
 
-**Usage:**
+JSON array to stdout. Progress and analysis go to stderr.
+
+```json
+[
+  {
+    "segment": 1,
+    "summary": "Quick Wyze Cam setup walkthrough covering unboxing through first stream",
+    "hook": "Direct promise to set up in under 5 minutes",
+    "cuts": "3.44:6.98,7.28:11.22,22.04:25.18,...",
+    "duration": 43.6,
+    "section_count": 16,
+    "analysis": {
+      "content_type": "procedural",
+      "single_or_multi": "single",
+      "cold_open_candidate": null,
+      "keepable_content_seconds": 60.0
+    }
+  }
+]
+```
+
+The `cuts` field contains comma-separated `start:end` timestamp ranges (in seconds) that can be passed directly to `ffmpeg` or downstream tools.
+
+#### Examples
+
 ```bash
-python enhance_voice.py <video_file> [output_file]
+# Punchy 40-second shorts:
+uv run python src/propose_cuts.py --video talk.mp4 --duration 40 --tolerance 15
+
+# Use a stronger model for better editorial decisions:
+uv run python src/propose_cuts.py --transcript talk-words.json --model anthropic/claude-opus-4
+
+# Export EDL files for use in Premiere/Resolve:
+uv run python src/propose_cuts.py --video talk.mp4 --edl edl_output/
+
+# Custom edit direction:
+uv run python src/propose_cuts.py --video talk.mp4 --prompt "Focus on actionable advice, skip anecdotes"
 ```
-
-### `add_background_music.py`
-
-Adds background music to a video with automatic loudness normalization.
-
-- Voice normalized to -16 LUFS
-- Music normalized to -26 LUFS
-- Can search Openverse for music by genre tags
-- Supports `--dry-run` to preview top 3 music options
-
-**Usage:**
-```bash
-python add_background_music.py <video_file> [music_file] [output_file] [--tags <genre>] [--dry-run]
-python add_background_music.py video.mp4 --tags "hip-hop" --dry-run  # Preview options
-python add_background_music.py video.mp4 --tags "hip-hop" output.mp4  # Use first result
-```
-
-### `add_subtitles.py`
-
-Adds subtitles to a video using Deepgram transcription.
-
-- Uses Deepgram Nova-2 for transcription
-- Generates SRT subtitles with 2 words per line (all caps)
-- Burns subtitles into video
-- Exports word-level and utterance-level transcripts (JSON and TXT)
-- Optional title overlay
-
-**Usage:**
-```bash
-python add_subtitles.py <video_file> [--output <output_file>] [--title <title_text>]
-```
-
-### `remove_filler_words.py`
-
-Removes filler words from video using Deepgram's filler word detection.
-
-- Detects filler words: uh, um, mhmm, mm-mm, uh-uh, uh-huh, nuh-uh
-- Silences detected filler word segments
-- Can use word-level transcript JSON file (from `add_subtitles.py`) instead of transcribing
-
-**Usage:**
-```bash
-python remove_filler_words.py <video_file> [output_file] [--transcript <word_transcript.json>]
-```
-
-## Dependencies
-
-- `deepgram-sdk`: For transcription and filler word detection
-- `ffmpeg`: Required for video/audio processing (system dependency)

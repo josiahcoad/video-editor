@@ -34,9 +34,13 @@ def measure_lufs(path: Path) -> float:
     p = subprocess.run(
         [
             "ffmpeg",
-            "-i", str(path),
-            "-af", "loudnorm=print_format=json",
-            "-f", "null", "-"
+            "-i",
+            str(path),
+            "-af",
+            "loudnorm=print_format=json",
+            "-f",
+            "null",
+            "-",
         ],
         capture_output=True,
         text=True,
@@ -49,7 +53,7 @@ def measure_lufs(path: Path) -> float:
     end_idx = stderr.rfind("}") + 1
     if start_idx == -1 or end_idx == 0:
         raise ValueError("Could not find JSON in ffmpeg output")
-    
+
     json_str = stderr[start_idx:end_idx]
     stats = json.loads(json_str)
     return float(stats["input_i"])
@@ -60,9 +64,13 @@ def normalize_audio(src: Path, dst: Path, target_lufs: float):
     p = subprocess.run(
         [
             "ffmpeg",
-            "-i", str(src),
-            "-af", f"loudnorm=I={target_lufs}:print_format=json",
-            "-f", "null", "-"
+            "-i",
+            str(src),
+            "-af",
+            f"loudnorm=I={target_lufs}:print_format=json",
+            "-f",
+            "null",
+            "-",
         ],
         capture_output=True,
         text=True,
@@ -75,27 +83,39 @@ def normalize_audio(src: Path, dst: Path, target_lufs: float):
     end_idx = stderr.rfind("}") + 1
     if start_idx == -1 or end_idx == 0:
         raise ValueError("Could not find JSON in ffmpeg output")
-    
+
     json_str = stderr[start_idx:end_idx]
     stats = json.loads(json_str)
 
-    run([
-        "ffmpeg", "-y",
-        "-i", str(src),
-        "-af",
-        (
-            f"loudnorm=I={target_lufs}:"
-            f"measured_I={stats['input_i']}:"
-            f"measured_TP={stats['input_tp']}:"
-            f"measured_LRA={stats['input_lra']}:"
-            f"measured_thresh={stats['input_thresh']}:"
-            f"linear=true"
-        ),
-        str(dst)
-    ])
+    run(
+        [
+            "ffmpeg",
+            "-y",
+            "-i",
+            str(src),
+            "-af",
+            (
+                f"loudnorm=I={target_lufs}:"
+                f"measured_I={stats['input_i']}:"
+                f"measured_TP={stats['input_tp']}:"
+                f"measured_LRA={stats['input_lra']}:"
+                f"measured_thresh={stats['input_thresh']}:"
+                f"linear=true"
+            ),
+            str(dst),
+        ]
+    )
 
 
-def add_music(video: Path, music: Path, output: Path):
+def add_music(video: Path, music: Path, output: Path, music_start_offset: float = 5.0):
+    """Add background music to video.
+
+    Args:
+        video: Input video file
+        music: Music file to add
+        output: Output video file
+        music_start_offset: Seconds into the music track to start (default: 5.0)
+    """
     with tempfile.TemporaryDirectory() as tmpdir:
         tmp = Path(tmpdir)
 
@@ -106,7 +126,20 @@ def add_music(video: Path, music: Path, output: Path):
 
         # Extract audio
         run(["ffmpeg", "-y", "-i", str(video), "-ac", "1", str(voice_raw)])
-        run(["ffmpeg", "-y", "-i", str(music), "-ac", "1", str(music_raw)])
+        # Start music 5 seconds into the track to skip intro/ramp-up
+        run(
+            [
+                "ffmpeg",
+                "-y",
+                "-ss",
+                str(music_start_offset),
+                "-i",
+                str(music),
+                "-ac",
+                "1",
+                str(music_raw),
+            ]
+        )
 
         # Normalize voice
         normalize_audio(voice_raw, voice_norm, VOICE_TARGET_LUFS)
@@ -115,42 +148,53 @@ def add_music(video: Path, music: Path, output: Path):
         normalize_audio(music_raw, music_adj, MUSIC_TARGET_LUFS)
 
         # Mix
-        run([
-            "ffmpeg", "-y",
-            "-i", str(video),
-            "-i", str(voice_norm),
-            "-i", str(music_adj),
-            "-filter_complex", "[1:a][2:a]amix=inputs=2[a]",
-            "-map", "0:v",
-            "-map", "[a]",
-            "-c:v", "copy",
-            "-c:a", "aac",
-            "-shortest",
-            str(output)
-        ])
+        run(
+            [
+                "ffmpeg",
+                "-y",
+                "-i",
+                str(video),
+                "-i",
+                str(voice_norm),
+                "-i",
+                str(music_adj),
+                "-filter_complex",
+                "[1:a][2:a]amix=inputs=2[a]",
+                "-map",
+                "0:v",
+                "-map",
+                "[a]",
+                "-c:v",
+                "copy",
+                "-c:a",
+                "aac",
+                "-shortest",
+                str(output),
+            ]
+        )
 
 
 async def search_music(tags: str, count: int = 3) -> list[dict]:
     """Search for music on Openverse.
-    
+
     Args:
         tags: Genre/tags to search for (e.g., "hip-hop", "upbeat", "energetic")
         count: Number of results to return (default: 3)
-        
+
     Returns:
         List of track dictionaries with id, title, creator, url, license
     """
     OPENVERSE_API_BASE = "https://api.openverse.org/v1"
-    
+
     params = {
         "category": "music",
         "tags": tags,
         "page": 1,
         "page_size": count,
     }
-    
+
     print(f"Searching Openverse for music with tags: {tags}...")
-    
+
     async with httpx.AsyncClient(timeout=30) as client:
         response = await client.get(
             f"{OPENVERSE_API_BASE}/audio/",
@@ -158,48 +202,52 @@ async def search_music(tags: str, count: int = 3) -> list[dict]:
         )
         response.raise_for_status()
         data = response.json()
-    
+
     results = data.get("results", [])
     if not results:
         raise RuntimeError(f"No music found for tags: {tags}")
-    
+
     tracks = []
     for track in results[:count]:
-        tracks.append({
-            "id": track.get("id", ""),
-            "title": track.get("title", "Unknown"),
-            "creator": track.get("creator", "Unknown"),
-            "url": track.get("url", ""),
-            "license": track.get("license", "Unknown"),
-        })
-    
+        tracks.append(
+            {
+                "id": track.get("id", ""),
+                "title": track.get("title", "Unknown"),
+                "creator": track.get("creator", "Unknown"),
+                "url": track.get("url", ""),
+                "license": track.get("license", "Unknown"),
+            }
+        )
+
     return tracks
 
 
 async def download_music(music_url: str, output_path: Path) -> Path:
     """Download music file from URL.
-    
+
     Args:
         music_url: URL to music file
         output_path: Path where music file should be saved
-        
+
     Returns:
         Path to downloaded music file
     """
     print(f"Downloading from: {music_url[:80]}...")
-    
+
     async with httpx.AsyncClient(timeout=60) as client:
         response = await client.get(music_url, follow_redirects=True)
         response.raise_for_status()
         output_path.write_bytes(response.content)
-    
+
     print(f"Downloaded music to: {output_path}")
     return output_path
 
 
 def main():
     if len(sys.argv) < 2:
-        print("Usage: add_background_music.py <video> [music_file] [output] [--tags <genre>] [--dry-run]")
+        print(
+            "Usage: add_background_music.py <video> [music_file] [output] [--tags <genre>] [--dry-run]"
+        )
         print("  If music_file is not provided, will search Openverse using --tags")
         print("  --dry-run: Show top 3 music options without processing video")
         print("  Example: add_background_music.py video.mp4 --tags 'hip-hop upbeat'")
@@ -209,33 +257,33 @@ def main():
     if not video.exists():
         print(f"Error: Video file not found: {video}")
         sys.exit(1)
-    
+
     # Parse tags flag
     tags = None
     if "--tags" in sys.argv:
         idx = sys.argv.index("--tags")
         if idx + 1 < len(sys.argv):
             tags = sys.argv[idx + 1]
-    
+
     # Parse music file (optional if tags provided)
     music = None
     music_arg_idx = 2
     if len(sys.argv) > 2 and not sys.argv[2].startswith("--"):
         music = Path(sys.argv[2])
         music_arg_idx = 3
-    
+
     # Parse output path
     output = video.with_stem(video.stem + "-with-music")
     if len(sys.argv) > music_arg_idx and not sys.argv[music_arg_idx].startswith("--"):
         output = Path(sys.argv[music_arg_idx])
-    
+
     # Check for dry-run flag
     dry_run = "--dry-run" in sys.argv
-    
+
     # If no music file provided, search
     if not music and tags:
         tracks = asyncio.run(search_music(tags, count=3))
-        
+
         if dry_run:
             print("\n🔍 DRY RUN: Top 3 music options:")
             for i, track in enumerate(tracks, 1):
@@ -244,11 +292,11 @@ def main():
                 print(f"      URL: {track['url']}")
                 print()
             return
-        
+
         # Use first result
         track = tracks[0]
         print(f"Selected: '{track['title']}' by {track['creator']}")
-        
+
         with tempfile.NamedTemporaryFile(suffix=".mp3", delete=False) as tmp:
             music_path = Path(tmp.name)
         try:
@@ -259,16 +307,18 @@ def main():
             sys.exit(1)
     elif not music:
         print("Error: Either provide a music file or use --tags to search for music")
-        print("Usage: add_background_music.py <video> [music_file] [output] [--tags <genre>] [--dry-run]")
+        print(
+            "Usage: add_background_music.py <video> [music_file] [output] [--tags <genre>] [--dry-run]"
+        )
         sys.exit(1)
-    
+
     if not music.exists():
         print(f"Error: Music file not found: {music}")
         sys.exit(1)
 
     add_music(video, music, output)
     print(f"✅ Output written to {output}")
-    
+
     # Clean up downloaded music if it was temporary
     if music.name.startswith("tmp") or str(music).startswith("/tmp"):
         music.unlink(missing_ok=True)

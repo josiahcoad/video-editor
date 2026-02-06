@@ -1,0 +1,13 @@
+.venv/
+.env
+.env.*
+.git/
+.cursor/
+.streamlit/
+.DS_Store
+projects/
+tests/
+docs/
+voices/
+__pycache__/
+*.pyc
