@@ -1,0 +1,1715 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sales Coach</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = { darkMode: "class" };
+    </script>
+    <style>
+      @keyframes fadeUp {
+        from {
+          opacity: 0;
+          transform: translateY(6px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      .fade-up {
+        animation: fadeUp 0.2s ease-out;
+      }
+      .pulse-dot {
+        animation: pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+      }
+      @keyframes pulse {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.3;
+        }
+      }
+      textarea:disabled,
+      select:disabled {
+        opacity: 0.5;
+      }
+      .view-hidden {
+        display: none !important;
+      }
+    </style>
+  </head>
+
+  <body
+    class="bg-slate-950 text-slate-100 h-screen flex flex-col overflow-hidden"
+  >
+    <!-- ── Header ──────────────────────────────────────────── -->
+    <header
+      class="shrink-0 bg-slate-900/80 backdrop-blur border-b border-slate-800 px-6 py-3"
+    >
+      <div class="max-w-7xl mx-auto flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <span class="text-2xl">🎯</span>
+          <div>
+            <h1 class="text-lg font-bold leading-tight">Sales Coach</h1>
+            <p class="text-xs text-slate-500">
+              Deepgram Flux · Claude Haiku 4.5
+            </p>
+          </div>
+        </div>
+        <div class="flex items-center gap-4">
+          <!-- Mode tabs -->
+          <div
+            class="flex rounded-lg overflow-hidden border border-slate-700 text-xs"
+          >
+            <button
+              id="tabLive"
+              onclick="switchTab('live')"
+              class="px-3 py-1.5 bg-slate-700 text-white font-medium"
+            >
+              Live
+            </button>
+            <button
+              id="tabTest"
+              onclick="switchTab('test')"
+              class="px-3 py-1.5 bg-slate-800 text-slate-400 hover:text-white"
+            >
+              Test
+            </button>
+            <button
+              id="tabContacts"
+              onclick="switchTab('contacts')"
+              class="px-3 py-1.5 bg-slate-800 text-slate-400 hover:text-white"
+            >
+              Contacts
+            </button>
+          </div>
+          <div
+            id="status"
+            class="flex items-center gap-2 text-sm text-slate-500"
+          >
+            <span
+              id="statusDot"
+              class="w-2 h-2 rounded-full bg-slate-600"
+            ></span>
+            <span id="statusText">Ready</span>
+          </div>
+          <span id="timer" class="font-mono text-sm text-slate-600 hidden"
+            >00:00</span
+          >
+          <button
+            id="btn"
+            onclick="toggleSession()"
+            class="px-4 py-1.5 rounded-lg text-sm font-semibold transition bg-emerald-600 hover:bg-emerald-500 active:scale-95"
+          >
+            Start Session
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- ── Context bar (live + test) ───────────────────────── -->
+    <div
+      id="contextBar"
+      class="shrink-0 max-w-7xl w-full mx-auto px-4 pt-3 pb-0"
+    >
+      <details open class="bg-slate-900 rounded-xl border border-slate-800">
+        <summary
+          class="px-4 py-2 cursor-pointer text-sm font-semibold text-slate-400 select-none"
+        >
+          📋 Pre-Call Context
+          <span class="text-xs font-normal text-slate-600 ml-2"
+            >objectives, prospect info</span
+          >
+        </summary>
+        <div class="px-4 pb-3 space-y-2">
+          <!-- Contact selector -->
+          <div class="flex items-center gap-2">
+            <select
+              id="contactSelect"
+              class="bg-slate-800 border border-slate-700 rounded-lg px-3 py-1.5 text-sm text-slate-200 focus:outline-none focus:border-emerald-600"
+            >
+              <option value="">No contact selected</option>
+            </select>
+            <button
+              onclick="showNewContact()"
+              class="px-2.5 py-1.5 text-[11px] rounded-lg bg-slate-700 hover:bg-slate-600 font-medium"
+            >
+              + New
+            </button>
+            <div id="newContactForm" class="hidden flex items-center gap-2">
+              <input
+                id="newContactName"
+                type="text"
+                placeholder="Name"
+                class="bg-slate-800 border border-slate-700 rounded-lg px-2 py-1.5 text-sm text-slate-200 w-32 focus:outline-none focus:border-emerald-600"
+              />
+              <input
+                id="newContactCompany"
+                type="text"
+                placeholder="Company"
+                class="bg-slate-800 border border-slate-700 rounded-lg px-2 py-1.5 text-sm text-slate-200 w-32 focus:outline-none focus:border-emerald-600"
+              />
+              <select
+                id="newContactStatus"
+                class="bg-slate-800 border border-slate-700 rounded-lg px-2 py-1.5 text-[11px] text-slate-300 focus:outline-none"
+              >
+                <option value="prospect">Prospect</option>
+                <option value="interested">Interested</option>
+                <option value="demoing">Demoing</option>
+                <option value="reviewing_contract">Reviewing Contract</option>
+              </select>
+              <button
+                onclick="saveNewContact()"
+                class="px-2.5 py-1.5 text-[11px] rounded-lg bg-emerald-700 hover:bg-emerald-600 font-medium"
+              >
+                Save
+              </button>
+              <button
+                onclick="$('newContactForm').classList.add('hidden')"
+                class="px-2 py-1.5 text-[11px] text-slate-500 hover:text-slate-300"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+          <textarea
+            id="contextInput"
+            rows="3"
+            placeholder="e.g. Objective: Close annual plan ($5k/yr)&#10;Key objection: already using competitor X&#10;Notes from last call: prospect mentioned budget approval in Q2"
+            class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-200 placeholder-slate-600 resize-y focus:outline-none focus:border-emerald-600"
+          ></textarea>
+        </div>
+      </details>
+    </div>
+
+    <!-- ── Test mode file input ────────────────────────────── -->
+    <div
+      id="testBar"
+      class="shrink-0 max-w-7xl w-full mx-auto px-4 pt-3 pb-0 hidden"
+    >
+      <div class="bg-slate-900 rounded-xl border border-slate-800 px-4 py-3">
+        <div class="flex items-center gap-3">
+          <label class="text-sm font-semibold text-slate-400"
+            >📂 Conversation file</label
+          >
+          <input
+            type="file"
+            id="testFile"
+            accept=".txt"
+            class="text-sm text-slate-400 file:mr-3 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-slate-700 file:text-slate-200 hover:file:bg-slate-600"
+          />
+          <button
+            onclick="loadTestFile()"
+            class="px-3 py-1.5 text-xs rounded-lg bg-blue-600 hover:bg-blue-500 font-medium"
+          >
+            Load & Connect
+          </button>
+          <button
+            id="testReviewBtn"
+            onclick="requestReview()"
+            class="px-3 py-1.5 text-xs rounded-lg bg-purple-600 hover:bg-purple-500 font-medium hidden"
+          >
+            Generate Review
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Main view: Session (live + test) ────────────────── -->
+    <main
+      id="viewSession"
+      class="flex-1 min-h-0 max-w-7xl w-full mx-auto p-4 grid grid-cols-1 md:grid-cols-12 grid-rows-1 gap-4"
+    >
+      <!-- Transcript (left) -->
+      <section
+        class="md:col-span-5 flex flex-col min-h-0 bg-slate-900 rounded-xl border border-slate-800 overflow-hidden"
+      >
+        <div
+          class="shrink-0 px-4 py-2 border-b border-slate-800 flex items-center justify-between"
+        >
+          <h2 class="text-sm font-semibold text-slate-400">📝 Transcript</h2>
+          <span id="turnCounter" class="text-xs text-slate-600">0 turns</span>
+        </div>
+        <div id="turns" class="flex-1 min-h-0 overflow-y-auto p-3 space-y-1.5">
+          <p class="text-slate-600 text-sm italic">Transcript appears here…</p>
+        </div>
+        <div
+          id="interim"
+          class="shrink-0 px-4 py-2 border-t border-slate-800 hidden"
+        >
+          <div class="flex items-center gap-2">
+            <span class="flex gap-0.5">
+              <span
+                class="w-1.5 h-1.5 rounded-full bg-emerald-500 pulse-dot"
+              ></span>
+              <span
+                class="w-1.5 h-1.5 rounded-full bg-emerald-500 pulse-dot"
+                style="animation-delay: 0.15s"
+              ></span>
+              <span
+                class="w-1.5 h-1.5 rounded-full bg-emerald-500 pulse-dot"
+                style="animation-delay: 0.3s"
+              ></span>
+            </span>
+            <span
+              id="interimText"
+              class="text-sm text-slate-500 truncate"
+            ></span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Coach (middle) -->
+      <section
+        class="md:col-span-4 flex flex-col min-h-0 bg-slate-900 rounded-xl border border-slate-800 overflow-hidden"
+      >
+        <div
+          class="shrink-0 px-4 py-2 border-b border-slate-800 flex items-center justify-between"
+        >
+          <div class="flex items-center gap-3">
+            <h2 class="text-sm font-semibold text-emerald-400">🎯 Coach</h2>
+            <label class="flex items-center gap-1.5 cursor-pointer">
+              <input
+                type="checkbox"
+                id="autoToggle"
+                checked
+                onchange="onAutoToggle()"
+                class="w-3.5 h-3.5 rounded accent-emerald-500"
+              />
+              <span class="text-[11px] text-slate-500">Auto</span>
+            </label>
+            <label
+              class="flex items-center gap-1.5 cursor-pointer"
+              title="Actor suggests several next steps; critic scores each for P(close). Slower."
+            >
+              <input
+                type="checkbox"
+                id="critiqueToggle"
+                onchange="onCritiqueToggle()"
+                class="w-3.5 h-3.5 rounded accent-purple-500"
+              />
+              <span class="text-[11px] text-slate-500">Critique</span>
+            </label>
+          </div>
+          <div class="flex items-center gap-2">
+            <span id="coachCounter" class="text-xs text-slate-600">0 tips</span>
+            <button
+              id="coachMeBtn"
+              onclick="requestCoaching()"
+              class="px-2.5 py-1 text-[11px] rounded-md bg-emerald-700 hover:bg-emerald-600 font-medium hidden"
+            >
+              Coach Me
+            </button>
+          </div>
+        </div>
+        <div id="tips" class="flex-1 min-h-0 overflow-y-auto p-3 space-y-2">
+          <p id="emptyCoach" class="text-slate-600 text-sm italic">
+            Coaching appears here…
+          </p>
+        </div>
+        <div
+          id="scoreBar"
+          class="shrink-0 px-4 py-2 border-t border-slate-800 hidden"
+        >
+          <div class="flex items-center justify-between text-[11px] mb-1">
+            <span class="text-slate-500">Close probability</span>
+            <span id="scoreValue" class="font-bold text-emerald-400">—</span>
+          </div>
+          <div class="w-full bg-slate-800 rounded-full h-1.5">
+            <div
+              id="scoreBarFill"
+              class="bg-emerald-500 h-1.5 rounded-full transition-all duration-500"
+              style="width: 0%"
+            ></div>
+          </div>
+          <div class="flex items-center justify-between text-[11px] mt-1">
+            <span class="text-slate-500">Steps to close</span>
+            <span id="stepsValue" class="font-bold text-amber-400">—</span>
+          </div>
+        </div>
+        <div class="shrink-0 px-3 py-2 border-t border-slate-800">
+          <div class="flex gap-2">
+            <input
+              id="questionInput"
+              type="text"
+              placeholder="Ask your coach a question…"
+              class="flex-1 bg-slate-800 border border-slate-700 rounded-lg px-3 py-1.5 text-sm text-slate-200 placeholder-slate-600 focus:outline-none focus:border-emerald-600"
+              onkeydown="if(event.key==='Enter')askQuestion()"
+            />
+            <button
+              onclick="askQuestion()"
+              class="px-3 py-1.5 text-xs rounded-lg bg-slate-700 hover:bg-slate-600 font-medium"
+            >
+              Ask
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Hesitations (right) -->
+      <section
+        class="md:col-span-3 flex flex-col min-h-0 bg-slate-900 rounded-xl border border-slate-800 overflow-hidden"
+      >
+        <div class="shrink-0 px-4 py-2 border-b border-slate-800">
+          <h2 class="text-sm font-semibold text-amber-400">⚠️ Hesitations</h2>
+        </div>
+        <div
+          id="objections"
+          class="flex-1 min-h-0 overflow-y-auto p-3 space-y-1.5"
+        >
+          <p id="emptyObj" class="text-slate-600 text-sm italic">
+            Hesitations tracked here…
+          </p>
+        </div>
+      </section>
+    </main>
+
+    <!-- ── Post-call review overlay ────────────────────────── -->
+    <div
+      id="reviewOverlay"
+      class="hidden fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4"
+    >
+      <div
+        class="bg-slate-900 border border-slate-700 rounded-2xl max-w-2xl w-full max-h-[85vh] overflow-y-auto p-6 space-y-4"
+      >
+        <div class="flex items-center justify-between">
+          <h2 class="text-lg font-bold text-white">📊 Post-Call Review</h2>
+          <button
+            onclick="closeReview()"
+            class="text-slate-500 hover:text-white text-xl leading-none"
+          >
+            &times;
+          </button>
+        </div>
+        <div id="reviewContent">
+          <p class="text-slate-500 italic">Generating review…</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Contacts view ──────────────────────────────────── -->
+    <main
+      id="viewContacts"
+      class="flex-1 min-h-0 max-w-5xl w-full mx-auto p-4 overflow-y-auto hidden"
+    >
+      <div class="space-y-3" id="contactsList">
+        <p class="text-slate-600 italic text-sm">Loading contacts…</p>
+      </div>
+    </main>
+
+    <!-- ── Detail view (contact or conversation) ───────────── -->
+    <main
+      id="viewDetail"
+      class="flex-1 min-h-0 max-w-6xl w-full mx-auto p-4 overflow-y-auto hidden flex flex-col"
+    >
+      <div id="detailContent" class="min-h-0 flex flex-col"></div>
+    </main>
+
+    <script>
+      // ── State ──
+      let ws = null,
+        audioCtx = null,
+        stream = null;
+      let running = false,
+        mode = "live";
+      let turns = 0,
+        tips = 0;
+      let timerStart = 0,
+        timerInterval = null;
+      let sessionId = null;
+
+      const $ = (id) => document.getElementById(id);
+
+      // ── Init ──
+      loadContacts();
+
+      // ── Tab switching ──
+      function switchTab(t) {
+        mode = t;
+        ["tabLive", "tabTest", "tabContacts"].forEach((id) => {
+          const active =
+            (t === "live" && id === "tabLive") ||
+            (t === "test" && id === "tabTest") ||
+            (t === "contacts" && id === "tabContacts");
+          $(id).className = active
+            ? "px-3 py-1.5 bg-slate-700 text-white font-medium"
+            : "px-3 py-1.5 bg-slate-800 text-slate-400 hover:text-white";
+        });
+
+        $("testBar").classList.toggle("hidden", t !== "test");
+        $("contextBar").classList.toggle("hidden", t === "contacts");
+
+        $("viewSession").classList.toggle("hidden", t === "contacts");
+        $("viewContacts").classList.toggle("hidden", t !== "contacts");
+        $("viewDetail").classList.add("hidden");
+
+        if (t === "live") {
+          $("btn").classList.remove("hidden");
+          $("btn").textContent = "Start Session";
+        } else if (t === "test") {
+          $("btn").classList.add("hidden");
+          $("interim").classList.add("hidden");
+        } else {
+          $("btn").classList.add("hidden");
+          loadContactsList();
+        }
+      }
+
+      // ── Contacts ──
+      async function loadContacts() {
+        try {
+          const res = await fetch("/api/contacts");
+          const data = await res.json();
+          const sel = $("contactSelect");
+          sel.innerHTML = '<option value="">No contact selected</option>';
+          data.forEach((c) => {
+            const o = document.createElement("option");
+            o.value = c.id;
+            o.textContent = c.company ? `${c.name} (${c.company})` : c.name;
+            sel.appendChild(o);
+          });
+        } catch (e) {
+          console.error(e);
+        }
+      }
+
+      function showNewContact() {
+        $("newContactForm").classList.remove("hidden");
+        $("newContactName").focus();
+      }
+
+      async function saveNewContact() {
+        const name = $("newContactName").value.trim();
+        if (!name) return;
+        const company = $("newContactCompany").value.trim();
+        const status = $("newContactStatus").value;
+        try {
+          const res = await fetch("/api/contacts", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ name, company: company || null, status }),
+          });
+          const data = await res.json();
+          await loadContacts();
+          $("contactSelect").value = data.id;
+          $("newContactForm").classList.add("hidden");
+          $("newContactName").value = "";
+          $("newContactCompany").value = "";
+        } catch (e) {
+          console.error(e);
+        }
+      }
+
+      // ── Status ──
+      function setStatus(text, color) {
+        $("statusText").textContent = text;
+        const d = $("statusDot");
+        d.className = "w-2 h-2 rounded-full";
+        const m = {
+          gray: "bg-slate-600",
+          green: "bg-emerald-500 pulse-dot",
+          yellow: "bg-amber-500",
+          red: "bg-red-500",
+        };
+        d.classList.add(...(m[color] || m.gray).split(" "));
+      }
+
+      function startTimer() {
+        timerStart = Date.now();
+        $("timer").classList.remove("hidden");
+        timerInterval = setInterval(() => {
+          const s = Math.floor((Date.now() - timerStart) / 1000);
+          $("timer").textContent =
+            String(Math.floor(s / 60)).padStart(2, "0") +
+            ":" +
+            String(s % 60).padStart(2, "0");
+        }, 1000);
+      }
+      function stopTimer() {
+        clearInterval(timerInterval);
+      }
+
+      // ── Auto / Critique toggles ──
+      function onAutoToggle() {
+        const auto = $("autoToggle").checked;
+        $("coachMeBtn").classList.toggle("hidden", auto);
+        if (ws && ws.readyState === WebSocket.OPEN) {
+          ws.send(JSON.stringify({ type: "set_auto_coach", value: auto }));
+        }
+      }
+
+      function onCritiqueToggle() {
+        if (ws && ws.readyState === WebSocket.OPEN) {
+          ws.send(
+            JSON.stringify({
+              type: "set_critique_mode",
+              value: $("critiqueToggle").checked,
+            })
+          );
+        }
+      }
+
+      function requestCoaching() {
+        if (ws && ws.readyState === WebSocket.OPEN) {
+          ws.send(JSON.stringify({ type: "coach_me" }));
+        }
+      }
+
+      function askQuestion() {
+        const q = $("questionInput").value.trim();
+        if (!q || !ws || ws.readyState !== WebSocket.OPEN) return;
+        ws.send(JSON.stringify({ type: "coach_me", question: q }));
+        $("questionInput").value = "";
+      }
+
+      // ── Live session ──
+      async function toggleSession() {
+        running ? stopSession() : await startLive();
+      }
+
+      async function startLive() {
+        const btn = $("btn");
+        btn.textContent = "Connecting…";
+        btn.disabled = true;
+        try {
+          stream = await navigator.mediaDevices.getUserMedia({
+            audio: {
+              sampleRate: 16000,
+              channelCount: 1,
+              echoCancellation: true,
+              noiseSuppression: true,
+            },
+          });
+          audioCtx = new AudioContext({ sampleRate: 16000 });
+          const src = audioCtx.createMediaStreamSource(stream);
+          const proc = audioCtx.createScriptProcessor(2048, 1, 1);
+          proc.onaudioprocess = (e) => {
+            if (!ws || ws.readyState !== WebSocket.OPEN) return;
+            const f = e.inputBuffer.getChannelData(0);
+            const i = new Int16Array(f.length);
+            for (let x = 0; x < f.length; x++) {
+              const s = Math.max(-1, Math.min(1, f[x]));
+              i[x] = s < 0 ? s * 0x8000 : s * 0x7fff;
+            }
+            ws.send(i.buffer);
+          };
+          src.connect(proc);
+          proc.connect(audioCtx.destination);
+
+          const proto = location.protocol === "https:" ? "wss:" : "ws:";
+          ws = new WebSocket(`${proto}//${location.host}/ws/coach`);
+          ws.binaryType = "arraybuffer";
+
+          ws.onopen = () => {
+            const contactId = $("contactSelect").value || null;
+            ws.send(
+              JSON.stringify({
+                context: $("contextInput").value.trim(),
+                auto_coach: $("autoToggle").checked,
+                critique_mode: $("critiqueToggle").checked,
+                contact_id: contactId,
+              })
+            );
+            running = true;
+            resetPanels();
+            btn.textContent = "Stop Session";
+            btn.disabled = false;
+            btn.classList.remove("bg-emerald-600", "hover:bg-emerald-500");
+            btn.classList.add("bg-red-600", "hover:bg-red-500");
+            setStatus("Listening…", "green");
+            $("interim").classList.remove("hidden");
+            $("scoreBar").classList.remove("hidden");
+            $("contextInput").disabled = true;
+            $("contactSelect").disabled = true;
+            const det = $("contextBar").querySelector("details");
+            if (det) det.removeAttribute("open");
+            startTimer();
+          };
+          ws.onmessage = (e) => handleMsg(JSON.parse(e.data));
+          ws.onclose = () => {
+            if (running) stopSession();
+          };
+          ws.onerror = () => setStatus("Connection error", "red");
+        } catch (err) {
+          console.error(err);
+          setStatus(
+            err.name === "NotAllowedError" ? "Mic access denied" : err.message,
+            "red"
+          );
+          btn.textContent = "Start Session";
+          btn.disabled = false;
+        }
+      }
+
+      function stopSession() {
+        running = false;
+        if (ws) {
+          ws.close();
+          ws = null;
+        }
+        if (audioCtx) {
+          audioCtx.close();
+          audioCtx = null;
+        }
+        if (stream) {
+          stream.getTracks().forEach((t) => t.stop());
+          stream = null;
+        }
+        stopTimer();
+        const btn = $("btn");
+        btn.textContent = "Start Session";
+        btn.disabled = false;
+        btn.classList.remove("bg-red-600", "hover:bg-red-500");
+        btn.classList.add("bg-emerald-600", "hover:bg-emerald-500");
+        setStatus("Session ended — generating review…", "yellow");
+        $("interim").classList.add("hidden");
+        $("contextInput").disabled = false;
+        $("contactSelect").disabled = false;
+
+        // Show review if we have a session ID
+        if (sessionId && tips > 0) {
+          showReviewLoading();
+          pollForReview(sessionId);
+        }
+      }
+
+      // ── Test mode ──
+      async function loadTestFile() {
+        const file = $("testFile").files[0];
+        if (!file) {
+          setStatus("No file selected", "yellow");
+          return;
+        }
+        const text = await file.text();
+        setStatus("Connecting…", "yellow");
+
+        const proto = location.protocol === "https:" ? "wss:" : "ws:";
+        ws = new WebSocket(`${proto}//${location.host}/ws/test`);
+        ws.onopen = () => {
+          const contactId = $("contactSelect")?.value || null;
+          ws.send(
+            JSON.stringify({
+              context: $("contextInput")?.value?.trim() || "",
+              conversation: text,
+              critique_mode: $("critiqueToggle")?.checked ?? false,
+              contact_id: contactId,
+            })
+          );
+          running = true;
+          resetPanels();
+          setStatus("Test mode", "green");
+          $("scoreBar").classList.remove("hidden");
+          $("testReviewBtn").classList.remove("hidden");
+        };
+        ws.onmessage = (e) => handleMsg(JSON.parse(e.data));
+        ws.onclose = () => {
+          running = false;
+          setStatus("Disconnected", "gray");
+        };
+      }
+
+      function requestReview() {
+        if (ws && ws.readyState === WebSocket.OPEN) {
+          ws.send(JSON.stringify({ type: "generate_review" }));
+          showReviewLoading();
+        }
+      }
+
+      function resetPanels() {
+        turns = 0;
+        tips = 0;
+        sessionId = null;
+        $("turns").innerHTML = "";
+        $("tips").innerHTML = "";
+        $("objections").innerHTML = "";
+        $("turnCounter").textContent = "0 turns";
+        $("coachCounter").textContent = "0 tips";
+        $("scoreValue").textContent = "—";
+        $("stepsValue").textContent = "—";
+        $("scoreBarFill").style.width = "0%";
+      }
+
+      // ── Message handler ──
+      function handleMsg(msg) {
+        switch (msg.type) {
+          case "session_id":
+            sessionId = msg.id;
+            break;
+
+          case "transcript_interim":
+            $("interimText").textContent = msg.text;
+            break;
+
+          case "turn_end": {
+            turns++;
+            $("turnCounter").textContent = `${turns} turn${
+              turns !== 1 ? "s" : ""
+            }`;
+            $("interimText").textContent = "";
+            const el = document.createElement("div");
+            const pending = msg.pending
+              ? " cursor-pointer hover:bg-slate-700/70"
+              : "";
+            el.className = `fade-up bg-slate-800/60 rounded-lg px-3 py-2${pending}`;
+            el.dataset.turn = msg.turn;
+            if (msg.pending) {
+              el.onclick = () => {
+                if (ws && ws.readyState === WebSocket.OPEN)
+                  ws.send(
+                    JSON.stringify({ type: "coach_me", up_to_turn: msg.turn })
+                  );
+              };
+            }
+            el.innerHTML = `
+              <div class="flex items-baseline gap-2 mb-0.5">
+                <span class="text-[10px] font-bold text-slate-500">TURN ${
+                  msg.turn
+                }</span>
+                <span class="text-[10px] text-slate-700">${(
+                  msg.confidence * 100
+                ).toFixed(0)}%</span>
+                ${
+                  msg.pending
+                    ? '<span class="text-[10px] text-blue-500 ml-auto">click to coach →</span>'
+                    : ""
+                }
+              </div>
+              <p class="text-[12px] leading-relaxed text-slate-300">${esc(
+                msg.text
+              )}</p>`;
+            $("turns").appendChild(el);
+            el.scrollIntoView({ behavior: "smooth", block: "end" });
+            break;
+          }
+
+          case "coaching": {
+            tips++;
+            $("coachCounter").textContent = `${tips} tip${
+              tips !== 1 ? "s" : ""
+            }`;
+
+            if (msg.close_score >= 0) {
+              $("scoreValue").textContent = msg.close_score + "%";
+              $("scoreBarFill").style.width = msg.close_score + "%";
+              const c =
+                msg.close_score >= 70
+                  ? "bg-emerald-500"
+                  : msg.close_score >= 40
+                  ? "bg-amber-500"
+                  : "bg-red-500";
+              $(
+                "scoreBarFill"
+              ).className = `${c} h-1.5 rounded-full transition-all duration-500`;
+            }
+            if (msg.steps_to_close >= 0) {
+              $("stepsValue").textContent = msg.steps_to_close;
+            }
+            if (msg.objections && msg.objections.length)
+              renderHesitations(msg.objections);
+
+            const el = document.createElement("div");
+            if (msg.candidates && msg.candidates.length > 0) {
+              el.className =
+                "fade-up rounded-lg px-3 py-2.5 border border-purple-900/40 bg-purple-950/20";
+              const candidatesHtml = msg.candidates
+                .map((c, i) => {
+                  const prob =
+                    c.close_probability >= 0 ? c.close_probability + "%" : "—";
+                  const isTop = i === 0;
+                  return `
+                  <div class="${
+                    i > 0 ? "mt-2 pt-2 border-t border-slate-700/50" : ""
+                  }">
+                    <div class="flex items-baseline gap-2 mb-0.5">
+                      <span class="text-[10px] font-bold ${
+                        isTop ? "text-purple-400" : "text-slate-500"
+                      }">#${i + 1} ${c.one_liner ? esc(c.one_liner) : ""}</span>
+                      <span class="text-[10px] text-emerald-400 ml-auto">P(close) ${prob}</span>
+                    </div>
+                    <p class="text-[12px] leading-relaxed ${
+                      isTop ? "text-purple-200 font-medium" : "text-slate-400"
+                    }">${esc(c.action)}</p>
+                    ${
+                      c.trajectory_notes
+                        ? `<p class="text-[11px] text-slate-500 mt-0.5 italic">${esc(
+                            c.trajectory_notes
+                          )}</p>`
+                        : ""
+                    }
+                  </div>`;
+                })
+                .join("");
+              el.innerHTML = `
+                <div class="flex items-baseline gap-2 mb-2">
+                  <span class="text-[10px] font-bold text-purple-400">🧠 Critique #${
+                    msg.number
+                  }</span>
+                  <span class="text-[10px] text-slate-700">turn ${
+                    msg.turn
+                  }</span>
+                  ${
+                    msg.close_score >= 0
+                      ? `<span class="text-[10px] text-slate-600 ml-auto">Best: ${msg.close_score}%</span>`
+                      : ""
+                  }
+                </div>
+                ${candidatesHtml}`;
+            } else {
+              const border = msg.is_custom
+                ? "border-blue-900/40 bg-blue-950/30"
+                : "border-emerald-900/40 bg-emerald-950/30";
+              el.className = `fade-up rounded-lg px-3 py-2.5 border ${border}`;
+              const label = msg.is_custom ? "💬" : "🎯";
+              const labelColor = msg.is_custom
+                ? "text-blue-400"
+                : "text-emerald-500";
+              el.innerHTML = `
+                <div class="flex items-baseline gap-2 mb-1">
+                  <span class="text-[10px] font-bold ${labelColor}">${label} #${
+                msg.number
+              }</span>
+                  <span class="text-[10px] text-slate-700">turn ${
+                    msg.turn
+                  }</span>
+                  ${
+                    msg.close_score >= 0
+                      ? `<span class="text-[10px] text-slate-600 ml-auto">${msg.close_score}% · ${msg.steps_to_close} steps</span>`
+                      : ""
+                  }
+                </div>
+                <p class="text-[12px] leading-relaxed text-emerald-300 font-medium">${esc(
+                  msg.advice
+                )}</p>`;
+            }
+            $("tips").insertBefore(el, $("tips").firstChild);
+            break;
+          }
+
+          case "review":
+            renderReview(msg.review);
+            setStatus("Review ready", "green");
+            break;
+
+          case "connected":
+          case "status":
+            setStatus(msg.message, "green");
+            break;
+
+          case "error": {
+            const el = document.createElement("div");
+            el.className =
+              "fade-up rounded-lg px-3 py-2 bg-red-950/40 border border-red-900/40";
+            el.innerHTML = `<p class="text-[12px] text-red-400">${esc(
+              msg.message
+            )}</p>`;
+            $("tips").insertBefore(el, $("tips").firstChild);
+            break;
+          }
+        }
+      }
+
+      function rankBadge(rank) {
+        if (!rank || !["S", "M", "L"].includes(rank)) return "";
+        const titles = {
+          S: "Minor, not deal-breaking",
+          M: "Blocking but overcomeable",
+          L: "Hard stop",
+        };
+        const classes = {
+          S: "bg-slate-700/60 text-slate-400",
+          M: "bg-amber-900/50 text-amber-300",
+          L: "bg-red-900/50 text-red-400",
+        };
+        return `<span class="text-[10px] font-bold px-1.5 py-0.5 rounded ${classes[rank]}" title="${titles[rank]}">${rank}</span>`;
+      }
+
+      function renderHesitations(objs) {
+        const c = $("objections");
+        c.innerHTML = "";
+        objs.forEach((o) => {
+          const el = document.createElement("div");
+          const resolved = o.status === "resolved";
+          const suggestion =
+            o.resolution_suggestion && o.resolution_suggestion.trim();
+          const badge = rankBadge(o.rank);
+          el.className = `rounded-lg px-3 py-2 border text-[12px] ${
+            resolved
+              ? "border-emerald-900/30 bg-emerald-950/20 text-emerald-400 line-through opacity-60"
+              : "border-amber-900/40 bg-amber-950/20 text-amber-300"
+          }`;
+          el.innerHTML = `
+            <div class="flex items-center gap-1.5 flex-wrap">
+              <span>${resolved ? "✅" : "⚠️"}</span>
+              ${badge}
+              <span>${esc(o.text)}</span>
+            </div>
+            ${
+              suggestion
+                ? `<div class="mt-1 pl-5 text-[11px] text-slate-400">↪ ${esc(
+                    suggestion
+                  )}</div>`
+                : ""
+            }`;
+          c.appendChild(el);
+        });
+      }
+
+      // ── Review ──
+      function showReviewLoading() {
+        $("reviewOverlay").classList.remove("hidden");
+        $("reviewContent").innerHTML = `
+          <div class="flex items-center gap-3 text-slate-400">
+            <span class="flex gap-0.5">
+              <span class="w-2 h-2 rounded-full bg-purple-500 pulse-dot"></span>
+              <span class="w-2 h-2 rounded-full bg-purple-500 pulse-dot" style="animation-delay:.15s"></span>
+              <span class="w-2 h-2 rounded-full bg-purple-500 pulse-dot" style="animation-delay:.3s"></span>
+            </span>
+            Analyzing your call…
+          </div>`;
+      }
+
+      function closeReview() {
+        $("reviewOverlay").classList.add("hidden");
+      }
+
+      async function pollForReview(convId) {
+        for (let i = 0; i < 30; i++) {
+          await new Promise((r) => setTimeout(r, 2000));
+          try {
+            const res = await fetch(`/api/conversations/${convId}`);
+            const data = await res.json();
+            if (data.review) {
+              renderReview(data.review);
+              setStatus("Review ready", "green");
+              return;
+            }
+          } catch (e) {
+            /* keep polling */
+          }
+        }
+        $("reviewContent").innerHTML =
+          '<p class="text-slate-400">Review generation timed out. Try again from Contacts.</p>';
+      }
+
+      function renderReview(r) {
+        if (!r) return;
+        $("reviewOverlay").classList.remove("hidden");
+        const scoreColor =
+          r.score >= 7
+            ? "text-emerald-400"
+            : r.score >= 4
+            ? "text-amber-400"
+            : "text-red-400";
+        $("reviewContent").innerHTML = `
+          <div class="space-y-4">
+            <!-- Score -->
+            <div class="flex items-center gap-3">
+              <span class="text-3xl font-black ${scoreColor}">${
+          r.score
+        }/10</span>
+              <span class="text-sm text-slate-400">Overall effectiveness</span>
+            </div>
+
+            <!-- What went well -->
+            <div>
+              <h3 class="text-sm font-semibold text-emerald-400 mb-1.5">✅ What went well</h3>
+              <ul class="space-y-1">
+                ${(r.went_well || [])
+                  .map(
+                    (w) =>
+                      `<li class="text-[13px] text-slate-300 pl-3 border-l-2 border-emerald-800">${esc(
+                        w
+                      )}</li>`
+                  )
+                  .join("")}
+              </ul>
+            </div>
+
+            <!-- Improve -->
+            <div>
+              <h3 class="text-sm font-semibold text-amber-400 mb-1.5">📈 Areas to improve</h3>
+              <ul class="space-y-1">
+                ${(r.improve || [])
+                  .map(
+                    (w) =>
+                      `<li class="text-[13px] text-slate-300 pl-3 border-l-2 border-amber-800">${esc(
+                        w
+                      )}</li>`
+                  )
+                  .join("")}
+              </ul>
+            </div>
+
+            <!-- Hesitations -->
+            <div>
+              <h3 class="text-sm font-semibold text-purple-400 mb-1.5">🔍 Hesitations</h3>
+              <div class="grid grid-cols-3 gap-2">
+                <div class="bg-slate-800/60 rounded-lg p-2">
+                  <p class="text-[10px] font-bold text-slate-500 mb-1">UNCOVERED</p>
+                  ${
+                    (r.hesitations_summary?.uncovered || [])
+                      .map(
+                        (h) =>
+                          `<p class="text-[12px] text-slate-300">${esc(h)}</p>`
+                      )
+                      .join("") ||
+                    '<p class="text-[11px] text-slate-600">None</p>'
+                  }
+                </div>
+                <div class="bg-slate-800/60 rounded-lg p-2">
+                  <p class="text-[10px] font-bold text-emerald-600 mb-1">HANDLED</p>
+                  ${
+                    (r.hesitations_summary?.handled || [])
+                      .map(
+                        (h) =>
+                          `<p class="text-[12px] text-emerald-300">${esc(
+                            h
+                          )}</p>`
+                      )
+                      .join("") ||
+                    '<p class="text-[11px] text-slate-600">None</p>'
+                  }
+                </div>
+                <div class="bg-slate-800/60 rounded-lg p-2">
+                  <p class="text-[10px] font-bold text-red-500 mb-1">REMAINING</p>
+                  ${
+                    (r.hesitations_summary?.remaining || [])
+                      .map(
+                        (h) =>
+                          `<p class="text-[12px] text-red-300">${esc(h)}</p>`
+                      )
+                      .join("") ||
+                    '<p class="text-[11px] text-slate-600">None</p>'
+                  }
+                </div>
+              </div>
+            </div>
+
+            <!-- Key moment -->
+            ${
+              r.key_moment
+                ? `
+            <div>
+              <h3 class="text-sm font-semibold text-blue-400 mb-1.5">💡 Key moment</h3>
+              <p class="text-[13px] text-slate-300 bg-blue-950/30 rounded-lg px-3 py-2 border border-blue-900/30">${esc(
+                r.key_moment
+              )}</p>
+            </div>`
+                : ""
+            }
+
+            <!-- Follow ups -->
+            <div>
+              <h3 class="text-sm font-semibold text-cyan-400 mb-1.5">📋 Follow-ups</h3>
+              <ul class="space-y-1">
+                ${(r.follow_ups || [])
+                  .map(
+                    (f, i) =>
+                      `<li class="text-[13px] text-slate-300 flex gap-2"><span class="text-cyan-600 font-bold">${
+                        i + 1
+                      }.</span>${esc(f)}</li>`
+                  )
+                  .join("")}
+              </ul>
+            </div>
+
+            <!-- Next step -->
+            ${
+              r.next_step
+                ? `
+            <div>
+              <h3 class="text-sm font-semibold text-cyan-400 mb-1.5">→ Next Step</h3>
+              <p class="text-[13px] text-cyan-300 bg-cyan-950/30 rounded-lg px-3 py-2 border border-cyan-900/30 font-medium">${esc(
+                r.next_step
+              )}</p>
+            </div>`
+                : ""
+            }
+
+            <!-- Next call prep -->
+            ${
+              r.next_call_prep
+                ? `
+            <div>
+              <h3 class="text-sm font-semibold text-slate-400 mb-1.5">🗓️ Next call prep</h3>
+              <p class="text-[13px] text-slate-300 bg-slate-800/60 rounded-lg px-3 py-2">${esc(
+                r.next_call_prep
+              )}</p>
+            </div>`
+                : ""
+            }
+
+            ${
+              r.suggested_status
+                ? `
+            <div class="text-[11px] text-slate-500">Pipeline: ${esc(
+              r.suggested_status
+            )}</div>`
+                : ""
+            }
+          </div>`;
+      }
+
+      // ── Status badge helpers ──
+      const STATUS_COLORS = {
+        prospect: { bg: "bg-slate-700", text: "text-slate-300" },
+        interested: { bg: "bg-blue-900/50", text: "text-blue-300" },
+        demoing: { bg: "bg-purple-900/50", text: "text-purple-300" },
+        reviewing_contract: { bg: "bg-amber-900/50", text: "text-amber-300" },
+        closed_won: { bg: "bg-emerald-900/50", text: "text-emerald-300" },
+        closed_lost: { bg: "bg-red-900/50", text: "text-red-400" },
+      };
+      const STATUS_LABELS = {
+        prospect: "Prospect",
+        interested: "Interested",
+        demoing: "Demoing",
+        reviewing_contract: "Reviewing Contract",
+        closed_won: "Closed Won",
+        closed_lost: "Closed Lost",
+      };
+      function statusBadge(s) {
+        const c = STATUS_COLORS[s] || STATUS_COLORS.prospect;
+        return `<span class="text-[10px] font-semibold px-2 py-0.5 rounded-full ${
+          c.bg
+        } ${c.text}">${STATUS_LABELS[s] || s}</span>`;
+      }
+
+      // ── Contacts list ──
+      let detailBackTo = "contacts";
+
+      async function loadContactsList() {
+        const list = $("contactsList");
+        list.innerHTML =
+          '<p class="text-slate-600 italic text-sm">Loading…</p>';
+        try {
+          const res = await fetch("/api/contacts?summary=true");
+          const data = await res.json();
+          if (!data.length) {
+            list.innerHTML =
+              '<p class="text-slate-600 italic text-sm">No contacts yet. Create one from the Live tab to get started.</p>';
+            return;
+          }
+          list.innerHTML = "";
+          data.forEach((c) => {
+            const el = document.createElement("div");
+            el.className =
+              "bg-slate-900 border border-slate-800 rounded-xl px-4 py-3 cursor-pointer hover:border-slate-600 transition";
+            el.onclick = () => loadContactDetail(c.id);
+            const score =
+              c.latest_close_score != null ? c.latest_close_score + "%" : "";
+            const scoreColor =
+              c.latest_close_score >= 70
+                ? "text-emerald-400"
+                : c.latest_close_score >= 40
+                ? "text-amber-400"
+                : "text-red-400";
+            const hesCount = c.open_hesitation_count || 0;
+            el.innerHTML = `
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                  <div>
+                    <div class="flex items-center gap-2">
+                      <span class="font-semibold text-sm">${esc(c.name)}</span>
+                      ${
+                        c.company
+                          ? `<span class="text-xs text-slate-600">@ ${esc(
+                              c.company
+                            )}</span>`
+                          : ""
+                      }
+                      ${statusBadge(c.status || "prospect")}
+                    </div>
+                    ${
+                      c.next_step
+                        ? `<p class="text-xs text-cyan-400 mt-1 flex items-center gap-1">→ ${esc(
+                            c.next_step
+                          )}</p>`
+                        : ""
+                    }
+                  </div>
+                </div>
+                <div class="text-right flex items-center gap-3">
+                  ${
+                    hesCount > 0
+                      ? `<span class="text-[11px] text-amber-400 font-medium">${hesCount} open</span>`
+                      : ""
+                  }
+                  ${
+                    score
+                      ? `<span class="font-bold text-lg ${scoreColor}">${score}</span>`
+                      : ""
+                  }
+                  <span class="text-[10px] text-slate-600">${
+                    c.conversation_count || 0
+                  } calls</span>
+                </div>
+              </div>`;
+            list.appendChild(el);
+          });
+        } catch (e) {
+          list.innerHTML = `<p class="text-red-400 text-sm">${e.message}</p>`;
+        }
+      }
+
+      // ── Contact detail ──
+      async function loadContactDetail(id) {
+        detailBackTo = "contacts";
+        $("viewContacts").classList.add("hidden");
+        $("viewDetail").classList.remove("hidden");
+        $("detailContent").innerHTML =
+          '<p class="text-slate-600 italic">Loading…</p>';
+
+        try {
+          const res = await fetch(`/api/contacts/${id}/detail`);
+          const c = await res.json();
+          if (c.error) {
+            $(
+              "detailContent"
+            ).innerHTML = `<p class="text-red-400">${c.error}</p>`;
+            return;
+          }
+
+          let html = `
+            <div class="mb-4">
+              <button onclick="backToList()" class="text-sm text-slate-500 hover:text-white mb-3 flex items-center gap-1">← Back to contacts</button>
+              <div class="flex items-center justify-between">
+                <div>
+                  <div class="flex items-center gap-3">
+                    <h2 class="text-lg font-bold">${esc(c.name)}</h2>
+                    ${
+                      c.company
+                        ? `<span class="text-slate-500">@ ${esc(
+                            c.company
+                          )}</span>`
+                        : ""
+                    }
+                    ${statusBadge(c.status || "prospect")}
+                    <select onchange="updateContactStatus(${id}, this.value)" class="bg-slate-800 border border-slate-700 rounded-lg px-2 py-1 text-[11px] text-slate-300 focus:outline-none">
+                      ${[
+                        "prospect",
+                        "interested",
+                        "demoing",
+                        "reviewing_contract",
+                        "closed_won",
+                        "closed_lost",
+                      ]
+                        .map(
+                          (s) =>
+                            `<option value="${s}" ${
+                              s === c.status ? "selected" : ""
+                            }>${STATUS_LABELS[s]}</option>`
+                        )
+                        .join("")}
+                    </select>
+                  </div>
+                  ${
+                    c.next_step
+                      ? `<p class="text-sm text-cyan-400 mt-1 font-medium">→ Next: ${esc(
+                          c.next_step
+                        )}</p>`
+                      : ""
+                  }
+                </div>
+              </div>
+              ${
+                c.notes
+                  ? `<p class="text-sm text-slate-400 mt-2">${esc(c.notes)}</p>`
+                  : ""
+              }
+            </div>`;
+
+          // Open hesitations
+          if (c.open_hesitations && c.open_hesitations.length) {
+            html += `<div class="mb-4 bg-amber-950/20 border border-amber-900/30 rounded-xl p-3">
+              <h3 class="text-sm font-semibold text-amber-400 mb-2">⚠️ Open Hesitations (${c.open_hesitations.length}) <span class="text-[10px] font-normal text-slate-500">S=minor · M=blocking · L=hard stop</span></h3>
+              <div class="space-y-2">`;
+            c.open_hesitations.forEach((h) => {
+              const sug =
+                h.resolution_suggestion && h.resolution_suggestion.trim();
+              const badge = rankBadge(h.rank);
+              html += `<div class="rounded-lg px-2 py-1.5 border border-amber-900/30">
+                <div class="flex items-center gap-1.5 flex-wrap text-[12px] text-amber-300"><span>⚠️</span>${badge}<span>${esc(
+                h.text
+              )}</span></div>
+                ${
+                  sug
+                    ? `<div class="mt-1 pl-4 text-[11px] text-slate-400">↪ ${esc(
+                        sug
+                      )}</div>`
+                    : ""
+                }
+              </div>`;
+            });
+            html += `</div></div>`;
+          }
+
+          // Conversations
+          html += `<div class="space-y-3">
+            <h3 class="text-sm font-semibold text-slate-400">📞 Conversations (${c.conversations.length})</h3>`;
+          if (!c.conversations.length) {
+            html += `<p class="text-slate-600 italic text-sm">No conversations yet.</p>`;
+          }
+          c.conversations.forEach((conv) => {
+            const date = conv.started_at
+              ? new Date(conv.started_at).toLocaleDateString("en-US", {
+                  month: "short",
+                  day: "numeric",
+                  hour: "numeric",
+                  minute: "2-digit",
+                })
+              : "—";
+            const score =
+              conv.final_close_score != null
+                ? conv.final_close_score + "%"
+                : "";
+            const scoreColor =
+              conv.final_close_score >= 70
+                ? "text-emerald-400"
+                : conv.final_close_score >= 40
+                ? "text-amber-400"
+                : "text-red-400";
+            const hasReview = conv.review_generated_at ? "📊" : "";
+            const modeLabel =
+              conv.mode === "test"
+                ? '<span class="text-[10px] bg-blue-900/40 text-blue-400 px-1.5 py-0.5 rounded">test</span>'
+                : "";
+            html += `
+              <div class="bg-slate-900 border border-slate-800 rounded-xl px-4 py-3 cursor-pointer hover:border-slate-600 transition" onclick="loadConversationDetail(${
+                conv.id
+              }, ${id})">
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center gap-2">
+                    <span class="text-xs text-slate-500">${date}</span>
+                    ${modeLabel} ${hasReview}
+                    ${
+                      conv.next_step
+                        ? `<span class="text-[11px] text-cyan-400">→ ${esc(
+                            conv.next_step
+                          )}</span>`
+                        : ""
+                    }
+                  </div>
+                  <div class="flex items-center gap-2">
+                    ${
+                      score
+                        ? `<span class="font-bold ${scoreColor}">${score}</span>`
+                        : ""
+                    }
+                    ${
+                      conv.final_steps_to_close != null
+                        ? `<span class="text-[10px] text-slate-600">${conv.final_steps_to_close} steps</span>`
+                        : ""
+                    }
+                  </div>
+                </div>
+                ${
+                  conv.context
+                    ? `<p class="text-xs text-slate-500 mt-1 line-clamp-1">${esc(
+                        conv.context
+                      )}</p>`
+                    : ""
+                }
+              </div>`;
+          });
+          html += `</div>`;
+
+          $("detailContent").innerHTML = html;
+        } catch (e) {
+          $(
+            "detailContent"
+          ).innerHTML = `<p class="text-red-400">${e.message}</p>`;
+        }
+      }
+
+      async function updateContactStatus(id, status) {
+        try {
+          await fetch(`/api/contacts/${id}`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ status }),
+          });
+        } catch (e) {
+          console.error(e);
+        }
+      }
+
+      // ── Conversation detail ──
+      async function loadConversationDetail(id, contactId) {
+        detailBackTo = contactId ? `contact:${contactId}` : "contacts";
+        $("viewContacts").classList.add("hidden");
+        $("viewDetail").classList.remove("hidden");
+        $("detailContent").innerHTML =
+          '<p class="text-slate-600 italic">Loading…</p>';
+
+        try {
+          const res = await fetch(`/api/conversations/${id}`);
+          const c = await res.json();
+
+          const date = c.started_at
+            ? new Date(c.started_at).toLocaleString()
+            : "—";
+          const contact = c.contact_name || "Unknown";
+
+          let html = `
+            <div class="mb-4">
+              <button onclick="backToList()" class="text-sm text-slate-500 hover:text-white mb-3 flex items-center gap-1">← Back</button>
+              <div class="flex items-center justify-between">
+                <div>
+                  <h2 class="text-lg font-bold">${esc(contact)} ${
+            c.contact_company
+              ? `<span class="text-slate-500 font-normal">@ ${esc(
+                  c.contact_company
+                )}</span>`
+              : ""
+          }</h2>
+                  <p class="text-xs text-slate-500">${date} · ${c.mode} mode</p>
+                  ${
+                    c.next_step
+                      ? `<p class="text-sm text-cyan-400 mt-1 font-medium">→ ${esc(
+                          c.next_step
+                        )}</p>`
+                      : ""
+                  }
+                </div>
+                <div class="flex items-center gap-3">
+                  ${
+                    c.final_close_score != null
+                      ? `<span class="text-2xl font-black ${
+                          c.final_close_score >= 70
+                            ? "text-emerald-400"
+                            : c.final_close_score >= 40
+                            ? "text-amber-400"
+                            : "text-red-400"
+                        }">${c.final_close_score}%</span>`
+                      : ""
+                  }
+                  ${
+                    !c.review
+                      ? `<button onclick="generateReviewForConv(${id})" class="px-3 py-1.5 text-xs rounded-lg bg-purple-600 hover:bg-purple-500 font-medium">Generate Review</button>`
+                      : ""
+                  }
+                </div>
+              </div>
+              ${
+                c.context
+                  ? `<p class="text-sm text-slate-400 mt-2 bg-slate-900 rounded-lg px-3 py-2 border border-slate-800">${esc(
+                      c.context
+                    )}</p>`
+                  : ""
+              }
+            </div>`;
+
+          if (c.review) {
+            html += `<div class="mb-4"><h3 class="text-sm font-semibold text-purple-400 mb-2">📊 Post-Call Review</h3>`;
+            html += buildReviewHTML(c.review);
+            html += `</div>`;
+          }
+
+          html += `<div class="grid grid-cols-1 lg:grid-cols-3 gap-4 max-h-[calc(100vh-14rem)] min-h-0">`;
+          html += `<div class="bg-slate-900 rounded-xl border border-slate-800 flex flex-col min-h-0">
+            <h3 class="text-sm font-semibold text-slate-400 mb-2 px-3 pt-3 shrink-0">📝 Transcript (${
+              (c.transcript || []).length
+            } turns)</h3>
+            <div class="flex-1 min-h-0 overflow-y-auto p-3 space-y-1.5">`;
+          (c.transcript || []).forEach((t) => {
+            html += `<div class="bg-slate-800/60 rounded-lg px-3 py-2">
+              <span class="text-[10px] font-bold text-slate-500">TURN ${
+                t.turn
+              }</span>
+              <p class="text-[12px] text-slate-300 mt-0.5">${esc(t.text)}</p>
+            </div>`;
+          });
+          html += `</div></div>`;
+
+          html += `<div class="bg-slate-900 rounded-xl border border-slate-800 flex flex-col min-h-0">
+            <h3 class="text-sm font-semibold text-emerald-400 mb-2 px-3 pt-3 shrink-0">🎯 Coaching (${
+              (c.coaching || []).length
+            } tips)</h3>
+            <div class="flex-1 min-h-0 overflow-y-auto p-3 space-y-1.5">`;
+          (c.coaching || []).forEach((tip) => {
+            const border = tip.is_custom
+              ? "border-blue-900/40 bg-blue-950/30"
+              : "border-emerald-900/40 bg-emerald-950/30";
+            html += `<div class="rounded-lg px-3 py-2 border ${border}">
+              <span class="text-[10px] font-bold ${
+                tip.is_custom ? "text-blue-400" : "text-emerald-500"
+              }">#${tip.number} · turn ${tip.turn}</span>
+              ${
+                tip.close_score >= 0
+                  ? `<span class="text-[10px] text-slate-600 ml-2">${tip.close_score}% · ${tip.steps_to_close} steps</span>`
+                  : ""
+              }
+              <p class="text-[12px] text-emerald-300 mt-0.5">${esc(
+                tip.advice
+              )}</p>
+            </div>`;
+          });
+          html += `</div></div>`;
+
+          html += `<div class="bg-slate-900 rounded-xl border border-slate-800 flex flex-col min-h-0">
+            <h3 class="text-sm font-semibold text-amber-400 mb-2 px-3 pt-3 shrink-0">⚠️ Hesitations <span class="text-[10px] font-normal text-slate-500">S · M · L</span></h3>
+            <div class="flex-1 min-h-0 overflow-y-auto p-3 space-y-1.5">`;
+          if (c.hesitations && c.hesitations.length) {
+            c.hesitations.forEach((h) => {
+              const resolved = h.status === "resolved";
+              const sug =
+                h.resolution_suggestion && h.resolution_suggestion.trim();
+              const badge = rankBadge(h.rank);
+              html += `<div class="rounded-lg px-2 py-1.5 border border-slate-700/50">
+                <div class="flex items-center gap-1.5 flex-wrap text-[12px] ${
+                  resolved
+                    ? "text-emerald-400 line-through opacity-60"
+                    : "text-amber-300"
+                }">
+                  <span>${resolved ? "✅" : "⚠️"}</span>${badge}<span>${esc(
+                h.text
+              )}</span>
+                </div>
+                ${
+                  sug
+                    ? `<div class="mt-1 pl-4 text-[11px] text-slate-400">↪ ${esc(
+                        sug
+                      )}</div>`
+                    : ""
+                }
+              </div>`;
+            });
+          } else {
+            html += `<p class="text-slate-600 text-sm italic">None tracked</p>`;
+          }
+          html += `</div></div></div>`;
+
+          $("detailContent").innerHTML = html;
+        } catch (e) {
+          $(
+            "detailContent"
+          ).innerHTML = `<p class="text-red-400">${e.message}</p>`;
+        }
+      }
+
+      function buildReviewHTML(r) {
+        const scoreColor =
+          r.score >= 7
+            ? "text-emerald-400"
+            : r.score >= 4
+            ? "text-amber-400"
+            : "text-red-400";
+        return `<div class="bg-slate-800/40 rounded-xl p-4 space-y-3">
+          <div class="flex items-center gap-3">
+            <span class="text-2xl font-black ${scoreColor}">${r.score}/10</span>
+            ${
+              r.next_step
+                ? `<span class="text-sm text-cyan-400">→ ${esc(
+                    r.next_step
+                  )}</span>`
+                : ""
+            }
+          </div>
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <p class="text-[10px] font-bold text-emerald-500 mb-1">WENT WELL</p>
+              ${(r.went_well || [])
+                .map(
+                  (w) =>
+                    `<p class="text-[12px] text-slate-300 pl-2 border-l-2 border-emerald-800 mb-1">${esc(
+                      w
+                    )}</p>`
+                )
+                .join("")}
+            </div>
+            <div>
+              <p class="text-[10px] font-bold text-amber-500 mb-1">IMPROVE</p>
+              ${(r.improve || [])
+                .map(
+                  (w) =>
+                    `<p class="text-[12px] text-slate-300 pl-2 border-l-2 border-amber-800 mb-1">${esc(
+                      w
+                    )}</p>`
+                )
+                .join("")}
+            </div>
+          </div>
+          <div class="grid grid-cols-3 gap-2">
+            <div><p class="text-[10px] font-bold text-slate-500">UNCOVERED</p>${
+              (r.hesitations_summary?.uncovered || [])
+                .map(
+                  (h) => `<p class="text-[11px] text-slate-300">${esc(h)}</p>`
+                )
+                .join("") || '<p class="text-[11px] text-slate-600">—</p>'
+            }</div>
+            <div><p class="text-[10px] font-bold text-emerald-600">HANDLED</p>${
+              (r.hesitations_summary?.handled || [])
+                .map(
+                  (h) => `<p class="text-[11px] text-emerald-300">${esc(h)}</p>`
+                )
+                .join("") || '<p class="text-[11px] text-slate-600">—</p>'
+            }</div>
+            <div><p class="text-[10px] font-bold text-red-500">REMAINING</p>${
+              (r.hesitations_summary?.remaining || [])
+                .map((h) => `<p class="text-[11px] text-red-300">${esc(h)}</p>`)
+                .join("") || '<p class="text-[11px] text-slate-600">—</p>'
+            }</div>
+          </div>
+          ${
+            r.key_moment
+              ? `<div><p class="text-[10px] font-bold text-blue-400">KEY MOMENT</p><p class="text-[12px] text-slate-300">${esc(
+                  r.key_moment
+                )}</p></div>`
+              : ""
+          }
+          <div><p class="text-[10px] font-bold text-cyan-400">FOLLOW-UPS</p>${(
+            r.follow_ups || []
+          )
+            .map(
+              (f, i) =>
+                `<p class="text-[12px] text-slate-300">${i + 1}. ${esc(f)}</p>`
+            )
+            .join("")}</div>
+          ${
+            r.next_call_prep
+              ? `<div><p class="text-[10px] font-bold text-slate-400">NEXT CALL PREP</p><p class="text-[12px] text-slate-300">${esc(
+                  r.next_call_prep
+                )}</p></div>`
+              : ""
+          }
+        </div>`;
+      }
+
+      function backToList() {
+        $("viewDetail").classList.add("hidden");
+        if (detailBackTo.startsWith("contact:")) {
+          loadContactDetail(parseInt(detailBackTo.split(":")[1]));
+        } else {
+          $("viewContacts").classList.remove("hidden");
+        }
+      }
+
+      async function generateReviewForConv(id) {
+        try {
+          const btn = event.target;
+          btn.textContent = "Generating…";
+          btn.disabled = true;
+          const res = await fetch(`/api/conversations/${id}/review`, {
+            method: "POST",
+          });
+          const review = await res.json();
+          loadConversationDetail(id);
+        } catch (e) {
+          alert(e.message);
+        }
+      }
+
+      function esc(s) {
+        if (!s) return "";
+        const d = document.createElement("div");
+        d.textContent = s;
+        return d.innerHTML;
+      }
+    </script>
+  </body>
+</html>

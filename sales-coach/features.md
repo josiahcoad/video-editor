@@ -1,0 +1,2 @@
+- gives realtime feedback (how long I've been talking in this turn. and how long ive been talking total compared to the total). show a benchmark line for whats industry standard for best results (45%). (need speaker deralization to make this work)
+- react/vite/refine.dev/react-router/shadcn FE
