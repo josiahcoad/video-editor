@@ -1,0 +1,92 @@
+{
+    "id": "260210-content-batch",
+    "description": "15-min merged recording of ~11 pre-recorded standalone hooks/tips recorded back-to-back in a single session. Multiple retakes per topic. Tests contiguous_batch detection: the LLM must NOT use cold opens, must detect retakes, pick the cleanest take per topic, and output one contiguous segment per topic. Key failure modes: (1) missing the trust gap hook at 59s, (2) picking stumble takes, (3) Frankenstein editing across topics.",
+    "transcript_path": "projects/JosiahCoad/editing/videos/260210-content-batch/merged-words.json",
+    "video_duration_s": 921,
+    "expected_strategy": "contiguous_batch",
+    "params": {
+        "target_duration": 60,
+        "tolerance": 30,
+        "max_segments": null,
+        "custom_prompt": null
+    },
+    "ground_truth": [
+        {
+            "segment": 1,
+            "summary": "Trust gap hook — the gap between awareness and purchase intent",
+            "cuts": "59.39:64.61",
+            "has_cold_open": false,
+            "rationale": "Standalone hook at the very start of the recording. Short but punchy. Models frequently miss this because they skip the first ~80s of the transcript."
+        },
+        {
+            "segment": 2,
+            "summary": "AI ethics — just because we can doesn't mean we should",
+            "cuts": "98.06:103.84",
+            "has_cold_open": false,
+            "rationale": "5 takes of the same hook (at 83s, 98s, 117s, 126s, 133s). Take at 98s is cleanest complete thought. Take at 133s has a stumble ('doing asking'). Take at 126s is also clean but shorter. The LLM must reject the stumble take."
+        },
+        {
+            "segment": 3,
+            "summary": "500 UGC videos in 10 minutes — but should you?",
+            "cuts": "151.32:157.42",
+            "has_cold_open": false,
+            "rationale": "Two takes (146s incomplete, 151s complete with 'but should you' payoff). Best take: 151s."
+        },
+        {
+            "segment": 4,
+            "summary": "Think like a producer, not a consumer",
+            "cuts": "168.99:175.29",
+            "has_cold_open": false,
+            "rationale": "Single clean take. Standalone marketing habit tip."
+        },
+        {
+            "segment": 5,
+            "summary": "Human in the loop — why we reject full automation + marketing has a soul",
+            "cuts": "211.40:216.14,229.69:233.10",
+            "has_cold_open": false,
+            "rationale": "Multiple takes for two related hooks: automation limits (191s, 203s, 211s) and soul of marketing (221s, 227s, 229s). Best automation take: 211s. Best soul take: 229s. They're the same broader topic (human touch in marketing). Acceptable to split into two segments."
+        },
+        {
+            "segment": 6,
+            "summary": "Problem-centered marketing — stop centering around the product",
+            "cuts": "275.75:282.98,294.37:298.71",
+            "has_cold_open": false,
+            "rationale": "Two takes (253s and 275s). Take at 275s is punchier ('come to us for' vs 'are having'). Body content at 294s follows naturally."
+        },
+        {
+            "segment": 7,
+            "summary": "Inspect your purchasing behavior — a trick to become a better marketer",
+            "cuts": "346.18:350.44",
+            "has_cold_open": false,
+            "rationale": "Two takes (340s and 346s). Take at 346s adds 'purchasing' which is more specific and actionable."
+        },
+        {
+            "segment": 8,
+            "summary": "Turn sales objections into content + use social media as a client classroom",
+            "cuts": "357.14:363.25,374.96:387.38,387.92:397.75,406.13:415.19,421.19:430.74",
+            "has_cold_open": false,
+            "rationale": "Largest topic in the batch. Sales objections hook, pen-and-paper CTA (must include 'call' at 386.88 — common LLM cut error), content payoff, and classroom analogy. All one thematic unit about using client questions for content. Acceptable to split classroom into its own segment."
+        },
+        {
+            "segment": 9,
+            "summary": "Quality erodes trust — commit to quality before scaling quantity",
+            "cuts": "529.09:537.67,546.18:571.24,592.51:599.52,604.62:607.12",
+            "has_cold_open": false,
+            "rationale": "Full quality discussion: aggressive hook, empathetic body ('I know you're busy'), quality vs quantity choice, and CTA. Common failure mode: LLM splits hook and payoff into separate segments."
+        },
+        {
+            "segment": 10,
+            "summary": "Social presence — clients stalk you online + keep posting consistently",
+            "cuts": "674.70:680.07,704.79:713.08,740.95:748.57,763.25:768.07,778.51:784.93",
+            "has_cold_open": false,
+            "rationale": "Two related sub-topics: ghost shopping behavior and consistency message. Same broader theme (importance of ongoing social presence). Acceptable to split into two segments."
+        },
+        {
+            "segment": 11,
+            "summary": "Word of mouth isn't enough — real estate agent story proves social presence matters",
+            "cuts": "829.63:834.85,847.08:857.16,860.42:874.18,875.52:883.10,903.99:906.89,914.67:920.61",
+            "has_cold_open": false,
+            "rationale": "Myth-busting hook, challenge question, personal story, payoff, conclusion, and CTA. Longest coherent narrative in the batch."
+        }
+    ]
+}

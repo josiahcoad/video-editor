@@ -1,0 +1,1224 @@
+{
+  "run_id": "2026-02-11T19:58:23Z",
+  "type": "model_comparison",
+  "judge_model": "openai/gpt-4o",
+  "models": [
+    {
+      "name": "Opus 4.5",
+      "id": "anthropic/claude-opus-4.5"
+    },
+    {
+      "name": "Opus 4.6",
+      "id": "anthropic/claude-opus-4.6"
+    },
+    {
+      "name": "Gemini 3 Flash",
+      "id": "google/gemini-3-flash-preview"
+    },
+    {
+      "name": "Gemini 3 Pro",
+      "id": "google/gemini-3-pro-preview"
+    },
+    {
+      "name": "GPT 5.2",
+      "id": "openai/gpt-5.2"
+    },
+    {
+      "name": "GPT 5.2 Pro",
+      "id": "openai/gpt-5.2-pro"
+    },
+    {
+      "name": "Grok 4.1 Fast",
+      "id": "x-ai/grok-4.1-fast"
+    },
+    {
+      "name": "Kimi K2",
+      "id": "moonshotai/kimi-k2-thinking"
+    }
+  ],
+  "case_count": 1,
+  "results": [
+    {
+      "case_id": "260210-content-batch",
+      "gt_segment_count": 11,
+      "proposed_segment_count": 10,
+      "proposed_segments": [
+        {
+          "segment": 1,
+          "summary": "Provocative question about AI-generated UGC content - challenges whether you should just because you can.",
+          "hook": "Opens with surprising capability stat (500 videos in 10 minutes) then subverts with 'but should you?' - creates instant tension.",
+          "cuts": "151.32:157.42",
+          "duration": 6.1,
+          "section_count": 1,
+          "has_cold_open": false,
+          "analysis": {
+            "content_type": "pre_recorded_batch",
+            "editing_strategy": "contiguous_batch",
+            "single_or_multi": "multi - This is clearly multiple standalone short-form clips recorded back-to-back in one session. Key signals: (1) same topics repeated 2-5 times with variations (retakes of 'AI should we', 'product vs problem', 'think like producer', CTAs), (2) clear topic changes between groups, (3) each topic has its own hook/intro, (4) stumbles and false starts ('doing asking', 'started sitting around', 'i believe that the'), (5) topics are independent and don't reference each other.",
+            "cold_open_candidate": null,
+            "keepable_content_seconds": 200.0
+          }
+        },
+        {
+          "segment": 2,
+          "summary": "Quick marketing mindset tip - shift from consumer to producer thinking.",
+          "hook": "Promise of a single actionable habit that improves marketing skills - simple and immediately applicable.",
+          "cuts": "168.66:175.29",
+          "duration": 6.6,
+          "section_count": 1,
+          "has_cold_open": false
+        },
+        {
+          "segment": 3,
+          "summary": "Business insight about shifting from product-centric to problem-centric positioning.",
+          "hook": "Opens with insider knowledge ('change we made') and delivers a clear strategic shift that viewers can apply.",
+          "cuts": "275.75:282.98",
+          "duration": 7.2,
+          "section_count": 1,
+          "has_cold_open": false
+        },
+        {
+          "segment": 4,
+          "summary": "Quick tip to improve marketing by studying your own buying decisions.",
+          "hook": "'Here's a trick' creates curiosity, and the advice is immediately actionable and self-reflective.",
+          "cuts": "346.18:350.44",
+          "duration": 4.3,
+          "section_count": 1,
+          "has_cold_open": false
+        },
+        {
+          "segment": 5,
+          "summary": "Actionable content strategy - turn common sales objections into content ideas.",
+          "hook": "Opens by calling out a common problem (same objections on calls) and reframes it as a content opportunity.",
+          "cuts": "357.14:363.25,374.96:380.34,386.88:390.06,393.97:397.75",
+          "duration": 18.4,
+          "section_count": 4,
+          "has_cold_open": false
+        },
+        {
+          "segment": 6,
+          "summary": "Reframe social media as a classroom to pre-answer client questions.",
+          "hook": "Uses classroom metaphor to make social media strategy feel approachable and educational.",
+          "cuts": "420.88:430.74",
+          "duration": 9.9,
+          "section_count": 1,
+          "has_cold_open": false
+        },
+        {
+          "segment": 7,
+          "summary": "Quality vs quantity argument - quality builds trust, bad content erodes it faster at scale.",
+          "hook": "Clear contrast statement (good vs bad content) with memorable tagline about scaling quality.",
+          "cuts": "592.51:599.52,604.62:607.12",
+          "duration": 9.5,
+          "section_count": 2,
+          "has_cold_open": false
+        },
+        {
+          "segment": 8,
+          "summary": "Insight about how prospects research you extensively before reaching out.",
+          "hook": "Provocative question using 'stalking' language grabs attention and validates a relatable behavior.",
+          "cuts": "674.70:680.07,704.79:713.08",
+          "duration": 13.7,
+          "section_count": 2,
+          "has_cold_open": false
+        },
+        {
+          "segment": 9,
+          "summary": "Encouragement to keep posting consistently even without immediate results.",
+          "hook": "Reframes quitting as 'abandoning prospects' - creates urgency and emotional stakes.",
+          "cuts": "740.95:748.57,763.25:768.07,778.51:784.93",
+          "duration": 18.9,
+          "section_count": 3,
+          "has_cold_open": false
+        },
+        {
+          "segment": 10,
+          "summary": "Story about how word-of-mouth referrals are lost without social presence - real estate agent example.",
+          "hook": "Challenges common belief ('I just get referrals') then uses personal story to prove social presence closes the gap.",
+          "cuts": "829.63:834.85,847.08:857.16,860.42:874.18,875.52:883.10,892.26:896.92,903.99:906.89,914.67:920.61",
+          "duration": 50.1,
+          "section_count": 7,
+          "has_cold_open": false
+        }
+      ],
+      "scores": {
+        "cold_viewer_test": {
+          "score": 10,
+          "reasoning": "All segments open with self-contained statements that are easy for a cold viewer to grasp immediately."
+        },
+        "hook_strength": {
+          "score": 10,
+          "reasoning": "Each segment starts with a compelling statement or question likely to engage scrolling viewers, similar to ground truth."
+        },
+        "narrative_coherence": {
+          "score": 9,
+          "reasoning": "Segments flow logically, though Segment 5 has a minor abrupt transition in the list of actions suggested, but it is still mostly coherent."
+        },
+        "content_selection": {
+          "score": 9,
+          "reasoning": "While the most impactful moments are generally well-chosen, a few grounded moments like in Segment 9 could have been more concise."
+        },
+        "cut_precision": {
+          "score": 10,
+          "reasoning": "Each segment starts and ends cleanly at natural sentence boundaries, without trailing conjunctions."
+        },
+        "duration_accuracy": {
+          "score": 10,
+          "reasoning": "All segments are within the 30s-90s acceptable range, maintaining the target duration effectively."
+        },
+        "segment_structure": {
+          "score": 10,
+          "reasoning": "The number and structure of segments align well with the ground truth; the proposed structure is appropriate for the source material."
+        }
+      },
+      "mean_score": 9.71,
+      "overall_notes": "The proposed cuts match the ground truth in quality, successfully capturing engaging and self-contained moments with strong hooks and natural flow. Minor transitions could be slightly refined, but overall, the selection is excellent.",
+      "elapsed": {
+        "propose_s": 271.9,
+        "judge_s": 6.6
+      },
+      "model_name": "Opus 4.5",
+      "model_id": "anthropic/claude-opus-4.5"
+    },
+    {
+      "case_id": "260210-content-batch",
+      "gt_segment_count": 11,
+      "proposed_segment_count": 16,
+      "proposed_segments": [
+        {
+          "segment": 1,
+          "summary": "Hook about the gap between brand awareness and purchase intent.",
+          "hook": "Opens with a provocative insight about the gap between visibility and conversions \u2014 instantly relevant to any business owner.",
+          "cuts": "59.39:64.61",
+          "duration": 5.2,
+          "section_count": 1,
+          "has_cold_open": false,
+          "analysis": {
+            "content_type": "pre_recorded_batch",
+            "editing_strategy": "contiguous_batch",
+            "single_or_multi": "multi \u2014 The transcript contains 16+ distinct topic groups with retakes, each having its own standalone hook. Topics range from AI ethics to sales objections to a real estate story, all recorded independently in one session.",
+            "cold_open_candidate": null,
+            "keepable_content_seconds": 222.0
+          }
+        },
+        {
+          "segment": 2,
+          "summary": "Philosophical question about whether we should use AI just because we can.",
+          "hook": "Challenges the AI hype by flipping 'can we' into 'should we' \u2014 a contrarian take that stops scrollers.",
+          "cuts": "98.06:103.84",
+          "duration": 5.8,
+          "section_count": 1,
+          "has_cold_open": false
+        },
+        {
+          "segment": 3,
+          "summary": "Specific example of AI-generated UGC videos with the 'but should you' punchline.",
+          "hook": "The shocking stat '500 UGC videos in less than ten minutes' hooks viewers, then the 'but should you' twist creates tension.",
+          "cuts": "151.32:157.42",
+          "duration": 6.1,
+          "section_count": 1,
+          "has_cold_open": false
+        },
+        {
+          "segment": 4,
+          "summary": "One habit tip: think like a producer, not a consumer.",
+          "hook": "Promise of a single actionable habit immediately draws in marketers looking for quick wins.",
+          "cuts": "168.66:175.29",
+          "duration": 6.6,
+          "section_count": 1,
+          "has_cold_open": false
+        },
+        {
+          "segment": 5,
+          "summary": "Why Marquee keeps humans in the loop instead of full automation.",
+          "hook": "The 'human in the loop' vs 'autopilot' contrast is a timely AI-era hook that sparks curiosity.",
+          "cuts": "191.06:195.16",
+          "duration": 4.1,
+          "section_count": 1,
+          "has_cold_open": false
+        },
+        {
+          "segment": 6,
+          "summary": "Marquee's stance against full automation \u2014 and why they say no.",
+          "hook": "Contrarian stance ('we say no') against the popular demand for full automation creates intrigue.",
+          "cuts": "211.40:216.14",
+          "duration": 4.7,
+          "section_count": 1,
+          "has_cold_open": false
+        },
+        {
+          "segment": 7,
+          "summary": "Belief statement that good marketing has a soul.",
+          "hook": "The emotional phrase 'marketing has a soul' is unexpected and philosophical \u2014 a pattern interrupt on social feeds.",
+          "cuts": "229.69:233.10",
+          "duration": 3.4,
+          "section_count": 1,
+          "has_cold_open": false
+        },
+        {
+          "segment": 8,
+          "summary": "Marquee's strategic shift from product-centered to problem-centered positioning, with a concrete headline example.",
+          "hook": "Opening with a real business decision ('we stopped centering around the product') signals insider knowledge and practical value.",
+          "cuts": "275.75:282.98,294.37:298.71",
+          "duration": 11.6,
+          "section_count": 2,
+          "has_cold_open": false
+        },
+        {
+          "segment": 9,
+          "summary": "Quick tip: inspect your own purchasing behavior to become a better marketer.",
+          "hook": "'Here's a trick' promises a quick win, and the surprising advice to study your OWN behavior is counterintuitive.",
+          "cuts": "346.18:350.44",
+          "duration": 4.3,
+          "section_count": 1,
+          "has_cold_open": false
+        },
+        {
+          "segment": 10,
+          "summary": "Turn your top three sales objections into your next three pieces of content.",
+          "hook": "Calling out a common frustration ('same three objections on every sales call') immediately resonates with anyone in sales or business.",
+          "cuts": "357.14:363.25,374.96:380.34,386.88:390.06,393.96:397.75",
+          "duration": 18.5,
+          "section_count": 4,
+          "has_cold_open": false
+        },
+        {
+          "segment": 11,
+          "summary": "Grade school analogy applied to business: use social media as a classroom to answer client questions before they even call.",
+          "hook": "The nostalgic 'remember in grade school' opener triggers a memory and the analogy to business creates an instant aha moment.",
+          "cuts": "406.13:413.09,420.88:430.74,436.42:440.44",
+          "duration": 20.8,
+          "section_count": 3,
+          "has_cold_open": false
+        },
+        {
+          "segment": 12,
+          "summary": "Standalone CTA targeting busy professionals in trust-based industries.",
+          "hook": "Direct address to a specific audience ('busy professional in a trust based industry') qualifies the viewer immediately.",
+          "cuts": "481.08:487.19",
+          "duration": 6.1,
+          "section_count": 1,
+          "has_cold_open": false
+        },
+        {
+          "segment": 13,
+          "summary": "Quality over quantity argument: bad content erodes trust with high-net-worth clients. Commit to quality first, then scale.",
+          "hook": "'Producing crap content doesn't just waste your time \u2014 it actively erodes trust' is a bold, confrontational opener that makes viewers reconsider their strategy.",
+          "cuts": "529.09:537.66,546.18:556.34,566.98:571.24,576.42:580.52,592.51:599.52,604.62:607.12,620.02:625.97",
+          "duration": 42.6,
+          "section_count": 7,
+          "has_cold_open": false
+        },
+        {
+          "segment": 14,
+          "summary": "Your potential clients are researching you online for weeks before reaching out \u2014 they expect to feel connected before the first call.",
+          "hook": "The word 'stalking' is provocative and unexpected in a business context, immediately creating curiosity.",
+          "cuts": "674.70:680.08,704.78:713.08",
+          "duration": 13.7,
+          "section_count": 2,
+          "has_cold_open": false
+        },
+        {
+          "segment": 15,
+          "summary": "If you stop posting because you don't see results, you're abandoning prospects at the decision point. Keep posting.",
+          "hook": "The reframe of 'not posting' as 'abandoning your prospects' is a guilt-triggering insight that stops the scroll.",
+          "cuts": "740.95:748.57,763.25:768.07,778.67:784.93",
+          "duration": 18.7,
+          "section_count": 3,
+          "has_cold_open": false
+        },
+        {
+          "segment": 16,
+          "summary": "Challenges the 'I just get referrals' mindset with a personal real estate story \u2014 social presence was the differentiating factor that won the business.",
+          "hook": "Quoting a common objection ('I don't need marketing, I get word-of-mouth') immediately resonates and sets up the counter-argument.",
+          "cuts": "829.63:834.85,847.08:857.16,860.42:874.18,875.52:883.10,892.26:896.92,903.99:906.89,914.67:920.61",
+          "duration": 50.1,
+          "section_count": 7,
+          "has_cold_open": false
+        }
+      ],
+      "scores": {
+        "cold_viewer_test": {
+          "score": 10,
+          "reasoning": "Each segment opens with a clear and standalone statement that does not rely on prior context, making it accessible to cold viewers."
+        },
+        "hook_strength": {
+          "score": 9,
+          "reasoning": "Most segments start with a compelling hook or question that draws viewers in, though a few lack the same immediate attention-grabbing appeal as others."
+        },
+        "narrative_coherence": {
+          "score": 8,
+          "reasoning": "The segments generally flow well, though some transitions between parts within segments could be smoother."
+        },
+        "content_selection": {
+          "score": 9,
+          "reasoning": "Segments include strong content choices, capturing key points and engaging ideas, with minor opportunities for enhancement in emphasis or detail."
+        },
+        "cut_precision": {
+          "score": 9,
+          "reasoning": "Most cuts are precise, starting and ending at natural boundaries. Minor improvements could be made in a couple of segments."
+        },
+        "duration_accuracy": {
+          "score": 10,
+          "reasoning": "All proposed segments fall within the acceptable duration range, maintaining a concise delivery format."
+        },
+        "segment_structure": {
+          "score": 8,
+          "reasoning": "Structure is well thought out and comprehensive, but there are a few more segments than in the ground truth which could be re-evaluated for conciseness."
+        }
+      },
+      "mean_score": 9.0,
+      "overall_notes": "The proposed cuts closely align with ground truth quality, featuring clear and engaging segments with effective hooks and coherence. Some segments could have been combined for better efficiency and clearer connections, but overall, the choices are strong and facilitate viewer understanding and interest.",
+      "elapsed": {
+        "propose_s": 661.8,
+        "judge_s": 7.0
+      },
+      "model_name": "Opus 4.6",
+      "model_id": "anthropic/claude-opus-4.6"
+    },
+    {
+      "case_id": "260210-content-batch",
+      "gt_segment_count": 11,
+      "proposed_segment_count": 11,
+      "proposed_segments": [
+        {
+          "segment": 1,
+          "summary": "A thought-provoking clip about the ethics and strategy of AI in content creation.",
+          "hook": "The speaker asks a critical question about AI: just because we can, should we?",
+          "cuts": "133.19:140.00,151.32:157.42",
+          "duration": 12.9,
+          "section_count": 2,
+          "has_cold_open": false,
+          "analysis": {
+            "content_type": "pre_recorded_batch",
+            "editing_strategy": "contiguous_batch",
+            "single_or_multi": "multi",
+            "cold_open_candidate": null,
+            "keepable_content_seconds": 450.0
+          }
+        },
+        {
+          "segment": 2,
+          "summary": "A quick tip on shifting your mindset from consumer to producer to improve marketing skills.",
+          "hook": "A direct promise of a habit that will make you a better marketer.",
+          "cuts": "168.66:175.29",
+          "duration": 6.6,
+          "section_count": 1,
+          "has_cold_open": false
+        },
+        {
+          "segment": 3,
+          "summary": "Explaining why human-in-the-loop is essential for marketing with a 'soul' vs. full automation.",
+          "hook": "A controversial stance: saying 'no' to full automation.",
+          "cuts": "211.40:216.14,229.69:233.10",
+          "duration": 8.1,
+          "section_count": 2,
+          "has_cold_open": false
+        },
+        {
+          "segment": 4,
+          "summary": "A business strategy lesson on centering your marketing around the customer's problem rather than your product.",
+          "hook": "Sharing a specific internal change made at the speaker's company.",
+          "cuts": "275.75:282.98,294.37:298.71",
+          "duration": 11.6,
+          "section_count": 2,
+          "has_cold_open": false
+        },
+        {
+          "segment": 5,
+          "summary": "A short, punchy tip on using self-observation to improve marketing intuition.",
+          "hook": "A 'trick' for marketers to improve by looking at their own behavior.",
+          "cuts": "346.18:350.44",
+          "duration": 4.3,
+          "section_count": 1,
+          "has_cold_open": false
+        },
+        {
+          "segment": 6,
+          "summary": "How to turn sales objections into a high-performing content strategy.",
+          "hook": "Identifying a common pain point: hearing the same objections on sales calls.",
+          "cuts": "357.14:363.25,374.96:380.34,393.97:397.75",
+          "duration": 15.3,
+          "section_count": 3,
+          "has_cold_open": false
+        },
+        {
+          "segment": 7,
+          "summary": "Using social media as a 'classroom' to pre-answer client questions and increase conversion rates.",
+          "hook": "Relatable nostalgia about grade school teachers to introduce a business concept.",
+          "cuts": "406.13:415.19,420.88:430.74,436.42:440.44",
+          "duration": 22.9,
+          "section_count": 3,
+          "has_cold_open": false
+        },
+        {
+          "segment": 8,
+          "summary": "A warning against low-quality content and a guide on why quality must come before quantity in trust-based industries.",
+          "hook": "A strong opening statement about how 'crap content' erodes trust.",
+          "cuts": "529.09:537.66,566.98:571.24,592.51:596.70,604.62:607.12,620.02:625.97",
+          "duration": 25.5,
+          "section_count": 5,
+          "has_cold_open": false
+        },
+        {
+          "segment": 9,
+          "summary": "Explaining the modern consumer behavior of 'stalking' businesses online before making contact.",
+          "hook": "A provocative question about clients 'stalking' you online.",
+          "cuts": "674.70:680.07,686.46:691.04,704.79:713.08",
+          "duration": 18.2,
+          "section_count": 3,
+          "has_cold_open": false
+        },
+        {
+          "segment": 10,
+          "summary": "Encouragement to stay consistent with posting, explaining that stopping hurts prospects who are currently in the decision phase.",
+          "hook": "A direct warning: stopping your posts is 'abandoning your prospects'.",
+          "cuts": "740.95:748.57,763.25:768.07,778.51:784.93",
+          "duration": 18.9,
+          "section_count": 3,
+          "has_cold_open": false
+        },
+        {
+          "segment": 11,
+          "summary": "Debunking the 'I only need word-of-mouth' myth with a real-life story about how social presence validates referrals.",
+          "hook": "Addressing a common business owner objection: 'I don't need marketing, I have referrals'.",
+          "cuts": "829.63:834.85,847.08:857.16,860.42:874.18,903.99:906.89,914.67:920.61",
+          "duration": 37.9,
+          "section_count": 5,
+          "has_cold_open": false
+        }
+      ],
+      "scores": {
+        "cold_viewer_test": {
+          "score": 8,
+          "reasoning": "Most proposed segments start with a clear, self-contained idea, although a few require a small amount of additional context to be fully understood."
+        },
+        "hook_strength": {
+          "score": 7,
+          "reasoning": "The proposed segments generally have solid openings, especially segment 1 and the word-of-mouth story. However, some segments lack an exceptionally strong hook."
+        },
+        "narrative_coherence": {
+          "score": 8,
+          "reasoning": "The narrative within each segment mostly flows well, with only minor jumps that don't severely disrupt overall understanding."
+        },
+        "content_selection": {
+          "score": 8,
+          "reasoning": "The proposed cuts capture a majority of the strong points from the transcript, aligning closely with the ground truth, though a few high-impact moments were missed."
+        },
+        "cut_precision": {
+          "score": 7,
+          "reasoning": "Most segments are cut cleanly at natural sentence boundaries, though some segments have slightly less precise starts or end on awkward notes."
+        },
+        "duration_accuracy": {
+          "score": 10,
+          "reasoning": "All segments fall within the acceptable target duration range, ensuring a concise yet comprehensive delivery."
+        },
+        "segment_structure": {
+          "score": 9,
+          "reasoning": "The number and arrangement of segments closely mirror the ground truth, demonstrating a solid understanding of segment differentiation."
+        }
+      },
+      "mean_score": 8.14,
+      "overall_notes": "The proposed cuts align well with the ground truth in terms of content and structure, capturing the key messages effectively. Slight refinement in hook strength and cut precision could elevate the overall impact, but the current assembly is strong and engaging for the intended audience.",
+      "elapsed": {
+        "propose_s": 331.5,
+        "judge_s": 8.0
+      },
+      "model_name": "Gemini 3 Flash",
+      "model_id": "google/gemini-3-flash-preview"
+    },
+    {
+      "case_id": "260210-content-batch",
+      "gt_segment_count": 11,
+      "proposed_segment_count": 8,
+      "proposed_segments": [
+        {
+          "segment": 1,
+          "summary": "A quick insight on shifting marketing focus from the product to the client's problem.",
+          "hook": "Opens with a direct 'behind the scenes' change made at the agency.",
+          "cuts": "275.75:282.98",
+          "duration": 7.2,
+          "section_count": 1,
+          "has_cold_open": false,
+          "analysis": {
+            "content_type": "pre_recorded_batch",
+            "editing_strategy": "contiguous_batch",
+            "single_or_multi": "multi",
+            "cold_open_candidate": null,
+            "keepable_content_seconds": 320.0
+          }
+        },
+        {
+          "segment": 2,
+          "summary": "A mindset shift for marketers to analyze their own consumption habits.",
+          "hook": "A direct challenge to the viewer to do 'one thing today'.",
+          "cuts": "323.02:327.52,346.18:350.44",
+          "duration": 8.8,
+          "section_count": 2,
+          "has_cold_open": false
+        },
+        {
+          "segment": 3,
+          "summary": "A tactical guide on turning sales objections into content ideas.",
+          "hook": "Identifies a common pain point (hearing the same objections) and diagnoses it as a strategy failure.",
+          "cuts": "357.14:363.25,374.96:380.34,393.97:397.75",
+          "duration": 15.3,
+          "section_count": 3,
+          "has_cold_open": false
+        },
+        {
+          "segment": 4,
+          "summary": "Uses a classroom analogy to explain how social media answers client questions at scale.",
+          "hook": "Nostalgic reference to grade school that sets up a relatable analogy.",
+          "cuts": "406.13:413.09,420.88:430.74,436.42:440.44",
+          "duration": 20.8,
+          "section_count": 3,
+          "has_cold_open": false
+        },
+        {
+          "segment": 5,
+          "summary": "A nuanced argument for quality over quantity in content marketing, explaining how bad content damages trust.",
+          "hook": "Strong controversial statement: 'Producing crap content actively erodes trust'.",
+          "cuts": "529.09:537.67,546.18:553.96,566.98:571.24,576.42:580.52,592.51:599.52,604.62:607.12,620.02:625.97",
+          "duration": 40.2,
+          "section_count": 7,
+          "has_cold_open": false
+        },
+        {
+          "segment": 6,
+          "summary": "Explains modern consumer behavior where clients 'stalk' providers online before making contact.",
+          "hook": "A provocative question about clients 'stalking' you.",
+          "cuts": "674.70:680.07,704.79:713.08",
+          "duration": 13.7,
+          "section_count": 2,
+          "has_cold_open": false
+        },
+        {
+          "segment": 7,
+          "summary": "Encouragement to keep posting content even without immediate results, framing silence as the decision-making phase.",
+          "hook": "Reframes 'no results' as 'abandoning prospects' to create urgency.",
+          "cuts": "740.95:748.57,763.25:768.07,778.51:784.93",
+          "duration": 18.9,
+          "section_count": 3,
+          "has_cold_open": false
+        },
+        {
+          "segment": 8,
+          "summary": "Debunks the 'I only need referrals' myth with a personal story about choosing a real estate agent based on social presence.",
+          "hook": "Quotes a common business owner objection ('I don't need marketing') and immediately challenges it.",
+          "cuts": "829.63:834.21,847.08:857.16,860.42:866.59,869.05:874.18,875.52:881.31,903.99:906.89,914.67:920.61",
+          "duration": 40.6,
+          "section_count": 7,
+          "has_cold_open": false
+        }
+      ],
+      "scores": {
+        "cold_viewer_test": {
+          "score": 8,
+          "reasoning": "Most segments in the proposed cuts open with a clear statement and require little prior context. However, a few segments could be more explicit in context, such as Segment 7's focus on consistent posting."
+        },
+        "hook_strength": {
+          "score": 7,
+          "reasoning": "The proposed segments have solid openings that could capture attention but lack the punch or uniqueness needed for a stronger hook, especially when compared to some of the more engaging openings in the ground truth."
+        },
+        "narrative_coherence": {
+          "score": 8,
+          "reasoning": "The segments flow logically within themselves. However, some transitions, like in Segment 5 with multiple sections, feel slightly abrupt or disconnected, slightly reducing coherence."
+        },
+        "content_selection": {
+          "score": 7,
+          "reasoning": "The proposed cuts capture key ideas, yet sometimes combine sections less effectively compared to ground truth, like in Segment 5 where it feels cluttered with many sections."
+        },
+        "cut_precision": {
+          "score": 9,
+          "reasoning": "Most segments are precise, starting and ending at natural boundaries. A few minor instances could be refined but overall, the cuts maintain strong sentence integrity."
+        },
+        "duration_accuracy": {
+          "score": 10,
+          "reasoning": "All segments fall within the desired duration range, ensuring they fit the format's requirements effectively."
+        },
+        "segment_structure": {
+          "score": 8,
+          "reasoning": "The number and structure of segments are generally appropriate. Slight improvements could be made, such as distributing content more uniformly across segments for fluid consumption."
+        }
+      },
+      "mean_score": 8.14,
+      "overall_notes": "The proposed cuts generally offer coherent, precise, and contextually appropriate video segments. They effectively deliver key insights similar to ground truth but could enhance hooks and content combination slightly for stronger engagement.",
+      "elapsed": {
+        "propose_s": 133.5,
+        "judge_s": 8.6
+      },
+      "model_name": "Gemini 3 Pro",
+      "model_id": "google/gemini-3-pro-preview"
+    },
+    {
+      "case_id": "260210-content-batch",
+      "gt_segment_count": 11,
+      "proposed_segment_count": 16,
+      "proposed_segments": [
+        {
+          "segment": 1,
+          "summary": "Quick hook: there\u2019s a gap between awareness and purchase\u2014and you can close it.",
+          "hook": "Immediately names a painful marketing problem (awareness \u2260 sales) and promises a fix.",
+          "cuts": "59.39:64.61",
+          "duration": 5.2,
+          "section_count": 1,
+          "has_cold_open": false,
+          "analysis": {
+            "content_type": "pre_recorded_batch",
+            "editing_strategy": "contiguous_batch",
+            "single_or_multi": "multi",
+            "cold_open_candidate": null,
+            "keepable_content_seconds": 260.0
+          }
+        },
+        {
+          "segment": 2,
+          "summary": "AI marketing: don\u2019t just ask what AI can do\u2014ask what you should do (example: 500 UGC videos in minutes).",
+          "hook": "Contrasts capability vs. judgment, then hits with a big-number AI example.",
+          "cuts": "98.06:102.70,146.36:157.42",
+          "duration": 15.7,
+          "section_count": 2,
+          "has_cold_open": false
+        },
+        {
+          "segment": 3,
+          "summary": "Simple mindset shift: think like a producer, not a consumer.",
+          "hook": "Promises one habit that makes you a better marketer\u2014fast payoff line.",
+          "cuts": "168.66:175.29",
+          "duration": 6.6,
+          "section_count": 1,
+          "has_cold_open": false
+        },
+        {
+          "segment": 4,
+          "summary": "Why they refuse full automation: keep humans in the loop because good marketing has a soul.",
+          "hook": "Strong contrarian stance: people want full automation, but they say no.",
+          "cuts": "191.06:195.16,203.48:207.90,221.37:225.22",
+          "duration": 12.4,
+          "section_count": 3,
+          "has_cold_open": false
+        },
+        {
+          "segment": 5,
+          "summary": "Positioning shift: stop marketing the product\u2014market the problem (and even change your headline accordingly).",
+          "hook": "Clear \u201cwe changed X to Y\u201d business lesson with immediate applicability.",
+          "cuts": "275.75:282.98,294.37:298.71",
+          "duration": 11.6,
+          "section_count": 2,
+          "has_cold_open": false
+        },
+        {
+          "segment": 6,
+          "summary": "One-action takeaway: think like a producer, not a consumer.",
+          "hook": "Direct call-to-action framing: \u201cif you can do one thing today\u2026\u201d",
+          "cuts": "323.02:327.52",
+          "duration": 4.5,
+          "section_count": 1,
+          "has_cold_open": false
+        },
+        {
+          "segment": 7,
+          "summary": "Improve your marketing by studying your own buying behavior.",
+          "hook": "Quick \u201chere\u2019s a trick\u201d setup with a simple self-audit method.",
+          "cuts": "332.82:334.37,346.18:350.44",
+          "duration": 5.8,
+          "section_count": 2,
+          "has_cold_open": false
+        },
+        {
+          "segment": 8,
+          "summary": "Turn common sales objections into your next 3 content ideas\u2014instantly.",
+          "hook": "Calls out a specific pain (\u201csame three objections\u201d) and gives a concrete exercise.",
+          "cuts": "357.14:363.25,374.96:387.38,387.92:390.06,393.97:397.25",
+          "duration": 23.9,
+          "section_count": 4,
+          "has_cold_open": false
+        },
+        {
+          "segment": 9,
+          "summary": "Use social media like a classroom: answer client questions before the sales call.",
+          "hook": "Relatable analogy (raising your hand in class) \u2192 immediate business application.",
+          "cuts": "406.13:415.19,420.88:430.74,448.63:454.65",
+          "duration": 24.9,
+          "section_count": 3,
+          "has_cold_open": false
+        },
+        {
+          "segment": 10,
+          "summary": "Hard truth: bad content doesn\u2019t just fail\u2014it damages trust with high-value clients.",
+          "hook": "Punchy opener (\u201ccrap content\u201d) plus a clear consequence (trust erosion).",
+          "cuts": "529.09:537.67",
+          "duration": 8.6,
+          "section_count": 1,
+          "has_cold_open": false
+        },
+        {
+          "segment": 11,
+          "summary": "Quality vs quantity: quantity just amplifies whatever you\u2019re doing\u2014good or bad. Commit to quality first, then scale.",
+          "hook": "Classic debate framed with a clear rule + consequence (trust up or trust down).",
+          "cuts": "566.98:571.24,576.42:580.52,592.51:599.52,604.62:607.12,620.02:625.97",
+          "duration": 23.8,
+          "section_count": 5,
+          "has_cold_open": false
+        },
+        {
+          "segment": 12,
+          "summary": "People research you for weeks before contacting you\u2014so your online presence must build connection before the call.",
+          "hook": "The \u2018stalking you for weeks\u2019 line creates instant curiosity and self-recognition.",
+          "cuts": "674.70:680.07,686.46:691.04,695.74:700.97,704.79:713.08",
+          "duration": 23.5,
+          "section_count": 4,
+          "has_cold_open": false
+        },
+        {
+          "segment": 13,
+          "summary": "Don\u2019t quit posting just because results aren\u2019t immediate\u2014you\u2019re disappearing right as prospects decide to contact you.",
+          "hook": "Calls out the exact discouragement moment most creators/business owners feel.",
+          "cuts": "734.27:736.95,740.95:748.57,763.25:768.07,778.67:784.93",
+          "duration": 21.4,
+          "section_count": 4,
+          "has_cold_open": false
+        },
+        {
+          "segment": 14,
+          "summary": "Word-of-mouth is great\u2014but you\u2019re still losing referred leads before they ever contact you.",
+          "hook": "Starts with a common belief, then flips it with a fear-of-loss question.",
+          "cuts": "829.63:834.85,847.08:857.16",
+          "duration": 15.3,
+          "section_count": 2,
+          "has_cold_open": false
+        },
+        {
+          "segment": 15,
+          "summary": "Story: they chose a real estate agent after checking her out on social\u2014before ever reaching out.",
+          "hook": "Opens with a real-world example that proves how buyers behave now.",
+          "cuts": "860.42:881.31",
+          "duration": 20.9,
+          "section_count": 1,
+          "has_cold_open": false
+        },
+        {
+          "segment": 16,
+          "summary": "Takeaway: when you\u2019re one of many options, your social presence is the differentiator.",
+          "hook": "Clear competition framing (\u201cher versus 10 other agents\u201d) makes the point land fast.",
+          "cuts": "892.26:900.18,903.99:906.89,914.67:920.61",
+          "duration": 16.8,
+          "section_count": 3,
+          "has_cold_open": false
+        }
+      ],
+      "scores": {
+        "cold_viewer_test": {
+          "score": 6,
+          "reasoning": "Most segments are straightforward but some early parts assume prior knowledge, particularly when AI and UGC are mentioned without clear definitions."
+        },
+        "hook_strength": {
+          "score": 7,
+          "reasoning": "Several segments have strong openings, especially those related to AI ethics and thinking like a producer. However, a few start more generically."
+        },
+        "narrative_coherence": {
+          "score": 6,
+          "reasoning": "While most segments maintain coherence, some abrupt jumps, particularly between concepts like AI capabilities and user-generated content, affect the flow."
+        },
+        "content_selection": {
+          "score": 7,
+          "reasoning": "The machine-generated cuts include strong content but miss some impactful sections present in the ground truth, particularly deeper explorations of key ideas."
+        },
+        "cut_precision": {
+          "score": 7,
+          "reasoning": "Most cuts start and end on sentence boundaries, although a few cuts could be tighter, with one or two segments starting mid-thought."
+        },
+        "duration_accuracy": {
+          "score": 9,
+          "reasoning": "All segments fit within the acceptable duration range, closely adhering to the target length criteria."
+        },
+        "segment_structure": {
+          "score": 5,
+          "reasoning": "There are more segments than the ground truth, indicating a more fragmented approach. Some segments are split unnecessarily while others group unrelated points."
+        }
+      },
+      "mean_score": 6.71,
+      "overall_notes": "The PROPOSED segments capture many key points but lack the structured coherence of the GROUND TRUTH. More, shorter segments could be streamlined, and some transitions are choppy. The selection process could be refined by focusing on cohesive threadlines present in the GROUND TRUTH.",
+      "elapsed": {
+        "propose_s": 224.6,
+        "judge_s": 7.6
+      },
+      "model_name": "GPT 5.2",
+      "model_id": "openai/gpt-5.2"
+    },
+    {
+      "case_id": "260210-content-batch",
+      "gt_segment_count": 11,
+      "proposed_segment_count": 13,
+      "proposed_segments": [
+        {
+          "segment": 1,
+          "summary": "Hook: the core marketing problem\u2014closing the gap between awareness and purchase intent.",
+          "hook": "Opens with a crisp, relatable problem statement (\u201cthere\u2019s a gap\u2026\u201d) and promises a fix.",
+          "cuts": "59.39:64.61",
+          "duration": 5.2,
+          "section_count": 1,
+          "has_cold_open": false,
+          "analysis": {
+            "content_type": "pre_recorded_batch",
+            "editing_strategy": "contiguous_batch",
+            "single_or_multi": "multi \u2014 this is clearly a batch recording of multiple standalone short clips: repeated hooks/retakes (\u201cokay just because\u2026\u201d, multiple CTA takes), clear topic resets (\u201chere\u2019s one habit\u2026\u201d, \u201chere\u2019s why\u2026\u201d, \u201chere\u2019s a trick\u2026\u201d) and independent topics that don\u2019t rely on each other.",
+            "cold_open_candidate": null,
+            "keepable_content_seconds": 270.0
+          }
+        },
+        {
+          "segment": 2,
+          "summary": "AI marketing caution: capability isn\u2019t the same as strategy\u2014ask \u201cshould we\u201d before scaling AI output.",
+          "hook": "Immediate ethical/strategy tension: \u201cjust because we can\u2026should we?\u201d then a concrete example (500 UGC videos).",
+          "cuts": "125.41:129.83,151.32:157.42",
+          "duration": 10.5,
+          "section_count": 2,
+          "has_cold_open": false
+        },
+        {
+          "segment": 3,
+          "summary": "Marketing mindset shift: act like a producer, not a consumer.",
+          "hook": "Promises a single habit that makes you better\u2014simple, quotable payoff line.",
+          "cuts": "168.66:175.29",
+          "duration": 6.6,
+          "section_count": 1,
+          "has_cold_open": false
+        },
+        {
+          "segment": 4,
+          "summary": "Why they refuse full automation: keep humans in the loop because good marketing has \u201ca soul.\u201d",
+          "hook": "Contrarian stance (\u201cwe say no\u201d) + emotional framing (\u201cmarketing has a soul\u201d).",
+          "cuts": "191.06:195.16,203.48:207.90,221.37:225.22",
+          "duration": 12.4,
+          "section_count": 3,
+          "has_cold_open": false
+        },
+        {
+          "segment": 5,
+          "summary": "Positioning shift: stop marketing the product\u2014market the problem (plus how it changed their headline).",
+          "hook": "\u201cHere\u2019s a change we made\u201d signals a practical, proven adjustment with a before/after headline.",
+          "cuts": "275.75:298.71",
+          "duration": 23.0,
+          "section_count": 1,
+          "has_cold_open": false
+        },
+        {
+          "segment": 6,
+          "summary": "Quick tip: become a better marketer by studying your own buying behavior.",
+          "hook": "\u201cHere\u2019s a trick\u201d + self-application makes it instantly actionable.",
+          "cuts": "346.18:350.44",
+          "duration": 4.3,
+          "section_count": 1,
+          "has_cold_open": false
+        },
+        {
+          "segment": 7,
+          "summary": "Turn sales objections into content: list your top 3 objections and you\u2019ve got your next 3 content ideas.",
+          "hook": "Calls out a painful pattern (\u201csame three objections\u201d) then gives a dead-simple exercise and payoff.",
+          "cuts": "357.14:363.25,374.96:387.38,387.92:390.06,393.97:397.75",
+          "duration": 24.4,
+          "section_count": 4,
+          "has_cold_open": false
+        },
+        {
+          "segment": 8,
+          "summary": "Use social media like a classroom: answer client questions publicly before they ever get on a call.",
+          "hook": "The grade-school analogy is a pattern interrupt, then it translates immediately into a business tactic.",
+          "cuts": "406.13:415.19,420.88:430.74,436.42:440.44",
+          "duration": 22.9,
+          "section_count": 3,
+          "has_cold_open": false
+        },
+        {
+          "segment": 9,
+          "summary": "Quality > quantity (especially for trust-based / high-net-worth audiences): bad content erodes trust.",
+          "hook": "Strong, polarizing opener (\u201ccrap content\u2026 erodes trust\u201d) aimed at a premium-client audience.",
+          "cuts": "529.09:537.67,546.18:556.34,566.98:571.24",
+          "duration": 23.0,
+          "section_count": 3,
+          "has_cold_open": false
+        },
+        {
+          "segment": 10,
+          "summary": "Prospects research you for weeks; people expect to feel connected before they ever talk to you.",
+          "hook": "\u201cYour potential clients are stalking you\u201d is a scroll-stopper, then it\u2019s backed by the 80% online stat.",
+          "cuts": "674.70:680.07,686.46:691.04,704.79:713.08",
+          "duration": 18.2,
+          "section_count": 3,
+          "has_cold_open": false
+        },
+        {
+          "segment": 11,
+          "summary": "Don\u2019t quit posting because results aren\u2019t instant\u2014you\u2019re disappearing right when prospects are deciding.",
+          "hook": "Direct call-out question that hits a common frustration, followed by a clear consequence (\u201cabandoning your prospects\u201d).",
+          "cuts": "734.27:736.95,740.95:748.57,763.25:768.07,778.51:784.93",
+          "duration": 21.5,
+          "section_count": 4,
+          "has_cold_open": false
+        },
+        {
+          "segment": 12,
+          "summary": "Word-of-mouth isn\u2019t enough\u2014referred leads can be lost before they ever contact you.",
+          "hook": "Starts with a familiar claim (\u201cI don\u2019t need marketing\u2026\u201d) then flips it with a sharp question about leakage.",
+          "cuts": "829.63:834.85,847.08:857.16",
+          "duration": 15.3,
+          "section_count": 2,
+          "has_cold_open": false
+        },
+        {
+          "segment": 13,
+          "summary": "Story proof: social presence is the differentiator (real estate agent example) + CTA.",
+          "hook": "A real-world buying story makes the point undeniable: you evaluated her via social before contacting her.",
+          "cuts": "860.42:874.18,875.52:881.31,881.56:883.10,892.26:900.18,903.99:906.89,914.67:920.61",
+          "duration": 37.9,
+          "section_count": 6,
+          "has_cold_open": false
+        }
+      ],
+      "scores": {
+        "cold_viewer_test": {
+          "score": 9,
+          "reasoning": "Most segments are clear and self-contained, providing enough context for a cold viewer to understand. A couple of segments might benefit from slightly more context, but generally, each one is clear from the start."
+        },
+        "hook_strength": {
+          "score": 8,
+          "reasoning": "Many of the proposed segments start with engaging hooks, especially the ones addressing common marketing challenges. A few segments could capture attention more effectively, but overall, they are strong."
+        },
+        "narrative_coherence": {
+          "score": 8,
+          "reasoning": "Segments are generally coherent with logical flow and connections between statements. Some minor jumps could be smoother, but the narrative is mostly maintained."
+        },
+        "content_selection": {
+          "score": 7,
+          "reasoning": "The proposed cuts generally capture strong content, but occasionally miss some of the best highlights identified in the ground truth. However, the selected content is mostly relevant and engaging."
+        },
+        "cut_precision": {
+          "score": 9,
+          "reasoning": "Cuts are mostly precise, starting and ending at natural sentence boundaries. There may be one or two minor issues, but overall, boundaries are clean."
+        },
+        "duration_accuracy": {
+          "score": 10,
+          "reasoning": "All segments fall within the target duration range, adhering well to the intended time constraints."
+        },
+        "segment_structure": {
+          "score": 7,
+          "reasoning": "The number of segments is slightly overextended compared to the ground truth, with some segments potentially combining for better cohesion. However, the overall structure is reasonable and follows the source material."
+        }
+      },
+      "mean_score": 8.29,
+      "overall_notes": "The proposed cuts are generally well-executed, with strong hooks and coherent narratives. They succeed in covering much of the impactful content found in the ground truth, although some of the top highlights are missed. The structure is slightly more spread out than necessary, but the segments are still logical and within the target time frame. Improvements could be made by consolidating some segments for streamlined storytelling.",
+      "elapsed": {
+        "propose_s": 779.4,
+        "judge_s": 12.1
+      },
+      "model_name": "GPT 5.2 Pro",
+      "model_id": "openai/gpt-5.2-pro"
+    },
+    {
+      "case_id": "260210-content-batch",
+      "gt_segment_count": 11,
+      "proposed_segment_count": 12,
+      "proposed_segments": [
+        {
+          "segment": 1,
+          "summary": "Just because we can do cool AI stuff, should we?",
+          "hook": "Provocative question challenging AI hype grabs attention immediately.",
+          "cuts": "98.38:103.84",
+          "duration": 5.5,
+          "section_count": 1,
+          "has_cold_open": false,
+          "analysis": {
+            "content_type": "pre_recorded_batch",
+            "editing_strategy": "contiguous_batch",
+            "single_or_multi": "multi. This is a classic batch recording session with multiple distinct short-form clips on marketing/AI tips, each with 2-6 retakes/false starts separated by gaps, standalone hooks, no dependencies between topics.",
+            "cold_open_candidate": null,
+            "keepable_content_seconds": 420.0
+          }
+        },
+        {
+          "segment": 2,
+          "summary": "You can make 500 UGC videos with AI in <10 min, but should you?",
+          "hook": "Bold claim about AI capability with questioning twist hooks curiosity.",
+          "cuts": "151.32:156.92",
+          "duration": 5.6,
+          "section_count": 1,
+          "has_cold_open": false
+        },
+        {
+          "segment": 3,
+          "summary": "Habit to become better marketer: think like producer, not consumer.",
+          "hook": "'Here's one habit' promises quick actionable value.",
+          "cuts": "168.66:175.29",
+          "duration": 6.6,
+          "section_count": 1,
+          "has_cold_open": false
+        },
+        {
+          "segment": 4,
+          "summary": "Why Marquee keeps humans in the loop, not on autopilot.",
+          "hook": "Company insight into rejecting full AI automation intrigues.",
+          "cuts": "191.06:195.16",
+          "duration": 4.1,
+          "section_count": 1,
+          "has_cold_open": false
+        },
+        {
+          "segment": 5,
+          "summary": "Why we say no to full automation despite requests.",
+          "hook": "Contrarian stance against popular demand sparks interest.",
+          "cuts": "214.76:216.14",
+          "duration": 1.4,
+          "section_count": 1,
+          "has_cold_open": false
+        },
+        {
+          "segment": 6,
+          "summary": "Good marketing has a soul; here's how we keep it.",
+          "hook": "Poetic claim about marketing's soul stands out emotionally.",
+          "cuts": "229.76:233.10",
+          "duration": 3.3,
+          "section_count": 1,
+          "has_cold_open": false
+        },
+        {
+          "segment": 7,
+          "summary": "Shifted from product-centric to problem-centric marketing at Marquee.",
+          "hook": "'Here's a change we made' shares insider strategy shift.",
+          "cuts": "275.75:282.98",
+          "duration": 7.2,
+          "section_count": 1,
+          "has_cold_open": false
+        },
+        {
+          "segment": 8,
+          "summary": "Trick: inspect your own purchasing behavior to improve as marketer.",
+          "hook": "Simple, counterintuitive personal hack for improvement.",
+          "cuts": "346.98:350.44",
+          "duration": 3.5,
+          "section_count": 1,
+          "has_cold_open": false
+        },
+        {
+          "segment": 9,
+          "summary": "Actionable: write down top 3 sales objections now for content ideas.",
+          "hook": "Direct call to grab pen/paper creates urgency and participation.",
+          "cuts": "374.96:380.34",
+          "duration": 5.4,
+          "section_count": 1,
+          "has_cold_open": false
+        },
+        {
+          "segment": 10,
+          "summary": "Raise your hand analogy: post questions others have on social media.",
+          "hook": "Relatable grade school memory ties to business advice.",
+          "cuts": "406.13:415.19",
+          "duration": 9.1,
+          "section_count": 1,
+          "has_cold_open": false
+        },
+        {
+          "segment": 11,
+          "summary": "Bad content erodes trust with high-net-worth clients.",
+          "hook": "Harsh truth about content quality's impact on trust.",
+          "cuts": "529.09:537.67",
+          "duration": 8.6,
+          "section_count": 1,
+          "has_cold_open": false
+        },
+        {
+          "segment": 12,
+          "summary": "Potential clients stalk you online for weeks before reaching out.",
+          "hook": "Surprising 'stalking' revelation reframes social media role.",
+          "cuts": "674.70:680.07",
+          "duration": 5.4,
+          "section_count": 1,
+          "has_cold_open": false
+        }
+      ],
+      "scores": {
+        "cold_viewer_test": {
+          "score": 8,
+          "reasoning": "Most segments are understandable without prior context, though a couple might benefit from more setup for a cold viewer, such as Segment 5."
+        },
+        "hook_strength": {
+          "score": 7,
+          "reasoning": "The hooks are solid but not outstanding. They generally start with an intriguing statement but don't consistently grip strongly enough to ensure attention."
+        },
+        "narrative_coherence": {
+          "score": 6,
+          "reasoning": "Several segments feel abrupt or disconnected, especially when transitions aren't obvious or when segments are too short to establish context."
+        },
+        "content_selection": {
+          "score": 6,
+          "reasoning": "While some strong content is selected, several segments miss key supporting details or are less impactful compared to the ground truth."
+        },
+        "cut_precision": {
+          "score": 7,
+          "reasoning": "Most cuts are cleanly aligned with sentence boundaries, but there are minor issues, such as clipped endings in Segments 2 and 5."
+        },
+        "duration_accuracy": {
+          "score": 9,
+          "reasoning": "Almost all segments fall within the acceptable duration range, with only minor deviations."
+        },
+        "segment_structure": {
+          "score": 7,
+          "reasoning": "The proposed structure is reasonable, though there's an imbalance with some segments being too brief or lacking detail compared to the ground truth."
+        }
+      },
+      "mean_score": 7.14,
+      "overall_notes": "The proposed cuts generally follow the ground truth's quality but exhibit less coherence and impact due to short durations and abrupt transitions. Some segments successfully capture the essence of the message, but others fall short in providing depth or necessary context. Additionally, the precision in cutting could be improved to ensure more natural starts and ends.",
+      "elapsed": {
+        "propose_s": 44.7,
+        "judge_s": 8.5
+      },
+      "model_name": "Grok 4.1 Fast",
+      "model_id": "x-ai/grok-4.1-fast"
+    },
+    {
+      "case_id": "260210-content-batch",
+      "model_name": "Kimi K2",
+      "model_id": "moonshotai/kimi-k2-thinking",
+      "error": "Structured Output response does not have a 'parsed' field nor a 'refusal' field. Received message:\n\ncontent='' additional_kwargs={'parsed': None, 'refusal': None} response_metadata={'token_usage': {'completion_tokens': 4570, 'prompt_tokens': 28385, 'total_tokens': 32955, 'completion_tokens_details': {'accepted_prediction_tokens': None, 'audio_tokens': 0, 'reasoning_tokens': 4570, 'rejected_prediction_tokens': None}, 'prompt_tokens_details': {'audio_tokens': 0, 'cached_tokens': 0}, 'cost': 0.052342, 'is_byok': False, 'cost_details': {'upstream_inference_cost': 0.052342, 'upstream_inference_prompt_cost': 0.034062, 'upstream_inference_completions_cost': 0.01828}}, 'model_provider': 'openai', 'model_name': 'moonshotai/kimi-k2-thinking', 'system_fingerprint': None, 'id': 'gen-1770839850-kYjrZpnXKAoE5JCCgYSR', 'finish_reason': None, 'logprobs': None} id='lc_run--019c4e47-bc2f-7e52-aa51-8f6f20a94bab-0' tool_calls=[] invalid_tool_calls=[] usage_metadata={'input_tokens': 28385, 'output_tokens': 4570, 'total_tokens': 32955, 'input_token_details': {'audio': 0, 'cache_read': 0}, 'output_token_details': {'audio': 0, 'reasoning': 4570}}",
+      "mean_score": 0,
+      "scores": {
+        "cold_viewer_test": {
+          "score": 0,
+          "reasoning": "Error: Structured Output response does not have a 'parsed' field nor a 'refusal' field. Received message:\n\ncontent='' additional_kwargs={'parsed': None, 'refusal': None} response_metadata={'token_usage': {'completion_tokens': 4570, 'prompt_tokens': 28385, 'total_tokens': 32955, 'completion_tokens_details': {'accepted_prediction_tokens': None, 'audio_tokens': 0, 'reasoning_tokens': 4570, 'rejected_prediction_tokens': None}, 'prompt_tokens_details': {'audio_tokens': 0, 'cached_tokens': 0}, 'cost': 0.052342, 'is_byok': False, 'cost_details': {'upstream_inference_cost': 0.052342, 'upstream_inference_prompt_cost': 0.034062, 'upstream_inference_completions_cost': 0.01828}}, 'model_provider': 'openai', 'model_name': 'moonshotai/kimi-k2-thinking', 'system_fingerprint': None, 'id': 'gen-1770839850-kYjrZpnXKAoE5JCCgYSR', 'finish_reason': None, 'logprobs': None} id='lc_run--019c4e47-bc2f-7e52-aa51-8f6f20a94bab-0' tool_calls=[] invalid_tool_calls=[] usage_metadata={'input_tokens': 28385, 'output_tokens': 4570, 'total_tokens': 32955, 'input_token_details': {'audio': 0, 'cache_read': 0}, 'output_token_details': {'audio': 0, 'reasoning': 4570}}"
+        },
+        "hook_strength": {
+          "score": 0,
+          "reasoning": "Error: Structured Output response does not have a 'parsed' field nor a 'refusal' field. Received message:\n\ncontent='' additional_kwargs={'parsed': None, 'refusal': None} response_metadata={'token_usage': {'completion_tokens': 4570, 'prompt_tokens': 28385, 'total_tokens': 32955, 'completion_tokens_details': {'accepted_prediction_tokens': None, 'audio_tokens': 0, 'reasoning_tokens': 4570, 'rejected_prediction_tokens': None}, 'prompt_tokens_details': {'audio_tokens': 0, 'cached_tokens': 0}, 'cost': 0.052342, 'is_byok': False, 'cost_details': {'upstream_inference_cost': 0.052342, 'upstream_inference_prompt_cost': 0.034062, 'upstream_inference_completions_cost': 0.01828}}, 'model_provider': 'openai', 'model_name': 'moonshotai/kimi-k2-thinking', 'system_fingerprint': None, 'id': 'gen-1770839850-kYjrZpnXKAoE5JCCgYSR', 'finish_reason': None, 'logprobs': None} id='lc_run--019c4e47-bc2f-7e52-aa51-8f6f20a94bab-0' tool_calls=[] invalid_tool_calls=[] usage_metadata={'input_tokens': 28385, 'output_tokens': 4570, 'total_tokens': 32955, 'input_token_details': {'audio': 0, 'cache_read': 0}, 'output_token_details': {'audio': 0, 'reasoning': 4570}}"
+        },
+        "narrative_coherence": {
+          "score": 0,
+          "reasoning": "Error: Structured Output response does not have a 'parsed' field nor a 'refusal' field. Received message:\n\ncontent='' additional_kwargs={'parsed': None, 'refusal': None} response_metadata={'token_usage': {'completion_tokens': 4570, 'prompt_tokens': 28385, 'total_tokens': 32955, 'completion_tokens_details': {'accepted_prediction_tokens': None, 'audio_tokens': 0, 'reasoning_tokens': 4570, 'rejected_prediction_tokens': None}, 'prompt_tokens_details': {'audio_tokens': 0, 'cached_tokens': 0}, 'cost': 0.052342, 'is_byok': False, 'cost_details': {'upstream_inference_cost': 0.052342, 'upstream_inference_prompt_cost': 0.034062, 'upstream_inference_completions_cost': 0.01828}}, 'model_provider': 'openai', 'model_name': 'moonshotai/kimi-k2-thinking', 'system_fingerprint': None, 'id': 'gen-1770839850-kYjrZpnXKAoE5JCCgYSR', 'finish_reason': None, 'logprobs': None} id='lc_run--019c4e47-bc2f-7e52-aa51-8f6f20a94bab-0' tool_calls=[] invalid_tool_calls=[] usage_metadata={'input_tokens': 28385, 'output_tokens': 4570, 'total_tokens': 32955, 'input_token_details': {'audio': 0, 'cache_read': 0}, 'output_token_details': {'audio': 0, 'reasoning': 4570}}"
+        },
+        "content_selection": {
+          "score": 0,
+          "reasoning": "Error: Structured Output response does not have a 'parsed' field nor a 'refusal' field. Received message:\n\ncontent='' additional_kwargs={'parsed': None, 'refusal': None} response_metadata={'token_usage': {'completion_tokens': 4570, 'prompt_tokens': 28385, 'total_tokens': 32955, 'completion_tokens_details': {'accepted_prediction_tokens': None, 'audio_tokens': 0, 'reasoning_tokens': 4570, 'rejected_prediction_tokens': None}, 'prompt_tokens_details': {'audio_tokens': 0, 'cached_tokens': 0}, 'cost': 0.052342, 'is_byok': False, 'cost_details': {'upstream_inference_cost': 0.052342, 'upstream_inference_prompt_cost': 0.034062, 'upstream_inference_completions_cost': 0.01828}}, 'model_provider': 'openai', 'model_name': 'moonshotai/kimi-k2-thinking', 'system_fingerprint': None, 'id': 'gen-1770839850-kYjrZpnXKAoE5JCCgYSR', 'finish_reason': None, 'logprobs': None} id='lc_run--019c4e47-bc2f-7e52-aa51-8f6f20a94bab-0' tool_calls=[] invalid_tool_calls=[] usage_metadata={'input_tokens': 28385, 'output_tokens': 4570, 'total_tokens': 32955, 'input_token_details': {'audio': 0, 'cache_read': 0}, 'output_token_details': {'audio': 0, 'reasoning': 4570}}"
+        },
+        "cut_precision": {
+          "score": 0,
+          "reasoning": "Error: Structured Output response does not have a 'parsed' field nor a 'refusal' field. Received message:\n\ncontent='' additional_kwargs={'parsed': None, 'refusal': None} response_metadata={'token_usage': {'completion_tokens': 4570, 'prompt_tokens': 28385, 'total_tokens': 32955, 'completion_tokens_details': {'accepted_prediction_tokens': None, 'audio_tokens': 0, 'reasoning_tokens': 4570, 'rejected_prediction_tokens': None}, 'prompt_tokens_details': {'audio_tokens': 0, 'cached_tokens': 0}, 'cost': 0.052342, 'is_byok': False, 'cost_details': {'upstream_inference_cost': 0.052342, 'upstream_inference_prompt_cost': 0.034062, 'upstream_inference_completions_cost': 0.01828}}, 'model_provider': 'openai', 'model_name': 'moonshotai/kimi-k2-thinking', 'system_fingerprint': None, 'id': 'gen-1770839850-kYjrZpnXKAoE5JCCgYSR', 'finish_reason': None, 'logprobs': None} id='lc_run--019c4e47-bc2f-7e52-aa51-8f6f20a94bab-0' tool_calls=[] invalid_tool_calls=[] usage_metadata={'input_tokens': 28385, 'output_tokens': 4570, 'total_tokens': 32955, 'input_token_details': {'audio': 0, 'cache_read': 0}, 'output_token_details': {'audio': 0, 'reasoning': 4570}}"
+        },
+        "duration_accuracy": {
+          "score": 0,
+          "reasoning": "Error: Structured Output response does not have a 'parsed' field nor a 'refusal' field. Received message:\n\ncontent='' additional_kwargs={'parsed': None, 'refusal': None} response_metadata={'token_usage': {'completion_tokens': 4570, 'prompt_tokens': 28385, 'total_tokens': 32955, 'completion_tokens_details': {'accepted_prediction_tokens': None, 'audio_tokens': 0, 'reasoning_tokens': 4570, 'rejected_prediction_tokens': None}, 'prompt_tokens_details': {'audio_tokens': 0, 'cached_tokens': 0}, 'cost': 0.052342, 'is_byok': False, 'cost_details': {'upstream_inference_cost': 0.052342, 'upstream_inference_prompt_cost': 0.034062, 'upstream_inference_completions_cost': 0.01828}}, 'model_provider': 'openai', 'model_name': 'moonshotai/kimi-k2-thinking', 'system_fingerprint': None, 'id': 'gen-1770839850-kYjrZpnXKAoE5JCCgYSR', 'finish_reason': None, 'logprobs': None} id='lc_run--019c4e47-bc2f-7e52-aa51-8f6f20a94bab-0' tool_calls=[] invalid_tool_calls=[] usage_metadata={'input_tokens': 28385, 'output_tokens': 4570, 'total_tokens': 32955, 'input_token_details': {'audio': 0, 'cache_read': 0}, 'output_token_details': {'audio': 0, 'reasoning': 4570}}"
+        },
+        "segment_structure": {
+          "score": 0,
+          "reasoning": "Error: Structured Output response does not have a 'parsed' field nor a 'refusal' field. Received message:\n\ncontent='' additional_kwargs={'parsed': None, 'refusal': None} response_metadata={'token_usage': {'completion_tokens': 4570, 'prompt_tokens': 28385, 'total_tokens': 32955, 'completion_tokens_details': {'accepted_prediction_tokens': None, 'audio_tokens': 0, 'reasoning_tokens': 4570, 'rejected_prediction_tokens': None}, 'prompt_tokens_details': {'audio_tokens': 0, 'cached_tokens': 0}, 'cost': 0.052342, 'is_byok': False, 'cost_details': {'upstream_inference_cost': 0.052342, 'upstream_inference_prompt_cost': 0.034062, 'upstream_inference_completions_cost': 0.01828}}, 'model_provider': 'openai', 'model_name': 'moonshotai/kimi-k2-thinking', 'system_fingerprint': None, 'id': 'gen-1770839850-kYjrZpnXKAoE5JCCgYSR', 'finish_reason': None, 'logprobs': None} id='lc_run--019c4e47-bc2f-7e52-aa51-8f6f20a94bab-0' tool_calls=[] invalid_tool_calls=[] usage_metadata={'input_tokens': 28385, 'output_tokens': 4570, 'total_tokens': 32955, 'input_token_details': {'audio': 0, 'cache_read': 0}, 'output_token_details': {'audio': 0, 'reasoning': 4570}}"
+        }
+      },
+      "proposed_segment_count": 0,
+      "gt_segment_count": 11,
+      "elapsed": {
+        "propose_s": 0,
+        "judge_s": 0
+      }
+    }
+  ],
+  "total_elapsed_s": 1853.7
+}

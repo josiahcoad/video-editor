@@ -106,7 +106,7 @@
             onclick="toggleSession()"
             class="px-4 py-1.5 rounded-lg text-sm font-semibold transition bg-emerald-600 hover:bg-emerald-500 active:scale-95"
           >
-            Start Session
+            Start Conversation
           </button>
         </div>
       </div>
@@ -121,13 +121,9 @@
         <summary
           class="px-4 py-2 cursor-pointer text-sm font-semibold text-slate-400 select-none"
         >
-          📋 Pre-Call Context
-          <span class="text-xs font-normal text-slate-600 ml-2"
-            >objectives, prospect info</span
-          >
+          📋 Contact
         </summary>
-        <div class="px-4 pb-3 space-y-2">
-          <!-- Contact selector -->
+        <div class="px-4 pb-3">
           <div class="flex items-center gap-2">
             <select
               id="contactSelect"
@@ -177,12 +173,6 @@
               </button>
             </div>
           </div>
-          <textarea
-            id="contextInput"
-            rows="3"
-            placeholder="e.g. Objective: Close annual plan ($5k/yr)&#10;Key objection: already using competitor X&#10;Notes from last call: prospect mentioned budget approval in Q2"
-            class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-200 placeholder-slate-600 resize-y focus:outline-none focus:border-emerald-600"
-          ></textarea>
         </div>
       </details>
     </div>
@@ -450,7 +440,7 @@
 
         if (t === "live") {
           $("btn").classList.remove("hidden");
-          $("btn").textContent = "Start Session";
+          $("btn").textContent = "Start Conversation";
         } else if (t === "test") {
           $("btn").classList.add("hidden");
           $("interim").classList.add("hidden");
@@ -609,7 +599,6 @@
             const contactId = $("contactSelect").value || null;
             ws.send(
               JSON.stringify({
-                context: $("contextInput").value.trim(),
                 auto_coach: $("autoToggle").checked,
                 critique_mode: $("critiqueToggle").checked,
                 contact_id: contactId,
@@ -617,14 +606,13 @@
             );
             running = true;
             resetPanels();
-            btn.textContent = "Stop Session";
+            btn.textContent = "End Conversation";
             btn.disabled = false;
             btn.classList.remove("bg-emerald-600", "hover:bg-emerald-500");
             btn.classList.add("bg-red-600", "hover:bg-red-500");
             setStatus("Listening…", "green");
             $("interim").classList.remove("hidden");
             $("scoreBar").classList.remove("hidden");
-            $("contextInput").disabled = true;
             $("contactSelect").disabled = true;
             const det = $("contextBar").querySelector("details");
             if (det) det.removeAttribute("open");
@@ -668,7 +656,6 @@
         btn.classList.add("bg-emerald-600", "hover:bg-emerald-500");
         setStatus("Session ended — generating review…", "yellow");
         $("interim").classList.add("hidden");
-        $("contextInput").disabled = false;
         $("contactSelect").disabled = false;
 
         // Show review if we have a session ID
@@ -694,7 +681,6 @@
           const contactId = $("contactSelect")?.value || null;
           ws.send(
             JSON.stringify({
-              context: $("contextInput")?.value?.trim() || "",
               conversation: text,
               critique_mode: $("critiqueToggle")?.checked ?? false,
               contact_id: contactId,
@@ -809,7 +795,7 @@
             if (msg.steps_to_close >= 0) {
               $("stepsValue").textContent = msg.steps_to_close;
             }
-            if (msg.objections && msg.objections.length)
+            if (Array.isArray(msg.objections))
               renderHesitations(msg.objections);
 
             const el = document.createElement("div");
@@ -883,7 +869,10 @@
                   }
                 </div>
                 <p class="text-[12px] leading-relaxed text-emerald-300 font-medium">${esc(
-                  msg.advice
+                  (msg.advice || "")
+                    .replace(/^```(?:json)?\s*/i, "")
+                    .replace(/\s*```\s*$/g, "")
+                    .trim()
                 )}</p>`;
             }
             $("tips").insertBefore(el, $("tips").firstChild);
@@ -893,6 +882,10 @@
           case "review":
             renderReview(msg.review);
             setStatus("Review ready", "green");
+            break;
+
+          case "auto_end":
+            stopSession();
             break;
 
           case "connected":
@@ -999,19 +992,23 @@
       function renderReview(r) {
         if (!r) return;
         $("reviewOverlay").classList.remove("hidden");
+        const score =
+          typeof r.score === "number" && r.score >= 0 ? r.score : null;
         const scoreColor =
-          r.score >= 7
-            ? "text-emerald-400"
-            : r.score >= 4
-            ? "text-amber-400"
-            : "text-red-400";
+          score != null
+            ? score >= 7
+              ? "text-emerald-400"
+              : score >= 4
+              ? "text-amber-400"
+              : "text-red-400"
+            : "text-slate-500";
         $("reviewContent").innerHTML = `
           <div class="space-y-4">
             <!-- Score -->
             <div class="flex items-center gap-3">
               <span class="text-3xl font-black ${scoreColor}">${
-          r.score
-        }/10</span>
+          score != null ? score + "/10" : "—/10"
+        }</span>
               <span class="text-sm text-slate-400">Overall effectiveness</span>
             </div>
 
@@ -1407,13 +1404,6 @@
                     }
                   </div>
                 </div>
-                ${
-                  conv.context
-                    ? `<p class="text-xs text-slate-500 mt-1 line-clamp-1">${esc(
-                        conv.context
-                      )}</p>`
-                    : ""
-                }
               </div>`;
           });
           html += `</div>`;
@@ -1495,13 +1485,6 @@
                   }
                 </div>
               </div>
-              ${
-                c.context
-                  ? `<p class="text-sm text-slate-400 mt-2 bg-slate-900 rounded-lg px-3 py-2 border border-slate-800">${esc(
-                      c.context
-                    )}</p>`
-                  : ""
-              }
             </div>`;
 
           if (c.review) {

@@ -1,0 +1,51 @@
+Composing 2 clips:
+  1. hook_01.mp4 (5.3s, 1080x1920)
+  2. 11_eye_contact.mp4 (34.7s, 1080x1920)
+All clips match 1080x1920 — using fast concat
+✅ Output: /Users/apple/Documents/code/marky/marky-app/video-editor/projects/JosiahCoad/editing/videos/260210-textbook-interview/outputs/with_hooks/segment_01_final.mp4 (36.8s, 1080x1920)
+Composing 2 clips:
+  1. hook_02.mp4 (74.7s, 1080x1920)
+  2. 11_eye-contact.mp4 (33.1s, 1080x1920)
+All clips match 1080x1920 — using fast concat
+✅ Output: /Users/apple/Documents/code/marky/marky-app/video-editor/projects/JosiahCoad/editing/videos/260210-textbook-interview/outputs/with_hooks/segment_02_final.mp4 (99.1s, 1080x1920)
+Composing 2 clips:
+  1. hook_03.mp4 (6.5s, 1080x1920)
+  2. 10_final.mp4 (38.0s, 1080x1920)
+All clips match 1080x1920 — using fast concat
+✅ Output: /Users/apple/Documents/code/marky/marky-app/video-editor/projects/JosiahCoad/editing/videos/260210-textbook-interview/outputs/with_hooks/segment_03_final.mp4 (89.0s, 1080x1920)
+Composing 2 clips:
+  1. hook_04.mp4 (69.1s, 1080x1920)
+  2. 03_jumpcut.mp4 (35.4s, 1080x1920)
+All clips match 1080x1920 — using fast concat
+✅ Output: /Users/apple/Documents/code/marky/marky-app/video-editor/projects/JosiahCoad/editing/videos/260210-textbook-interview/outputs/with_hooks/segment_04_final.mp4 (6797.8s, 1080x1920)
+Composing 2 clips:
+  1. hook_05.mp4 (31.0s, 1080x1920)
+  2. 03_jumpcut.mp4 (28.6s, 1080x1920)
+All clips match 1080x1920 — using fast concat
+✅ Output: /Users/apple/Documents/code/marky/marky-app/video-editor/projects/JosiahCoad/editing/videos/260210-textbook-interview/outputs/with_hooks/segment_05_final.mp4 (3883.6s, 1080x1920)
+Composing 2 clips:
+  1. hook_06.mp4 (4.5s, 1080x1920)
+  2. 03_jumpcut.mp4 (52.8s, 1080x1920)
+All clips match 1080x1920 — using fast concat
+✅ Output: /Users/apple/Documents/code/marky/marky-app/video-editor/projects/JosiahCoad/editing/videos/260210-textbook-interview/outputs/with_hooks/segment_06_final.mp4 (3723.8s, 1080x1920)
+Composing 2 clips:
+  1. hook_07.mp4 (17.5s, 1080x1920)
+  2. 03_jumpcut.mp4 (44.4s, 1080x1920)
+All clips match 1080x1920 — using fast concat
+✅ Output: /Users/apple/Documents/code/marky/marky-app/video-editor/projects/JosiahCoad/editing/videos/260210-textbook-interview/outputs/with_hooks/segment_07_final.mp4 (4027.1s, 1080x1920)
+Extracting hook 1: 59.3s - 64.6s -> hook_01.mp4
+Extracting hook 2: 82.7s - 157.4s -> hook_02.mp4
+Extracting hook 3: 168.7s - 175.2s -> hook_03.mp4
+Extracting hook 4: 190.9s - 260.0s -> hook_04.mp4
+Extracting hook 5: 267.7s - 298.7s -> hook_05.mp4
+Extracting hook 6: 323.0s - 327.5s -> hook_06.mp4
+Extracting hook 7: 332.8s - 350.3s -> hook_07.mp4
+Composing segment 1: hook + 11_eye_contact.mp4 -> segment_01_final.mp4
+Composing segment 2: hook + 11_eye-contact.mp4 -> segment_02_final.mp4
+Composing segment 3: hook + 10_final.mp4 -> segment_03_final.mp4
+Composing segment 4: hook + 03_jumpcut.mp4 -> segment_04_final.mp4
+Composing segment 5: hook + 03_jumpcut.mp4 -> segment_05_final.mp4
+Composing segment 6: hook + 03_jumpcut.mp4 -> segment_06_final.mp4
+Composing segment 7: hook + 03_jumpcut.mp4 -> segment_07_final.mp4
+
+Done. 7 videos in /Users/apple/Documents/code/marky/marky-app/video-editor/projects/JosiahCoad/editing/videos/260210-textbook-interview/outputs/with_hooks

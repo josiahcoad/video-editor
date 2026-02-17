@@ -1,0 +1,1009 @@
+[dotenvx@1.51.0] injecting env (8) from .env
+========== segment_01 ==========
+ffmpeg version 7.1.1 Copyright (c) 2000-2025 the FFmpeg developers
+  built with Apple clang version 17.0.0 (clang-1700.0.13.3)
+  configuration: --prefix=/opt/homebrew/Cellar/ffmpeg/7.1.1_3 --enable-shared --enable-pthreads --enable-version3 --cc=clang --host-cflags= --host-ldflags='-Wl,-ld_classic' --enable-ffplay --enable-gnutls --enable-gpl --enable-libaom --enable-libaribb24 --enable-libbluray --enable-libdav1d --enable-libharfbuzz --enable-libjxl --enable-libmp3lame --enable-libopus --enable-librav1e --enable-librist --enable-librubberband --enable-libsnappy --enable-libsrt --enable-libssh --enable-libsvtav1 --enable-libtesseract --enable-libtheora --enable-libvidstab --enable-libvmaf --enable-libvorbis --enable-libvpx --enable-libwebp --enable-libx264 --enable-libx265 --enable-libxml2 --enable-libxvid --enable-lzma --enable-libfontconfig --enable-libfreetype --enable-frei0r --enable-libass --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-libopenjpeg --enable-libspeex --enable-libsoxr --enable-libzmq --enable-libzimg --disable-libjack --disable-indev=jack --enable-videotoolbox --enable-audiotoolbox --enable-neon
+  libavutil      59. 39.100 / 59. 39.100
+  libavcodec     61. 19.101 / 61. 19.101
+  libavformat    61.  7.100 / 61.  7.100
+  libavdevice    61.  3.100 / 61.  3.100
+  libavfilter    10.  4.100 / 10.  4.100
+  libswscale      8.  3.100 /  8.  3.100
+  libswresample   5.  3.100 /  5.  3.100
+  libpostproc    58.  3.100 / 58.  3.100
+Input #0, mov,mp4,m4a,3gp,3g2,mj2, from '/Users/apple/Documents/code/marky/marky-app/video-editor/projects/HunterZier/editing/videos/260214-hunter-session1/outputs/segment_01/06_captioned.mp4':
+  Metadata:
+    major_brand     : isom
+    minor_version   : 512
+    compatible_brands: isomiso2avc1mp41
+    encoder         : Lavf61.7.100
+  Duration: 00:01:23.68, start: 0.000000, bitrate: 4653 kb/s
+  Stream #0:0[0x1](und): Video: h264 (High) (avc1 / 0x31637661), yuv420p(tv, bt709, progressive), 608x1080, 4465 kb/s, SAR 1:1 DAR 76:135, 24 fps, 24 tbr, 12288 tbn (default)
+      Metadata:
+        handler_name    : VideoHandler
+        vendor_id       : [0][0][0][0]
+        encoder         : Lavc61.19.101 h264_videotoolbox
+  Stream #0:1[0x2](und): Audio: aac (LC) (mp4a / 0x6134706D), 96000 Hz, mono, fltp, 193 kb/s (default)
+      Metadata:
+        handler_name    : SoundHandler
+        vendor_id       : [0][0][0][0]
+Stream mapping:
+  Stream #0:0 -> #0:0 (copy)
+  Stream #0:1 -> #0:1 (aac (native) -> aac (native))
+Press [q] to stop, [?] for help
+Output #0, mp4, to '/Users/apple/Documents/code/marky/marky-app/video-editor/projects/HunterZier/editing/videos/260214-hunter-session1/outputs/segment_01/06_enhanced.mp4':
+  Metadata:
+    major_brand     : isom
+    minor_version   : 512
+    compatible_brands: isomiso2avc1mp41
+    encoder         : Lavf61.7.100
+  Stream #0:0(und): Video: h264 (High) (avc1 / 0x31637661), yuv420p(tv, bt709, progressive), 608x1080 [SAR 1:1 DAR 76:135], q=2-31, 4465 kb/s, 24 fps, 24 tbr, 12288 tbn (default)
+      Metadata:
+        handler_name    : VideoHandler
+        vendor_id       : [0][0][0][0]
+        encoder         : Lavc61.19.101 h264_videotoolbox
+  Stream #0:1(und): Audio: aac (LC) (mp4a / 0x6134706D), 96000 Hz, mono, fltp, 192 kb/s (default)
+      Metadata:
+        handler_name    : SoundHandler
+        vendor_id       : [0][0][0][0]
+        encoder         : Lavc61.19.101 aac
+[aac @ 0xb1341d500] Queue input is backward in time
+[aost#0:1/aac @ 0xb1287c300] Non-monotonic DTS; previous: 479232, current: 478029; changing to 479233. This may result in incorrect timestamps in the output file.
+[aost#0:1/aac @ 0xb1287c300] Non-monotonic DTS; previous: 479233, current: 479053; changing to 479234. This may result in incorrect timestamps in the output file.
+frame=  525 fps=0.0 q=-1.0 size=   10496KiB time=00:00:18.65 bitrate=4609.8kbits/s speed=36.6x    frame=  920 fps=902 q=-1.0 size=   19968KiB time=00:00:35.07 bitrate=4663.1kbits/s speed=34.4x    frame= 1382 fps=908 q=-1.0 size=   30976KiB time=00:00:54.33 bitrate=4670.4kbits/s speed=35.7x    frame= 1895 fps=933 q=-1.0 size=   43008KiB time=00:01:15.67 bitrate=4655.6kbits/s speed=37.3x    [out#0/mp4 @ 0xb12824a80] video:45489KiB audio:1984KiB subtitle:0KiB other streams:0KiB global headers:0KiB muxing overhead: 0.127784%
+frame= 2003 fps=900 q=-1.0 Lsize=   47534KiB time=00:01:23.45 bitrate=4665.8kbits/s speed=37.5x    
+[aac @ 0xb1341d500] Qavg: 333.071
+Enhancing voice (warmth + compression + normalization)...
+✅ Output video: /Users/apple/Documents/code/marky/marky-app/video-editor/projects/HunterZier/editing/videos/260214-hunter-session1/outputs/segment_01/06_enhanced.mp4
+Round-robin: segment 1 → 01_upbeat-summer-corporate_rafael-krux.mp3
+✅ Output written to /Users/apple/Documents/code/marky/marky-app/video-editor/projects/HunterZier/editing/videos/260214-hunter-session1/outputs/segment_01/07_music.mp4
+Loaded 296 words from /Users/apple/Documents/code/marky/marky-app/video-editor/projects/HunterZier/editing/videos/260214-hunter-session1/outputs/segment_01/07_music-words.json
+Analyzing transcript for emoji moments (296 words, 83s)...
+
+────────────────────────────────────────────────────────────
+Emoji plan (4 overlays):
+  1. 🏠  2.6–4.1s  (top-right)  Reinforces the central theme of horizontal real estate and buying a house.
+  2. 💰  22.2–23.7s  (top-left)  Emphasizes the concept of a down payment and money involved in the loan.
+  3. 📍  39.2–40.7s  (top-right)  Highlights the specific geographical location (Washington state) mentioned.
+  4. 📞  75.2–76.7s  (top-left)  Visual call to action reinforcing the advice to 'talk' to a lender.
+────────────────────────────────────────────────────────────
+
+  Generated: 🏠 → emoji_0.png
+  Generated: 💰 → emoji_1.png
+  Generated: 📍 → emoji_2.png
+  Generated: 📞 → emoji_3.png
+Overlaying 4 emojis...
+✅ Output: /Users/apple/Documents/code/marky/marky-app/video-editor/projects/HunterZier/editing/videos/260214-hunter-session1/outputs/segment_01/08_emojis.mp4
+Loaded 296 words from /Users/apple/Documents/code/marky/marky-app/video-editor/projects/HunterZier/editing/videos/260214-hunter-session1/outputs/segment_01/07_music-words.json
+Analyzing transcript for infographic concept (296 words, 83s)...
+INFO: HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+
+────────────────────────────────────────────────────────────
+Infographic plan:
+  Concept:  Down Payment Options
+  Title:    LOW DOWN PAYMENT OPTIONS
+  Template: list
+  Timing:   46.9–53.9s
+  Rationale: The speaker lists several specific percentages and loan types rapidly. A visual list helps the viewer compare the different entry points (0% to 5%) which contradicts the '20% rule' mentioned at the start.
+  Items:
+    🏠 FHA Loans: 3.5% Minimum
+    📉 Conventional: 3% - 5% Down
+    🇺🇸 VA & USDA: 0% Down
+    📍 WA First-Time Programs: 0% Down
+  Tagline: You don't need 20% down.
+────────────────────────────────────────────────────────────
+
+Generating infographic with Gemini 3 Pro...
+WARNING: Both GOOGLE_API_KEY and GEMINI_API_KEY are set. Using GOOGLE_API_KEY.
+INFO: Generating image with gemini-3-pro-image-preview ...
+INFO: AFC is enabled with max remote calls: 10.
+INFO: HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-3-pro-image-preview:generateContent "HTTP/1.1 200 OK"
+Rendered: /var/folders/3m/wbb812l55fv7xc2q79ttxl680000gn/T/infographic_8x4bzi6p/infographic.png (1080x1920)
+Overlaying infographic at 46.9–53.9s...
+Output: /Users/apple/Documents/code/marky/marky-app/video-editor/projects/HunterZier/editing/videos/260214-hunter-session1/outputs/segment_01/09_infographic.mp4
+Done segment_01
+========== segment_02 ==========
+ffmpeg version 7.1.1 Copyright (c) 2000-2025 the FFmpeg developers
+  built with Apple clang version 17.0.0 (clang-1700.0.13.3)
+  configuration: --prefix=/opt/homebrew/Cellar/ffmpeg/7.1.1_3 --enable-shared --enable-pthreads --enable-version3 --cc=clang --host-cflags= --host-ldflags='-Wl,-ld_classic' --enable-ffplay --enable-gnutls --enable-gpl --enable-libaom --enable-libaribb24 --enable-libbluray --enable-libdav1d --enable-libharfbuzz --enable-libjxl --enable-libmp3lame --enable-libopus --enable-librav1e --enable-librist --enable-librubberband --enable-libsnappy --enable-libsrt --enable-libssh --enable-libsvtav1 --enable-libtesseract --enable-libtheora --enable-libvidstab --enable-libvmaf --enable-libvorbis --enable-libvpx --enable-libwebp --enable-libx264 --enable-libx265 --enable-libxml2 --enable-libxvid --enable-lzma --enable-libfontconfig --enable-libfreetype --enable-frei0r --enable-libass --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-libopenjpeg --enable-libspeex --enable-libsoxr --enable-libzmq --enable-libzimg --disable-libjack --disable-indev=jack --enable-videotoolbox --enable-audiotoolbox --enable-neon
+  libavutil      59. 39.100 / 59. 39.100
+  libavcodec     61. 19.101 / 61. 19.101
+  libavformat    61.  7.100 / 61.  7.100
+  libavdevice    61.  3.100 / 61.  3.100
+  libavfilter    10.  4.100 / 10.  4.100
+  libswscale      8.  3.100 /  8.  3.100
+  libswresample   5.  3.100 /  5.  3.100
+  libpostproc    58.  3.100 / 58.  3.100
+Input #0, mov,mp4,m4a,3gp,3g2,mj2, from '/Users/apple/Documents/code/marky/marky-app/video-editor/projects/HunterZier/editing/videos/260214-hunter-session1/outputs/segment_02/06_captioned.mp4':
+  Metadata:
+    major_brand     : isom
+    minor_version   : 512
+    compatible_brands: isomiso2avc1mp41
+    encoder         : Lavf61.7.100
+  Duration: 00:00:52.78, start: 0.000000, bitrate: 4652 kb/s
+  Stream #0:0[0x1](und): Video: h264 (High) (avc1 / 0x31637661), yuv420p(tv, bt709, progressive), 608x1080, 4466 kb/s, SAR 1:1 DAR 76:135, 23.98 fps, 24 tbr, 12288 tbn (default)
+      Metadata:
+        handler_name    : VideoHandler
+        vendor_id       : [0][0][0][0]
+        encoder         : Lavc61.19.101 h264_videotoolbox
+  Stream #0:1[0x2](und): Audio: aac (LC) (mp4a / 0x6134706D), 96000 Hz, mono, fltp, 193 kb/s (default)
+      Metadata:
+        handler_name    : SoundHandler
+        vendor_id       : [0][0][0][0]
+Stream mapping:
+  Stream #0:0 -> #0:0 (copy)
+  Stream #0:1 -> #0:1 (aac (native) -> aac (native))
+Press [q] to stop, [?] for help
+Output #0, mp4, to '/Users/apple/Documents/code/marky/marky-app/video-editor/projects/HunterZier/editing/videos/260214-hunter-session1/outputs/segment_02/06_enhanced.mp4':
+  Metadata:
+    major_brand     : isom
+    minor_version   : 512
+    compatible_brands: isomiso2avc1mp41
+    encoder         : Lavf61.7.100
+  Stream #0:0(und): Video: h264 (High) (avc1 / 0x31637661), yuv420p(tv, bt709, progressive), 608x1080 [SAR 1:1 DAR 76:135], q=2-31, 4466 kb/s, 23.98 fps, 24 tbr, 12288 tbn (default)
+      Metadata:
+        handler_name    : VideoHandler
+        vendor_id       : [0][0][0][0]
+        encoder         : Lavc61.19.101 h264_videotoolbox
+  Stream #0:1(und): Audio: aac (LC) (mp4a / 0x6134706D), 96000 Hz, mono, fltp, 192 kb/s (default)
+      Metadata:
+        handler_name    : SoundHandler
+        vendor_id       : [0][0][0][0]
+        encoder         : Lavc61.19.101 aac
+[aac @ 0xbf4c85500] Queue input is backward in time
+[aost#0:1/aac @ 0xbf506c300] Non-monotonic DTS; previous: 382976, current: 382426; changing to 382977. This may result in incorrect timestamps in the output file.
+frame=  572 fps=0.0 q=-1.0 size=   11776KiB time=00:00:20.65 bitrate=4670.4kbits/s speed=41.3x    frame= 1096 fps=1094 q=-1.0 size=   24064KiB time=00:00:42.41 bitrate=4647.6kbits/s speed=42.4x    [out#0/mp4 @ 0xbf4c88300] video:28692KiB audio:1250KiB subtitle:0KiB other streams:0KiB global headers:0KiB muxing overhead: 0.129574%
+frame= 1262 fps=1013 q=-1.0 Lsize=   29980KiB time=00:00:52.62 bitrate=4666.9kbits/s speed=42.2x    
+[aac @ 0xbf4c85500] Qavg: 500.877
+Enhancing voice (warmth + compression + normalization)...
+✅ Output video: /Users/apple/Documents/code/marky/marky-app/video-editor/projects/HunterZier/editing/videos/260214-hunter-session1/outputs/segment_02/06_enhanced.mp4
+Round-robin: segment 2 → 02_happy-optimistic-corporate_aliaksei.mp3
+✅ Output written to /Users/apple/Documents/code/marky/marky-app/video-editor/projects/HunterZier/editing/videos/260214-hunter-session1/outputs/segment_02/07_music.mp4
+Loaded 184 words from /Users/apple/Documents/code/marky/marky-app/video-editor/projects/HunterZier/editing/videos/260214-hunter-session1/outputs/segment_02/07_music-words.json
+Analyzing transcript for emoji moments (184 words, 52s)...
+
+────────────────────────────────────────────────────────────
+Emoji plan (4 overlays):
+  1. 🏠  2.9–4.4s  (top-left)  Reinforces the core subject of the video: buying a house.
+  2. 📍  7.4–9.1s  (top-right)  Emphasizes the specific location mention of Washington State.
+  3. 💰  28.0–29.5s  (top-left)  Visual for 'equity', reinforcing the financial benefit mentioned.
+  4. 📢  44.0–45.5s  (top-right)  Visual for the call to action to 'talk' to a lender.
+────────────────────────────────────────────────────────────
+
+  Generated: 🏠 → emoji_0.png
+  Generated: 📍 → emoji_1.png
+  Generated: 💰 → emoji_2.png
+  Generated: 📢 → emoji_3.png
+Overlaying 4 emojis...
+✅ Output: /Users/apple/Documents/code/marky/marky-app/video-editor/projects/HunterZier/editing/videos/260214-hunter-session1/outputs/segment_02/08_emojis.mp4
+Loaded 184 words from /Users/apple/Documents/code/marky/marky-app/video-editor/projects/HunterZier/editing/videos/260214-hunter-session1/outputs/segment_02/07_music-words.json
+Analyzing transcript for infographic concept (184 words, 52s)...
+INFO: HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+
+────────────────────────────────────────────────────────────
+Infographic plan:
+  Concept:  low down payment options
+  Title:    LOWER DOWN PAYMENT OPTIONS
+  Template: list
+  Timing:   15.1–22.1s
+  Rationale: The speaker debunks the 20% down payment myth by listing multiple alternatives. A list format allows viewers to see the concrete percentages for FHA and Conventional loans while he explains them, making the information more digestible.
+  Items:
+    🏢 Washington State Programs: 0% down
+    🏠 FHA Loans: 3.5% down minimum
+    📑 Conventional Loans: 3% to 5% down
+    🇺🇸 VA & USDA Loans: 0% down
+  Tagline: You don't need 20% down.
+────────────────────────────────────────────────────────────
+
+Generating infographic with Gemini 3 Pro...
+WARNING: Both GOOGLE_API_KEY and GEMINI_API_KEY are set. Using GOOGLE_API_KEY.
+INFO: Generating image with gemini-3-pro-image-preview ...
+INFO: AFC is enabled with max remote calls: 10.
+INFO: HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-3-pro-image-preview:generateContent "HTTP/1.1 200 OK"
+Rendered: /var/folders/3m/wbb812l55fv7xc2q79ttxl680000gn/T/infographic_ycevev54/infographic.png (1080x1920)
+Overlaying infographic at 15.1–22.1s...
+Output: /Users/apple/Documents/code/marky/marky-app/video-editor/projects/HunterZier/editing/videos/260214-hunter-session1/outputs/segment_02/09_infographic.mp4
+Done segment_02
+========== segment_03 ==========
+ffmpeg version 7.1.1 Copyright (c) 2000-2025 the FFmpeg developers
+  built with Apple clang version 17.0.0 (clang-1700.0.13.3)
+  configuration: --prefix=/opt/homebrew/Cellar/ffmpeg/7.1.1_3 --enable-shared --enable-pthreads --enable-version3 --cc=clang --host-cflags= --host-ldflags='-Wl,-ld_classic' --enable-ffplay --enable-gnutls --enable-gpl --enable-libaom --enable-libaribb24 --enable-libbluray --enable-libdav1d --enable-libharfbuzz --enable-libjxl --enable-libmp3lame --enable-libopus --enable-librav1e --enable-librist --enable-librubberband --enable-libsnappy --enable-libsrt --enable-libssh --enable-libsvtav1 --enable-libtesseract --enable-libtheora --enable-libvidstab --enable-libvmaf --enable-libvorbis --enable-libvpx --enable-libwebp --enable-libx264 --enable-libx265 --enable-libxml2 --enable-libxvid --enable-lzma --enable-libfontconfig --enable-libfreetype --enable-frei0r --enable-libass --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-libopenjpeg --enable-libspeex --enable-libsoxr --enable-libzmq --enable-libzimg --disable-libjack --disable-indev=jack --enable-videotoolbox --enable-audiotoolbox --enable-neon
+  libavutil      59. 39.100 / 59. 39.100
+  libavcodec     61. 19.101 / 61. 19.101
+  libavformat    61.  7.100 / 61.  7.100
+  libavdevice    61.  3.100 / 61.  3.100
+  libavfilter    10.  4.100 / 10.  4.100
+  libswscale      8.  3.100 /  8.  3.100
+  libswresample   5.  3.100 /  5.  3.100
+  libpostproc    58.  3.100 / 58.  3.100
+Input #0, mov,mp4,m4a,3gp,3g2,mj2, from '/Users/apple/Documents/code/marky/marky-app/video-editor/projects/HunterZier/editing/videos/260214-hunter-session1/outputs/segment_03/06_captioned.mp4':
+  Metadata:
+    major_brand     : isom
+    minor_version   : 512
+    compatible_brands: isomiso2avc1mp41
+    encoder         : Lavf61.7.100
+  Duration: 00:01:22.57, start: 0.000000, bitrate: 4655 kb/s
+  Stream #0:0[0x1](und): Video: h264 (High) (avc1 / 0x31637661), yuv420p(tv, bt709, progressive), 608x1080, 4467 kb/s, SAR 1:1 DAR 76:135, 23.99 fps, 24 tbr, 12288 tbn (default)
+      Metadata:
+        handler_name    : VideoHandler
+        vendor_id       : [0][0][0][0]
+        encoder         : Lavc61.19.101 h264_videotoolbox
+  Stream #0:1[0x2](und): Audio: aac (LC) (mp4a / 0x6134706D), 96000 Hz, mono, fltp, 194 kb/s (default)
+      Metadata:
+        handler_name    : SoundHandler
+        vendor_id       : [0][0][0][0]
+Stream mapping:
+  Stream #0:0 -> #0:0 (copy)
+  Stream #0:1 -> #0:1 (aac (native) -> aac (native))
+Press [q] to stop, [?] for help
+Output #0, mp4, to '/Users/apple/Documents/code/marky/marky-app/video-editor/projects/HunterZier/editing/videos/260214-hunter-session1/outputs/segment_03/06_enhanced.mp4':
+  Metadata:
+    major_brand     : isom
+    minor_version   : 512
+    compatible_brands: isomiso2avc1mp41
+    encoder         : Lavf61.7.100
+  Stream #0:0(und): Video: h264 (High) (avc1 / 0x31637661), yuv420p(tv, bt709, progressive), 608x1080 [SAR 1:1 DAR 76:135], q=2-31, 4467 kb/s, 23.99 fps, 24 tbr, 12288 tbn (default)
+      Metadata:
+        handler_name    : VideoHandler
+        vendor_id       : [0][0][0][0]
+        encoder         : Lavc61.19.101 h264_videotoolbox
+  Stream #0:1(und): Audio: aac (LC) (mp4a / 0x6134706D), 96000 Hz, mono, fltp, 192 kb/s (default)
+      Metadata:
+        handler_name    : SoundHandler
+        vendor_id       : [0][0][0][0]
+        encoder         : Lavc61.19.101 aac
+frame=  565 fps=0.0 q=-1.0 size=   11520KiB time=00:00:20.34 bitrate=4639.2kbits/s speed=40.2x    frame= 1069 fps=1053 q=-1.0 size=   23552KiB time=00:00:41.33 bitrate=4667.8kbits/s speed=40.7x    frame= 1596 fps=1052 q=-1.0 size=   35840KiB time=00:01:03.29 bitrate=4638.5kbits/s speed=41.7x    [aac @ 0xb28c7d500] Queue input is backward in time
+[aost#0:1/aac @ 0xb28c80300] Non-monotonic DTS; previous: 7438431, current: 7437328; changing to 7438432. This may result in incorrect timestamps in the output file.
+[aost#0:1/aac @ 0xb28c80300] Non-monotonic DTS; previous: 7438432, current: 7438352; changing to 7438433. This may result in incorrect timestamps in the output file.
+[out#0/mp4 @ 0xb28c04900] video:44905KiB audio:1960KiB subtitle:0KiB other streams:0KiB global headers:0KiB muxing overhead: 0.127744%
+frame= 1975 fps=1002 q=-1.0 Lsize=   46924KiB time=00:01:22.33 bitrate=4668.9kbits/s speed=41.8x    
+[aac @ 0xb28c7d500] Qavg: 461.609
+Enhancing voice (warmth + compression + normalization)...
+✅ Output video: /Users/apple/Documents/code/marky/marky-app/video-editor/projects/HunterZier/editing/videos/260214-hunter-session1/outputs/segment_03/06_enhanced.mp4
+Round-robin: segment 3 → 03_calm-uplifting-optimistic_makesound.mp3
+✅ Output written to /Users/apple/Documents/code/marky/marky-app/video-editor/projects/HunterZier/editing/videos/260214-hunter-session1/outputs/segment_03/07_music.mp4
+Loaded 309 words from /Users/apple/Documents/code/marky/marky-app/video-editor/projects/HunterZier/editing/videos/260214-hunter-session1/outputs/segment_03/07_music-words.json
+Analyzing transcript for emoji moments (309 words, 82s)...
+
+────────────────────────────────────────────────────────────
+Emoji plan (4 overlays):
+  1. 🏠  2.6–4.1s  (top-left)  Reinforces the core topic of buying a house early in the video.
+  2. 📉  27.1–28.6s  (top-right)  Visualizes the mention of a specific low credit score (580).
+  3. 🚀  61.2–62.8s  (top-left)  Matches the action of 'boosting' credit scores.
+  4. 🎯  66.8–68.3s  (top-right)  Directly represents the metaphor 'moving target'.
+────────────────────────────────────────────────────────────
+
+  Generated: 🏠 → emoji_0.png
+  Generated: 📉 → emoji_1.png
+  Generated: 🚀 → emoji_2.png
+  Generated: 🎯 → emoji_3.png
+Overlaying 4 emojis...
+✅ Output: /Users/apple/Documents/code/marky/marky-app/video-editor/projects/HunterZier/editing/videos/260214-hunter-session1/outputs/segment_03/08_emojis.mp4
+Loaded 309 words from /Users/apple/Documents/code/marky/marky-app/video-editor/projects/HunterZier/editing/videos/260214-hunter-session1/outputs/segment_03/07_music-words.json
+Analyzing transcript for infographic concept (309 words, 82s)...
+INFO: HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+
+────────────────────────────────────────────────────────────
+Infographic plan:
+  Concept:  Minimum Credit Scores
+  Title:    NO PERFECT CREDIT NEEDED
+  Template: list
+  Timing:   26.5–33.5s
+  Rationale: The speaker challenges the common myth that perfect credit is required for a home loan, listing specific score requirements and alternatives that are much easier to process visually than through fast-paced audio.
+  Items:
+    ✅ 580 minimum for some FHA loans
+    🏠 0% down programs for first-time buyers
+    📉 Options with no credit score at all
+    ⭐ VA and USDA have lenient requirements
+  Tagline: Follow for more home buyer tips
+────────────────────────────────────────────────────────────
+
+Generating infographic with Gemini 3 Pro...
+WARNING: Both GOOGLE_API_KEY and GEMINI_API_KEY are set. Using GOOGLE_API_KEY.
+INFO: Generating image with gemini-3-pro-image-preview ...
+INFO: AFC is enabled with max remote calls: 10.
+INFO: HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-3-pro-image-preview:generateContent "HTTP/1.1 200 OK"
+Rendered: /var/folders/3m/wbb812l55fv7xc2q79ttxl680000gn/T/infographic_s5z5i8bt/infographic.png (1080x1920)
+Overlaying infographic at 26.5–33.5s...
+Output: /Users/apple/Documents/code/marky/marky-app/video-editor/projects/HunterZier/editing/videos/260214-hunter-session1/outputs/segment_03/09_infographic.mp4
+Done segment_03
+========== segment_04 ==========
+ffmpeg version 7.1.1 Copyright (c) 2000-2025 the FFmpeg developers
+  built with Apple clang version 17.0.0 (clang-1700.0.13.3)
+  configuration: --prefix=/opt/homebrew/Cellar/ffmpeg/7.1.1_3 --enable-shared --enable-pthreads --enable-version3 --cc=clang --host-cflags= --host-ldflags='-Wl,-ld_classic' --enable-ffplay --enable-gnutls --enable-gpl --enable-libaom --enable-libaribb24 --enable-libbluray --enable-libdav1d --enable-libharfbuzz --enable-libjxl --enable-libmp3lame --enable-libopus --enable-librav1e --enable-librist --enable-librubberband --enable-libsnappy --enable-libsrt --enable-libssh --enable-libsvtav1 --enable-libtesseract --enable-libtheora --enable-libvidstab --enable-libvmaf --enable-libvorbis --enable-libvpx --enable-libwebp --enable-libx264 --enable-libx265 --enable-libxml2 --enable-libxvid --enable-lzma --enable-libfontconfig --enable-libfreetype --enable-frei0r --enable-libass --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-libopenjpeg --enable-libspeex --enable-libsoxr --enable-libzmq --enable-libzimg --disable-libjack --disable-indev=jack --enable-videotoolbox --enable-audiotoolbox --enable-neon
+  libavutil      59. 39.100 / 59. 39.100
+  libavcodec     61. 19.101 / 61. 19.101
+  libavformat    61.  7.100 / 61.  7.100
+  libavdevice    61.  3.100 / 61.  3.100
+  libavfilter    10.  4.100 / 10.  4.100
+  libswscale      8.  3.100 /  8.  3.100
+  libswresample   5.  3.100 /  5.  3.100
+  libpostproc    58.  3.100 / 58.  3.100
+Input #0, mov,mp4,m4a,3gp,3g2,mj2, from '/Users/apple/Documents/code/marky/marky-app/video-editor/projects/HunterZier/editing/videos/260214-hunter-session1/outputs/segment_04/06_captioned.mp4':
+  Metadata:
+    major_brand     : isom
+    minor_version   : 512
+    compatible_brands: isomiso2avc1mp41
+    encoder         : Lavf61.7.100
+  Duration: 00:01:22.27, start: 0.000000, bitrate: 4663 kb/s
+  Stream #0:0[0x1](und): Video: h264 (High) (avc1 / 0x31637661), yuv420p(tv, bt709, progressive), 608x1080, 4472 kb/s, SAR 1:1 DAR 76:135, 24 fps, 24 tbr, 12288 tbn (default)
+      Metadata:
+        handler_name    : VideoHandler
+        vendor_id       : [0][0][0][0]
+        encoder         : Lavc61.19.101 h264_videotoolbox
+  Stream #0:1[0x2](und): Audio: aac (LC) (mp4a / 0x6134706D), 96000 Hz, mono, fltp, 194 kb/s (default)
+      Metadata:
+        handler_name    : SoundHandler
+        vendor_id       : [0][0][0][0]
+Stream mapping:
+  Stream #0:0 -> #0:0 (copy)
+  Stream #0:1 -> #0:1 (aac (native) -> aac (native))
+Press [q] to stop, [?] for help
+Output #0, mp4, to '/Users/apple/Documents/code/marky/marky-app/video-editor/projects/HunterZier/editing/videos/260214-hunter-session1/outputs/segment_04/06_enhanced.mp4':
+  Metadata:
+    major_brand     : isom
+    minor_version   : 512
+    compatible_brands: isomiso2avc1mp41
+    encoder         : Lavf61.7.100
+  Stream #0:0(und): Video: h264 (High) (avc1 / 0x31637661), yuv420p(tv, bt709, progressive), 608x1080 [SAR 1:1 DAR 76:135], q=2-31, 4472 kb/s, 24 fps, 24 tbr, 12288 tbn (default)
+      Metadata:
+        handler_name    : VideoHandler
+        vendor_id       : [0][0][0][0]
+        encoder         : Lavc61.19.101 h264_videotoolbox
+  Stream #0:1(und): Audio: aac (LC) (mp4a / 0x6134706D), 96000 Hz, mono, fltp, 192 kb/s (default)
+      Metadata:
+        handler_name    : SoundHandler
+        vendor_id       : [0][0][0][0]
+        encoder         : Lavc61.19.101 aac
+frame=  573 fps=0.0 q=-1.0 size=   11520KiB time=00:00:20.65 bitrate=4569.9kbits/s speed=40.8x    frame= 1092 fps=1080 q=-1.0 size=   24064KiB time=00:00:42.22 bitrate=4668.1kbits/s speed=41.8x    frame= 1615 fps=1067 q=-1.0 size=   36352KiB time=00:01:04.06 bitrate=4648.4kbits/s speed=42.3x    [aac @ 0xb63031500] Queue input is backward in time
+[aost#0:1/aac @ 0xb62c84300] Non-monotonic DTS; previous: 7418912, current: 7417935; changing to 7418913. This may result in incorrect timestamps in the output file.
+[out#0/mp4 @ 0xb62c78300] video:44816KiB audio:1956KiB subtitle:0KiB other streams:0KiB global headers:0KiB muxing overhead: 0.127628%
+frame= 1970 fps=1016 q=-1.0 Lsize=   46832KiB time=00:01:22.08 bitrate=4673.9kbits/s speed=42.3x    
+[aac @ 0xb63031500] Qavg: 319.684
+Enhancing voice (warmth + compression + normalization)...
+✅ Output video: /Users/apple/Documents/code/marky/marky-app/video-editor/projects/HunterZier/editing/videos/260214-hunter-session1/outputs/segment_04/06_enhanced.mp4
+Round-robin: segment 4 → 04_warm-acoustic_papanin.mp3
+✅ Output written to /Users/apple/Documents/code/marky/marky-app/video-editor/projects/HunterZier/editing/videos/260214-hunter-session1/outputs/segment_04/07_music.mp4
+Loaded 312 words from /Users/apple/Documents/code/marky/marky-app/video-editor/projects/HunterZier/editing/videos/260214-hunter-session1/outputs/segment_04/07_music-words.json
+Analyzing transcript for emoji moments (312 words, 82s)...
+
+────────────────────────────────────────────────────────────
+Emoji plan (4 overlays):
+  1. 🏠  2.2–3.7s  (top-left)  Reinforces the word 'house' which is the main topic of the video in the opening hook.
+  2. 📈  27.5–29.0s  (top-right)  Emphasizes the specific 'credit score' number mentioned being a threshold for approval.
+  3. 🤝  35.1–36.6s  (top-left)  Visually represents the 'borrowers' mentioned in the real-world example provided.
+  4. 🚀  61.2–62.7s  (top-right)  Matches the word 'boost' and creates energy around the idea of improving a score.
+────────────────────────────────────────────────────────────
+
+  Generated: 🏠 → emoji_0.png
+  Generated: 📈 → emoji_1.png
+  Generated: 🤝 → emoji_2.png
+  Generated: 🚀 → emoji_3.png
+Overlaying 4 emojis...
+✅ Output: /Users/apple/Documents/code/marky/marky-app/video-editor/projects/HunterZier/editing/videos/260214-hunter-session1/outputs/segment_04/08_emojis.mp4
+Loaded 312 words from /Users/apple/Documents/code/marky/marky-app/video-editor/projects/HunterZier/editing/videos/260214-hunter-session1/outputs/segment_04/07_music-words.json
+Analyzing transcript for infographic concept (312 words, 82s)...
+INFO: HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+
+────────────────────────────────────────────────────────────
+Infographic plan:
+  Concept:  Credit score requirements
+  Title:    YOU DON'T NEED PERFECT CREDIT
+  Template: list
+  Timing:   44.8–51.8s
+  Rationale: The speaker lists several specific loan programs (VA, USDA, Conventional) and their varying levels of credit strictness. A list helps the viewer differentiate these options visually while they are being mentioned quickly back-to-back.
+  Items:
+    ✅ VA & USDA: Most flexible credit requirements
+    🏠 FHA: Can qualify with a 580 score
+    📊 Conventional: Strictest credit standards
+    📝 Manual Underwrite: Options for no credit history
+  Tagline: There is a program for every score.
+────────────────────────────────────────────────────────────
+
+Generating infographic with Gemini 3 Pro...
+WARNING: Both GOOGLE_API_KEY and GEMINI_API_KEY are set. Using GOOGLE_API_KEY.
+INFO: Generating image with gemini-3-pro-image-preview ...
+INFO: AFC is enabled with max remote calls: 10.
+INFO: HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-3-pro-image-preview:generateContent "HTTP/1.1 200 OK"
+Rendered: /var/folders/3m/wbb812l55fv7xc2q79ttxl680000gn/T/infographic_zuw3svxm/infographic.png (1080x1920)
+Overlaying infographic at 44.8–51.8s...
+Output: /Users/apple/Documents/code/marky/marky-app/video-editor/projects/HunterZier/editing/videos/260214-hunter-session1/outputs/segment_04/09_infographic.mp4
+Done segment_04
+========== segment_05 ==========
+ffmpeg version 7.1.1 Copyright (c) 2000-2025 the FFmpeg developers
+  built with Apple clang version 17.0.0 (clang-1700.0.13.3)
+  configuration: --prefix=/opt/homebrew/Cellar/ffmpeg/7.1.1_3 --enable-shared --enable-pthreads --enable-version3 --cc=clang --host-cflags= --host-ldflags='-Wl,-ld_classic' --enable-ffplay --enable-gnutls --enable-gpl --enable-libaom --enable-libaribb24 --enable-libbluray --enable-libdav1d --enable-libharfbuzz --enable-libjxl --enable-libmp3lame --enable-libopus --enable-librav1e --enable-librist --enable-librubberband --enable-libsnappy --enable-libsrt --enable-libssh --enable-libsvtav1 --enable-libtesseract --enable-libtheora --enable-libvidstab --enable-libvmaf --enable-libvorbis --enable-libvpx --enable-libwebp --enable-libx264 --enable-libx265 --enable-libxml2 --enable-libxvid --enable-lzma --enable-libfontconfig --enable-libfreetype --enable-frei0r --enable-libass --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-libopenjpeg --enable-libspeex --enable-libsoxr --enable-libzmq --enable-libzimg --disable-libjack --disable-indev=jack --enable-videotoolbox --enable-audiotoolbox --enable-neon
+  libavutil      59. 39.100 / 59. 39.100
+  libavcodec     61. 19.101 / 61. 19.101
+  libavformat    61.  7.100 / 61.  7.100
+  libavdevice    61.  3.100 / 61.  3.100
+  libavfilter    10.  4.100 / 10.  4.100
+  libswscale      8.  3.100 /  8.  3.100
+  libswresample   5.  3.100 /  5.  3.100
+  libpostproc    58.  3.100 / 58.  3.100
+Input #0, mov,mp4,m4a,3gp,3g2,mj2, from '/Users/apple/Documents/code/marky/marky-app/video-editor/projects/HunterZier/editing/videos/260214-hunter-session1/outputs/segment_05/06_captioned.mp4':
+  Metadata:
+    major_brand     : isom
+    minor_version   : 512
+    compatible_brands: isomiso2avc1mp41
+    encoder         : Lavf61.7.100
+  Duration: 00:01:35.68, start: 0.000000, bitrate: 4665 kb/s
+  Stream #0:0[0x1](und): Video: h264 (High) (avc1 / 0x31637661), yuv420p(tv, bt709, progressive), 608x1080, 4469 kb/s, SAR 1:1 DAR 76:135, 23.99 fps, 24 tbr, 12288 tbn (default)
+      Metadata:
+        handler_name    : VideoHandler
+        vendor_id       : [0][0][0][0]
+        encoder         : Lavc61.19.101 h264_videotoolbox
+  Stream #0:1[0x2](und): Audio: aac (LC) (mp4a / 0x6134706D), 96000 Hz, mono, fltp, 194 kb/s (default)
+      Metadata:
+        handler_name    : SoundHandler
+        vendor_id       : [0][0][0][0]
+Stream mapping:
+  Stream #0:0 -> #0:0 (copy)
+  Stream #0:1 -> #0:1 (aac (native) -> aac (native))
+Press [q] to stop, [?] for help
+Output #0, mp4, to '/Users/apple/Documents/code/marky/marky-app/video-editor/projects/HunterZier/editing/videos/260214-hunter-session1/outputs/segment_05/06_enhanced.mp4':
+  Metadata:
+    major_brand     : isom
+    minor_version   : 512
+    compatible_brands: isomiso2avc1mp41
+    encoder         : Lavf61.7.100
+  Stream #0:0(und): Video: h264 (High) (avc1 / 0x31637661), yuv420p(tv, bt709, progressive), 608x1080 [SAR 1:1 DAR 76:135], q=2-31, 4469 kb/s, 23.99 fps, 24 tbr, 12288 tbn (default)
+      Metadata:
+        handler_name    : VideoHandler
+        vendor_id       : [0][0][0][0]
+        encoder         : Lavc61.19.101 h264_videotoolbox
+  Stream #0:1(und): Audio: aac (LC) (mp4a / 0x6134706D), 96000 Hz, mono, fltp, 192 kb/s (default)
+      Metadata:
+        handler_name    : SoundHandler
+        vendor_id       : [0][0][0][0]
+        encoder         : Lavc61.19.101 aac
+[aac @ 0x712c6d500] Queue input is backward in time
+[aost#0:1/aac @ 0x712c70300] Non-monotonic DTS; previous: 479232, current: 478308; changing to 479233. This may result in incorrect timestamps in the output file.
+frame=  440 fps=0.0 q=-1.0 size=    8448KiB time=00:00:15.14 bitrate=4568.8kbits/s speed=30.1x    frame=  714 fps=707 q=-1.0 size=   14848KiB time=00:00:26.51 bitrate=4586.8kbits/s speed=26.3x    frame= 1235 fps=813 q=-1.0 size=   27392KiB time=00:00:48.24 bitrate=4651.0kbits/s speed=31.8x    frame= 1758 fps=867 q=-1.0 size=   39680KiB time=00:01:10.02 bitrate=4641.9kbits/s speed=34.5x    frame= 2258 fps=893 q=-1.0 size=   51712KiB time=00:01:30.84 bitrate=4663.0kbits/s speed=35.9x    [out#0/mp4 @ 0x712c04900] video:52151KiB audio:2267KiB subtitle:0KiB other streams:0KiB global headers:0KiB muxing overhead: 0.127210%
+frame= 2293 fps=864 q=-1.0 Lsize=   54487KiB time=00:01:35.58 bitrate=4669.9kbits/s speed=  36x    
+[aac @ 0x712c6d500] Qavg: 552.425
+Enhancing voice (warmth + compression + normalization)...
+✅ Output video: /Users/apple/Documents/code/marky/marky-app/video-editor/projects/HunterZier/editing/videos/260214-hunter-session1/outputs/segment_05/06_enhanced.mp4
+Round-robin: segment 5 → 05_motivational-uplifting-corporate_makesound.mp3
+✅ Output written to /Users/apple/Documents/code/marky/marky-app/video-editor/projects/HunterZier/editing/videos/260214-hunter-session1/outputs/segment_05/07_music.mp4
+Loaded 287 words from /Users/apple/Documents/code/marky/marky-app/video-editor/projects/HunterZier/editing/videos/260214-hunter-session1/outputs/segment_05/07_music-words.json
+Analyzing transcript for emoji moments (287 words, 95s)...
+
+────────────────────────────────────────────────────────────
+Emoji plan (4 overlays):
+  1. 🏠  2.9–4.4s  (top-right)  Reinforces the main subject of the video, which is purchasing a house.
+  2. 📉  53.6–55.1s  (top-left)  Visualizes the concept of interest rates dropping as discussed by lenders.
+  3. 🔄  79.5–81.0s  (top-right)  Represents the process of refinancing the loan later.
+  4. 🎯  89.8–91.3s  (top-left)  Visually identifies the 'moving target' metaphor the speaker uses regarding rates.
+────────────────────────────────────────────────────────────
+
+  Generated: 🏠 → emoji_0.png
+  Generated: 📉 → emoji_1.png
+  Generated: 🔄 → emoji_2.png
+  Generated: 🎯 → emoji_3.png
+Overlaying 4 emojis...
+✅ Output: /Users/apple/Documents/code/marky/marky-app/video-editor/projects/HunterZier/editing/videos/260214-hunter-session1/outputs/segment_05/08_emojis.mp4
+Loaded 287 words from /Users/apple/Documents/code/marky/marky-app/video-editor/projects/HunterZier/editing/videos/260214-hunter-session1/outputs/segment_05/07_music-words.json
+Analyzing transcript for infographic concept (287 words, 95s)...
+INFO: HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+
+────────────────────────────────────────────────────────────
+Infographic plan:
+  Concept:  The Rate Drop Trap
+  Title:    WAITING FOR LOWER RATES?
+  Template: compare
+  Timing:   64.1–71.1s
+  Rationale: The speaker contrasts the benefit of a lower rate against the hidden cost of higher competition and prices. A side-by-side comparison makes the trade-offs of the 'waiting' strategy immediately apparent to the viewer.
+  Left:  BUY NOW: Less competition, Better home price, Refinance later
+  Right: WAIT: 5M more buyers, Higher sale price, Bidding wars
+  Tagline: You can't change what you paid later.
+────────────────────────────────────────────────────────────
+
+Generating infographic with Gemini 3 Pro...
+WARNING: Both GOOGLE_API_KEY and GEMINI_API_KEY are set. Using GOOGLE_API_KEY.
+INFO: Generating image with gemini-3-pro-image-preview ...
+INFO: AFC is enabled with max remote calls: 10.
+INFO: HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-3-pro-image-preview:generateContent "HTTP/1.1 200 OK"
+Rendered: /var/folders/3m/wbb812l55fv7xc2q79ttxl680000gn/T/infographic_t4o5crmu/infographic.png (1080x1920)
+Overlaying infographic at 64.1–71.1s...
+Output: /Users/apple/Documents/code/marky/marky-app/video-editor/projects/HunterZier/editing/videos/260214-hunter-session1/outputs/segment_05/09_infographic.mp4
+Done segment_05
+========== segment_06 ==========
+ffmpeg version 7.1.1 Copyright (c) 2000-2025 the FFmpeg developers
+  built with Apple clang version 17.0.0 (clang-1700.0.13.3)
+  configuration: --prefix=/opt/homebrew/Cellar/ffmpeg/7.1.1_3 --enable-shared --enable-pthreads --enable-version3 --cc=clang --host-cflags= --host-ldflags='-Wl,-ld_classic' --enable-ffplay --enable-gnutls --enable-gpl --enable-libaom --enable-libaribb24 --enable-libbluray --enable-libdav1d --enable-libharfbuzz --enable-libjxl --enable-libmp3lame --enable-libopus --enable-librav1e --enable-librist --enable-librubberband --enable-libsnappy --enable-libsrt --enable-libssh --enable-libsvtav1 --enable-libtesseract --enable-libtheora --enable-libvidstab --enable-libvmaf --enable-libvorbis --enable-libvpx --enable-libwebp --enable-libx264 --enable-libx265 --enable-libxml2 --enable-libxvid --enable-lzma --enable-libfontconfig --enable-libfreetype --enable-frei0r --enable-libass --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-libopenjpeg --enable-libspeex --enable-libsoxr --enable-libzmq --enable-libzimg --disable-libjack --disable-indev=jack --enable-videotoolbox --enable-audiotoolbox --enable-neon
+  libavutil      59. 39.100 / 59. 39.100
+  libavcodec     61. 19.101 / 61. 19.101
+  libavformat    61.  7.100 / 61.  7.100
+  libavdevice    61.  3.100 / 61.  3.100
+  libavfilter    10.  4.100 / 10.  4.100
+  libswscale      8.  3.100 /  8.  3.100
+  libswresample   5.  3.100 /  5.  3.100
+  libpostproc    58.  3.100 / 58.  3.100
+Input #0, mov,mp4,m4a,3gp,3g2,mj2, from '/Users/apple/Documents/code/marky/marky-app/video-editor/projects/HunterZier/editing/videos/260214-hunter-session1/outputs/segment_06/06_captioned.mp4':
+  Metadata:
+    major_brand     : isom
+    minor_version   : 512
+    compatible_brands: isomiso2avc1mp41
+    encoder         : Lavf61.7.100
+  Duration: 00:01:03.68, start: 0.000000, bitrate: 4658 kb/s
+  Stream #0:0[0x1](und): Video: h264 (High) (avc1 / 0x31637661), yuv420p(tv, bt709, progressive), 608x1080, 4468 kb/s, SAR 1:1 DAR 76:135, 24 fps, 24 tbr, 12288 tbn (default)
+      Metadata:
+        handler_name    : VideoHandler
+        vendor_id       : [0][0][0][0]
+        encoder         : Lavc61.19.101 h264_videotoolbox
+  Stream #0:1[0x2](und): Audio: aac (LC) (mp4a / 0x6134706D), 96000 Hz, mono, fltp, 194 kb/s (default)
+      Metadata:
+        handler_name    : SoundHandler
+        vendor_id       : [0][0][0][0]
+Stream mapping:
+  Stream #0:0 -> #0:0 (copy)
+  Stream #0:1 -> #0:1 (aac (native) -> aac (native))
+Press [q] to stop, [?] for help
+Output #0, mp4, to '/Users/apple/Documents/code/marky/marky-app/video-editor/projects/HunterZier/editing/videos/260214-hunter-session1/outputs/segment_06/06_enhanced.mp4':
+  Metadata:
+    major_brand     : isom
+    minor_version   : 512
+    compatible_brands: isomiso2avc1mp41
+    encoder         : Lavf61.7.100
+  Stream #0:0(und): Video: h264 (High) (avc1 / 0x31637661), yuv420p(tv, bt709, progressive), 608x1080 [SAR 1:1 DAR 76:135], q=2-31, 4468 kb/s, 24 fps, 24 tbr, 12288 tbn (default)
+      Metadata:
+        handler_name    : VideoHandler
+        vendor_id       : [0][0][0][0]
+        encoder         : Lavc61.19.101 h264_videotoolbox
+  Stream #0:1(und): Audio: aac (LC) (mp4a / 0x6134706D), 96000 Hz, mono, fltp, 192 kb/s (default)
+      Metadata:
+        handler_name    : SoundHandler
+        vendor_id       : [0][0][0][0]
+        encoder         : Lavc61.19.101 aac
+frame=  569 fps=0.0 q=-1.0 size=   11520KiB time=00:00:20.46 bitrate=4610.4kbits/s speed=40.6x    frame=  984 fps=974 q=-1.0 size=   21504KiB time=00:00:37.72 bitrate=4669.2kbits/s speed=37.3x    [aac @ 0x81a47d500] Queue input is backward in time
+[aost#0:1/aac @ 0x81a4ec300] Non-monotonic DTS; previous: 5624832, current: 5624261; changing to 5624833. This may result in incorrect timestamps in the output file.
+frame= 1502 fps=988 q=-1.0 size=   33792KiB time=00:00:59.35 bitrate=4664.0kbits/s speed=  39x    [out#0/mp4 @ 0x81a800900] video:34661KiB audio:1510KiB subtitle:0KiB other streams:0KiB global headers:0KiB muxing overhead: 0.128671%
+frame= 1525 fps=940 q=-1.0 Lsize=   36218KiB time=00:01:03.54 bitrate=4669.3kbits/s speed=39.2x    
+[aac @ 0x81a47d500] Qavg: 487.874
+Enhancing voice (warmth + compression + normalization)...
+✅ Output video: /Users/apple/Documents/code/marky/marky-app/video-editor/projects/HunterZier/editing/videos/260214-hunter-session1/outputs/segment_06/06_enhanced.mp4
+Round-robin: segment 6 → 01_upbeat-summer-corporate_rafael-krux.mp3
+✅ Output written to /Users/apple/Documents/code/marky/marky-app/video-editor/projects/HunterZier/editing/videos/260214-hunter-session1/outputs/segment_06/07_music.mp4
+Loaded 183 words from /Users/apple/Documents/code/marky/marky-app/video-editor/projects/HunterZier/editing/videos/260214-hunter-session1/outputs/segment_06/07_music-words.json
+Analyzing transcript for emoji moments (183 words, 63s)...
+
+────────────────────────────────────────────────────────────
+Emoji plan (4 overlays):
+  1. 🏠  2.6–4.1s  (top-right)  Reinforces the central subject 'house' at the beginning of the explanation.
+  2. 📉  21.9–23.4s  (top-left)  Visually represents the key concept of 'interest rates drop'.
+  3. 🔄  47.5–49.0s  (top-right)  Suggests the cycle of 'refinance' which is the main strategy being proposed.
+  4. 📈  54.1–55.6s  (top-left)  Emphasizes the core fact that real estate prices 'go up' over time.
+────────────────────────────────────────────────────────────
+
+  Generated: 🏠 → emoji_0.png
+  Generated: 📉 → emoji_1.png
+  Generated: 🔄 → emoji_2.png
+  Generated: 📈 → emoji_3.png
+Overlaying 4 emojis...
+✅ Output: /Users/apple/Documents/code/marky/marky-app/video-editor/projects/HunterZier/editing/videos/260214-hunter-session1/outputs/segment_06/08_emojis.mp4
+Loaded 183 words from /Users/apple/Documents/code/marky/marky-app/video-editor/projects/HunterZier/editing/videos/260214-hunter-session1/outputs/segment_06/07_music-words.json
+Analyzing transcript for infographic concept (183 words, 63s)...
+INFO: HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+
+────────────────────────────────────────────────────────────
+Infographic plan:
+  Concept:  Market competition impact
+  Title:    THE RATE DROP TRAP
+  Template: compare
+  Timing:   32.1–39.1s
+  Rationale: The speaker contrasts the benefit of lower rates with the disadvantage of higher housing prices and competition. A comparison table allows viewers to quickly see the trade-offs of 'waiting versus buying now' which is the heart of the speaker's advice.
+  Left:  BUY NOW: Less competition, Lower home price, Refinance later
+  Right: WAIT: 5M more buyers, Higher home price, Bidding wars
+  Tagline: You can change your rate, not your price.
+────────────────────────────────────────────────────────────
+
+Generating infographic with Gemini 3 Pro...
+WARNING: Both GOOGLE_API_KEY and GEMINI_API_KEY are set. Using GOOGLE_API_KEY.
+INFO: Generating image with gemini-3-pro-image-preview ...
+INFO: AFC is enabled with max remote calls: 10.
+INFO: HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-3-pro-image-preview:generateContent "HTTP/1.1 200 OK"
+Rendered: /var/folders/3m/wbb812l55fv7xc2q79ttxl680000gn/T/infographic_v62ykupp/infographic.png (1080x1920)
+Overlaying infographic at 32.1–39.1s...
+Output: /Users/apple/Documents/code/marky/marky-app/video-editor/projects/HunterZier/editing/videos/260214-hunter-session1/outputs/segment_06/09_infographic.mp4
+Done segment_06
+========== segment_07 ==========
+ffmpeg version 7.1.1 Copyright (c) 2000-2025 the FFmpeg developers
+  built with Apple clang version 17.0.0 (clang-1700.0.13.3)
+  configuration: --prefix=/opt/homebrew/Cellar/ffmpeg/7.1.1_3 --enable-shared --enable-pthreads --enable-version3 --cc=clang --host-cflags= --host-ldflags='-Wl,-ld_classic' --enable-ffplay --enable-gnutls --enable-gpl --enable-libaom --enable-libaribb24 --enable-libbluray --enable-libdav1d --enable-libharfbuzz --enable-libjxl --enable-libmp3lame --enable-libopus --enable-librav1e --enable-librist --enable-librubberband --enable-libsnappy --enable-libsrt --enable-libssh --enable-libsvtav1 --enable-libtesseract --enable-libtheora --enable-libvidstab --enable-libvmaf --enable-libvorbis --enable-libvpx --enable-libwebp --enable-libx264 --enable-libx265 --enable-libxml2 --enable-libxvid --enable-lzma --enable-libfontconfig --enable-libfreetype --enable-frei0r --enable-libass --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-libopenjpeg --enable-libspeex --enable-libsoxr --enable-libzmq --enable-libzimg --disable-libjack --disable-indev=jack --enable-videotoolbox --enable-audiotoolbox --enable-neon
+  libavutil      59. 39.100 / 59. 39.100
+  libavcodec     61. 19.101 / 61. 19.101
+  libavformat    61.  7.100 / 61.  7.100
+  libavdevice    61.  3.100 / 61.  3.100
+  libavfilter    10.  4.100 / 10.  4.100
+  libswscale      8.  3.100 /  8.  3.100
+  libswresample   5.  3.100 /  5.  3.100
+  libpostproc    58.  3.100 / 58.  3.100
+Input #0, mov,mp4,m4a,3gp,3g2,mj2, from '/Users/apple/Documents/code/marky/marky-app/video-editor/projects/HunterZier/editing/videos/260214-hunter-session1/outputs/segment_07/06_captioned.mp4':
+  Metadata:
+    major_brand     : isom
+    minor_version   : 512
+    compatible_brands: isomiso2avc1mp41
+    encoder         : Lavf61.7.100
+  Duration: 00:00:17.70, start: 0.000000, bitrate: 4635 kb/s
+  Stream #0:0[0x1](und): Video: h264 (High) (avc1 / 0x31637661), yuv420p(tv, bt709, progressive), 608x1080, 4443 kb/s, SAR 1:1 DAR 76:135, 24 fps, 24 tbr, 12288 tbn (default)
+      Metadata:
+        handler_name    : VideoHandler
+        vendor_id       : [0][0][0][0]
+        encoder         : Lavc61.19.101 h264_videotoolbox
+  Stream #0:1[0x2](und): Audio: aac (LC) (mp4a / 0x6134706D), 96000 Hz, mono, fltp, 194 kb/s (default)
+      Metadata:
+        handler_name    : SoundHandler
+        vendor_id       : [0][0][0][0]
+Stream mapping:
+  Stream #0:0 -> #0:0 (copy)
+  Stream #0:1 -> #0:1 (aac (native) -> aac (native))
+Press [q] to stop, [?] for help
+Output #0, mp4, to '/Users/apple/Documents/code/marky/marky-app/video-editor/projects/HunterZier/editing/videos/260214-hunter-session1/outputs/segment_07/06_enhanced.mp4':
+  Metadata:
+    major_brand     : isom
+    minor_version   : 512
+    compatible_brands: isomiso2avc1mp41
+    encoder         : Lavf61.7.100
+  Stream #0:0(und): Video: h264 (High) (avc1 / 0x31637661), yuv420p(tv, bt709, progressive), 608x1080 [SAR 1:1 DAR 76:135], q=2-31, 4443 kb/s, 24 fps, 24 tbr, 12288 tbn (default)
+      Metadata:
+        handler_name    : VideoHandler
+        vendor_id       : [0][0][0][0]
+        encoder         : Lavc61.19.101 h264_videotoolbox
+  Stream #0:1(und): Audio: aac (LC) (mp4a / 0x6134706D), 96000 Hz, mono, fltp, 192 kb/s (default)
+      Metadata:
+        handler_name    : SoundHandler
+        vendor_id       : [0][0][0][0]
+        encoder         : Lavc61.19.101 aac
+[out#0/mp4 @ 0xb30c04900] video:9582KiB audio:420KiB subtitle:0KiB other streams:0KiB global headers:0KiB muxing overhead: 0.139532%
+frame=  424 fps=0.0 q=-1.0 Lsize=   10016KiB time=00:00:17.66 bitrate=4644.4kbits/s speed=  39x    
+[aac @ 0xb30c85500] Qavg: 304.854
+Enhancing voice (warmth + compression + normalization)...
+✅ Output video: /Users/apple/Documents/code/marky/marky-app/video-editor/projects/HunterZier/editing/videos/260214-hunter-session1/outputs/segment_07/06_enhanced.mp4
+Round-robin: segment 7 → 02_happy-optimistic-corporate_aliaksei.mp3
+✅ Output written to /Users/apple/Documents/code/marky/marky-app/video-editor/projects/HunterZier/editing/videos/260214-hunter-session1/outputs/segment_07/07_music.mp4
+Loaded 62 words from /Users/apple/Documents/code/marky/marky-app/video-editor/projects/HunterZier/editing/videos/260214-hunter-session1/outputs/segment_07/07_music-words.json
+Analyzing transcript for emoji moments (62 words, 17s)...
+
+────────────────────────────────────────────────────────────
+Emoji plan (4 overlays):
+  1. ⚖️  2.6–4.1s  (top-left)  Reinforces the concept of a 'breaking even point' which implies balance.
+  2. 💰  6.9–8.4s  (top-right)  Used when discussing the high cost of refinancing ($20,000).
+  3. 🚫  12.0–13.5s  (top-left)  Visual emphasis on the statement that a bad deal 'doesn't make any sense'.
+  4. 🏠  14.2–15.7s  (top-right)  Represents 'home buyer' which is the target audience of the advice.
+────────────────────────────────────────────────────────────
+
+  Generated: ⚖️ → emoji_0.png
+  Generated: 💰 → emoji_1.png
+  Generated: 🚫 → emoji_2.png
+  Generated: 🏠 → emoji_3.png
+Overlaying 4 emojis...
+✅ Output: /Users/apple/Documents/code/marky/marky-app/video-editor/projects/HunterZier/editing/videos/260214-hunter-session1/outputs/segment_07/08_emojis.mp4
+Loaded 62 words from /Users/apple/Documents/code/marky/marky-app/video-editor/projects/HunterZier/editing/videos/260214-hunter-session1/outputs/segment_07/07_music-words.json
+Analyzing transcript for infographic concept (62 words, 17s)...
+INFO: HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+
+────────────────────────────────────────────────────────────
+Infographic plan:
+  Concept:  Refinance Break Even Point
+  Title:    RECOUPMENT PERIOD MATH
+  Template: list
+  Timing:   4.4–11.4s
+  Rationale: Calculating the break-even point of a refinance is a mental math problem that visualizes much better than it sounds. This list clarifies the relationship between monthly savings and total cost.
+  Items:
+    💵 Monthly Savings: $200
+    🏦 Refinance Cost: $20,000
+    ⏳ Break Even: 10 Years
+  Tagline: Does the math make sense?
+────────────────────────────────────────────────────────────
+
+Generating infographic with Gemini 3 Pro...
+WARNING: Both GOOGLE_API_KEY and GEMINI_API_KEY are set. Using GOOGLE_API_KEY.
+INFO: Generating image with gemini-3-pro-image-preview ...
+INFO: AFC is enabled with max remote calls: 10.
+INFO: HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-3-pro-image-preview:generateContent "HTTP/1.1 200 OK"
+Rendered: /var/folders/3m/wbb812l55fv7xc2q79ttxl680000gn/T/infographic_2ajgqi4v/infographic.png (1080x1920)
+Overlaying infographic at 4.4–11.4s...
+Output: /Users/apple/Documents/code/marky/marky-app/video-editor/projects/HunterZier/editing/videos/260214-hunter-session1/outputs/segment_07/09_infographic.mp4
+Done segment_07
+========== segment_08 ==========
+ffmpeg version 7.1.1 Copyright (c) 2000-2025 the FFmpeg developers
+  built with Apple clang version 17.0.0 (clang-1700.0.13.3)
+  configuration: --prefix=/opt/homebrew/Cellar/ffmpeg/7.1.1_3 --enable-shared --enable-pthreads --enable-version3 --cc=clang --host-cflags= --host-ldflags='-Wl,-ld_classic' --enable-ffplay --enable-gnutls --enable-gpl --enable-libaom --enable-libaribb24 --enable-libbluray --enable-libdav1d --enable-libharfbuzz --enable-libjxl --enable-libmp3lame --enable-libopus --enable-librav1e --enable-librist --enable-librubberband --enable-libsnappy --enable-libsrt --enable-libssh --enable-libsvtav1 --enable-libtesseract --enable-libtheora --enable-libvidstab --enable-libvmaf --enable-libvorbis --enable-libvpx --enable-libwebp --enable-libx264 --enable-libx265 --enable-libxml2 --enable-libxvid --enable-lzma --enable-libfontconfig --enable-libfreetype --enable-frei0r --enable-libass --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-libopenjpeg --enable-libspeex --enable-libsoxr --enable-libzmq --enable-libzimg --disable-libjack --disable-indev=jack --enable-videotoolbox --enable-audiotoolbox --enable-neon
+  libavutil      59. 39.100 / 59. 39.100
+  libavcodec     61. 19.101 / 61. 19.101
+  libavformat    61.  7.100 / 61.  7.100
+  libavdevice    61.  3.100 / 61.  3.100
+  libavfilter    10.  4.100 / 10.  4.100
+  libswscale      8.  3.100 /  8.  3.100
+  libswresample   5.  3.100 /  5.  3.100
+  libpostproc    58.  3.100 / 58.  3.100
+Input #0, mov,mp4,m4a,3gp,3g2,mj2, from '/Users/apple/Documents/code/marky/marky-app/video-editor/projects/HunterZier/editing/videos/260214-hunter-session1/outputs/segment_08/06_captioned.mp4':
+  Metadata:
+    major_brand     : isom
+    minor_version   : 512
+    compatible_brands: isomiso2avc1mp41
+    encoder         : Lavf61.7.100
+  Duration: 00:02:02.70, start: 0.000000, bitrate: 4663 kb/s
+  Stream #0:0[0x1](und): Video: h264 (High) (avc1 / 0x31637661), yuv420p(tv, bt709, progressive), 608x1080, 4465 kb/s, SAR 1:1 DAR 76:135, 24 fps, 24 tbr, 12288 tbn (default)
+      Metadata:
+        handler_name    : VideoHandler
+        vendor_id       : [0][0][0][0]
+        encoder         : Lavc61.19.101 h264_videotoolbox
+  Stream #0:1[0x2](und): Audio: aac (LC) (mp4a / 0x6134706D), 96000 Hz, mono, fltp, 194 kb/s (default)
+      Metadata:
+        handler_name    : SoundHandler
+        vendor_id       : [0][0][0][0]
+Stream mapping:
+  Stream #0:0 -> #0:0 (copy)
+  Stream #0:1 -> #0:1 (aac (native) -> aac (native))
+Press [q] to stop, [?] for help
+Output #0, mp4, to '/Users/apple/Documents/code/marky/marky-app/video-editor/projects/HunterZier/editing/videos/260214-hunter-session1/outputs/segment_08/06_enhanced.mp4':
+  Metadata:
+    major_brand     : isom
+    minor_version   : 512
+    compatible_brands: isomiso2avc1mp41
+    encoder         : Lavf61.7.100
+  Stream #0:0(und): Video: h264 (High) (avc1 / 0x31637661), yuv420p(tv, bt709, progressive), 608x1080 [SAR 1:1 DAR 76:135], q=2-31, 4465 kb/s, 24 fps, 24 tbr, 12288 tbn (default)
+      Metadata:
+        handler_name    : VideoHandler
+        vendor_id       : [0][0][0][0]
+        encoder         : Lavc61.19.101 h264_videotoolbox
+  Stream #0:1(und): Audio: aac (LC) (mp4a / 0x6134706D), 96000 Hz, mono, fltp, 192 kb/s (default)
+      Metadata:
+        handler_name    : SoundHandler
+        vendor_id       : [0][0][0][0]
+        encoder         : Lavc61.19.101 aac
+frame=  581 fps=0.0 q=-1.0 size=   11776KiB time=00:00:20.97 bitrate=4600.2kbits/s speed=41.1x    frame= 1111 fps=1095 q=-1.0 size=   24320KiB time=00:00:43.11 bitrate=4620.9kbits/s speed=42.5x    frame= 1628 fps=1068 q=-1.0 size=   36864KiB time=00:01:04.57 bitrate=4676.5kbits/s speed=42.4x    frame= 2151 fps=1057 q=-1.0 size=   48896KiB time=00:01:26.36 bitrate=4637.8kbits/s speed=42.5x    frame= 2671 fps=1053 q=-1.0 size=   61184KiB time=00:01:48.02 bitrate=4640.0kbits/s speed=42.6x    [out#0/mp4 @ 0xbef018300] video:66847KiB audio:2914KiB subtitle:0KiB other streams:0KiB global headers:0KiB muxing overhead: 0.126558%
+frame= 2943 fps=1020 q=-1.0 Lsize=   69849KiB time=00:02:02.62 bitrate=4666.3kbits/s speed=42.5x    
+[aac @ 0xbef015500] Qavg: 444.330
+Enhancing voice (warmth + compression + normalization)...
+✅ Output video: /Users/apple/Documents/code/marky/marky-app/video-editor/projects/HunterZier/editing/videos/260214-hunter-session1/outputs/segment_08/06_enhanced.mp4
+Round-robin: segment 8 → 03_calm-uplifting-optimistic_makesound.mp3
+✅ Output written to /Users/apple/Documents/code/marky/marky-app/video-editor/projects/HunterZier/editing/videos/260214-hunter-session1/outputs/segment_08/07_music.mp4
+Loaded 397 words from /Users/apple/Documents/code/marky/marky-app/video-editor/projects/HunterZier/editing/videos/260214-hunter-session1/outputs/segment_08/07_music-words.json
+Analyzing transcript for emoji moments (397 words, 122s)...
+
+────────────────────────────────────────────────────────────
+Emoji plan (4 overlays):
+  1. 📉  15.4–17.0s  (top-right)  Visualizes the concept of lowering interest rates.
+  2. 🏠  44.6–46.1s  (top-left)  Reinforces the concept of home equity and property.
+  3. 💰  61.3–62.7s  (top-right)  Emphasizes the significant dollar amount of monthly savings.
+  4. 🎯  98.5–99.9s  (top-left)  Represents the precision required for timing the market.
+────────────────────────────────────────────────────────────
+
+  Generated: 📉 → emoji_0.png
+  Generated: 🏠 → emoji_1.png
+  Generated: 💰 → emoji_2.png
+  Generated: 🎯 → emoji_3.png
+Overlaying 4 emojis...
+✅ Output: /Users/apple/Documents/code/marky/marky-app/video-editor/projects/HunterZier/editing/videos/260214-hunter-session1/outputs/segment_08/08_emojis.mp4
+Loaded 397 words from /Users/apple/Documents/code/marky/marky-app/video-editor/projects/HunterZier/editing/videos/260214-hunter-session1/outputs/segment_08/07_music-words.json
+Analyzing transcript for infographic concept (397 words, 122s)...
+INFO: HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+
+────────────────────────────────────────────────────────────
+Infographic plan:
+  Concept:  Cash Out Refinance Strategy
+  Title:    SMART REFINANCE MATH
+  Template: compare
+  Timing:   53.0–60.0s
+  Rationale: The speaker explains a complex trade-off where increasing a mortgage rate actually saves money by eliminating high-interest debt. This side-by-side contrast helps viewers visualize the net gain that is hard to track through audio alone.
+  Left:  BEFORE: 50k Credit Debt, 11.5% Interest Rate, +$1,000/mo Payment
+  Right: AFTER: Zero Credit Debt, 12.5% Interest Rate, +$100/mo Payment
+  Tagline: Net Savings: $900 per month
+────────────────────────────────────────────────────────────
+
+Generating infographic with Gemini 3 Pro...
+WARNING: Both GOOGLE_API_KEY and GEMINI_API_KEY are set. Using GOOGLE_API_KEY.
+INFO: Generating image with gemini-3-pro-image-preview ...
+INFO: AFC is enabled with max remote calls: 10.
+INFO: HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-3-pro-image-preview:generateContent "HTTP/1.1 200 OK"
+Rendered: /var/folders/3m/wbb812l55fv7xc2q79ttxl680000gn/T/infographic_rmb3ucj1/infographic.png (1080x1920)
+Overlaying infographic at 53.0–60.0s...
+Output: /Users/apple/Documents/code/marky/marky-app/video-editor/projects/HunterZier/editing/videos/260214-hunter-session1/outputs/segment_08/09_infographic.mp4
+Done segment_08
+========== segment_09 ==========
+ffmpeg version 7.1.1 Copyright (c) 2000-2025 the FFmpeg developers
+  built with Apple clang version 17.0.0 (clang-1700.0.13.3)
+  configuration: --prefix=/opt/homebrew/Cellar/ffmpeg/7.1.1_3 --enable-shared --enable-pthreads --enable-version3 --cc=clang --host-cflags= --host-ldflags='-Wl,-ld_classic' --enable-ffplay --enable-gnutls --enable-gpl --enable-libaom --enable-libaribb24 --enable-libbluray --enable-libdav1d --enable-libharfbuzz --enable-libjxl --enable-libmp3lame --enable-libopus --enable-librav1e --enable-librist --enable-librubberband --enable-libsnappy --enable-libsrt --enable-libssh --enable-libsvtav1 --enable-libtesseract --enable-libtheora --enable-libvidstab --enable-libvmaf --enable-libvorbis --enable-libvpx --enable-libwebp --enable-libx264 --enable-libx265 --enable-libxml2 --enable-libxvid --enable-lzma --enable-libfontconfig --enable-libfreetype --enable-frei0r --enable-libass --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-libopenjpeg --enable-libspeex --enable-libsoxr --enable-libzmq --enable-libzimg --disable-libjack --disable-indev=jack --enable-videotoolbox --enable-audiotoolbox --enable-neon
+  libavutil      59. 39.100 / 59. 39.100
+  libavcodec     61. 19.101 / 61. 19.101
+  libavformat    61.  7.100 / 61.  7.100
+  libavdevice    61.  3.100 / 61.  3.100
+  libavfilter    10.  4.100 / 10.  4.100
+  libswscale      8.  3.100 /  8.  3.100
+  libswresample   5.  3.100 /  5.  3.100
+  libpostproc    58.  3.100 / 58.  3.100
+Input #0, mov,mp4,m4a,3gp,3g2,mj2, from '/Users/apple/Documents/code/marky/marky-app/video-editor/projects/HunterZier/editing/videos/260214-hunter-session1/outputs/segment_09/06_captioned.mp4':
+  Metadata:
+    major_brand     : isom
+    minor_version   : 512
+    compatible_brands: isomiso2avc1mp41
+    encoder         : Lavf61.7.100
+  Duration: 00:01:06.07, start: 0.000000, bitrate: 4654 kb/s
+  Stream #0:0[0x1](und): Video: h264 (High) (avc1 / 0x31637661), yuv420p(tv, bt709, progressive), 608x1080, 4458 kb/s, SAR 1:1 DAR 76:135, 23.98 fps, 24 tbr, 12288 tbn (default)
+      Metadata:
+        handler_name    : VideoHandler
+        vendor_id       : [0][0][0][0]
+        encoder         : Lavc61.19.101 h264_videotoolbox
+  Stream #0:1[0x2](und): Audio: aac (LC) (mp4a / 0x6134706D), 96000 Hz, mono, fltp, 194 kb/s (default)
+      Metadata:
+        handler_name    : SoundHandler
+        vendor_id       : [0][0][0][0]
+Stream mapping:
+  Stream #0:0 -> #0:0 (copy)
+  Stream #0:1 -> #0:1 (aac (native) -> aac (native))
+Press [q] to stop, [?] for help
+Output #0, mp4, to '/Users/apple/Documents/code/marky/marky-app/video-editor/projects/HunterZier/editing/videos/260214-hunter-session1/outputs/segment_09/06_enhanced.mp4':
+  Metadata:
+    major_brand     : isom
+    minor_version   : 512
+    compatible_brands: isomiso2avc1mp41
+    encoder         : Lavf61.7.100
+  Stream #0:0(und): Video: h264 (High) (avc1 / 0x31637661), yuv420p(tv, bt709, progressive), 608x1080 [SAR 1:1 DAR 76:135], q=2-31, 4458 kb/s, 23.98 fps, 24 tbr, 12288 tbn (default)
+      Metadata:
+        handler_name    : VideoHandler
+        vendor_id       : [0][0][0][0]
+        encoder         : Lavc61.19.101 h264_videotoolbox
+  Stream #0:1(und): Audio: aac (LC) (mp4a / 0x6134706D), 96000 Hz, mono, fltp, 192 kb/s (default)
+      Metadata:
+        handler_name    : SoundHandler
+        vendor_id       : [0][0][0][0]
+        encoder         : Lavc61.19.101 aac
+frame=  568 fps=0.0 q=-1.0 size=   11520KiB time=00:00:20.45 bitrate=4614.0kbits/s speed=40.2x    frame= 1081 fps=1071 q=-1.0 size=   23808KiB time=00:00:41.85 bitrate=4660.3kbits/s speed=41.5x    [aac @ 0xb5904d500] Queue input is backward in time
+[aost#0:1/aac @ 0xb58cd4300] Non-monotonic DTS; previous: 5854732, current: 5853644; changing to 5854733. This may result in incorrect timestamps in the output file.
+[aost#0:1/aac @ 0xb58cd4300] Non-monotonic DTS; previous: 5854733, current: 5854668; changing to 5854734. This may result in incorrect timestamps in the output file.
+frame= 1573 fps=1039 q=-1.0 size=   35328KiB time=00:01:02.34 bitrate=4642.3kbits/s speed=41.2x    [out#0/mp4 @ 0xb58c64300] video:35924KiB audio:1569KiB subtitle:0KiB other streams:0KiB global headers:0KiB muxing overhead: 0.128739%
+frame= 1583 fps=963 q=-1.0 Lsize=   37542KiB time=00:01:06.00 bitrate=4659.7kbits/s speed=40.1x    
+[aac @ 0xb5904d500] Qavg: 610.657
+Enhancing voice (warmth + compression + normalization)...
+✅ Output video: /Users/apple/Documents/code/marky/marky-app/video-editor/projects/HunterZier/editing/videos/260214-hunter-session1/outputs/segment_09/06_enhanced.mp4
+Round-robin: segment 9 → 04_warm-acoustic_papanin.mp3
+✅ Output written to /Users/apple/Documents/code/marky/marky-app/video-editor/projects/HunterZier/editing/videos/260214-hunter-session1/outputs/segment_09/07_music.mp4
+Loaded 206 words from /Users/apple/Documents/code/marky/marky-app/video-editor/projects/HunterZier/editing/videos/260214-hunter-session1/outputs/segment_09/07_music-words.json
+Analyzing transcript for emoji moments (206 words, 66s)...
+
+────────────────────────────────────────────────────────────
+Emoji plan (4 overlays):
+  1. 🏠  3.0–4.5s  (top-left)  Reinforces the mention of purchasing a house.
+  2. 📈  14.1–15.6s  (top-right)  Visualizes the increase of 100 points in the credit score.
+  3. 💰  26.3–27.8s  (top-left)  Emphasizes the topic of eliminating debt.
+  4. 🎖️  35.5–37.0s  (top-right)  Highlights the specific audience the speaker is discussing: veterans.
+────────────────────────────────────────────────────────────
+
+  Generated: 🏠 → emoji_0.png
+  Generated: 📈 → emoji_1.png
+  Generated: 💰 → emoji_2.png
+  Generated: 🎖️ → emoji_3.png
+Overlaying 4 emojis...
+✅ Output: /Users/apple/Documents/code/marky/marky-app/video-editor/projects/HunterZier/editing/videos/260214-hunter-session1/outputs/segment_09/08_emojis.mp4
+Loaded 206 words from /Users/apple/Documents/code/marky/marky-app/video-editor/projects/HunterZier/editing/videos/260214-hunter-session1/outputs/segment_09/07_music-words.json
+Analyzing transcript for infographic concept (206 words, 66s)...
+INFO: HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+
+────────────────────────────────────────────────────────────
+Infographic plan:
+  Concept:  VA Loan Benefits
+  Title:    VA LOAN ADVANTAGES
+  Template: list
+  Timing:   36.2–43.2s
+  Rationale: The speaker lists specific, unique benefits of the VA program starting around 36 seconds. A list helps viewers catalog these perks quickly since mortgage insurance and down payments can be confusing topics for homebuyers.
+  Items:
+    💰 0% down payment required
+    🛡️ No monthly mortgage insurance
+    📉 Use seller credits to pay debt
+    🏠 Lower interest rates available
+  Tagline: The most unique loan program available
+────────────────────────────────────────────────────────────
+
+Generating infographic with Gemini 3 Pro...
+WARNING: Both GOOGLE_API_KEY and GEMINI_API_KEY are set. Using GOOGLE_API_KEY.
+INFO: Generating image with gemini-3-pro-image-preview ...
+INFO: AFC is enabled with max remote calls: 10.
+INFO: HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-3-pro-image-preview:generateContent "HTTP/1.1 200 OK"
+Rendered: /var/folders/3m/wbb812l55fv7xc2q79ttxl680000gn/T/infographic_g0nm3cpr/infographic.png (1080x1920)
+Overlaying infographic at 36.2–43.2s...
+Output: /Users/apple/Documents/code/marky/marky-app/video-editor/projects/HunterZier/editing/videos/260214-hunter-session1/outputs/segment_09/09_infographic.mp4
+Done segment_09
+========== segment_10 ==========
+ffmpeg version 7.1.1 Copyright (c) 2000-2025 the FFmpeg developers
+  built with Apple clang version 17.0.0 (clang-1700.0.13.3)
+  configuration: --prefix=/opt/homebrew/Cellar/ffmpeg/7.1.1_3 --enable-shared --enable-pthreads --enable-version3 --cc=clang --host-cflags= --host-ldflags='-Wl,-ld_classic' --enable-ffplay --enable-gnutls --enable-gpl --enable-libaom --enable-libaribb24 --enable-libbluray --enable-libdav1d --enable-libharfbuzz --enable-libjxl --enable-libmp3lame --enable-libopus --enable-librav1e --enable-librist --enable-librubberband --enable-libsnappy --enable-libsrt --enable-libssh --enable-libsvtav1 --enable-libtesseract --enable-libtheora --enable-libvidstab --enable-libvmaf --enable-libvorbis --enable-libvpx --enable-libwebp --enable-libx264 --enable-libx265 --enable-libxml2 --enable-libxvid --enable-lzma --enable-libfontconfig --enable-libfreetype --enable-frei0r --enable-libass --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-libopenjpeg --enable-libspeex --enable-libsoxr --enable-libzmq --enable-libzimg --disable-libjack --disable-indev=jack --enable-videotoolbox --enable-audiotoolbox --enable-neon
+  libavutil      59. 39.100 / 59. 39.100
+  libavcodec     61. 19.101 / 61. 19.101
+  libavformat    61.  7.100 / 61.  7.100
+  libavdevice    61.  3.100 / 61.  3.100
+  libavfilter    10.  4.100 / 10.  4.100
+  libswscale      8.  3.100 /  8.  3.100
+  libswresample   5.  3.100 /  5.  3.100
+  libpostproc    58.  3.100 / 58.  3.100
+Input #0, mov,mp4,m4a,3gp,3g2,mj2, from '/Users/apple/Documents/code/marky/marky-app/video-editor/projects/HunterZier/editing/videos/260214-hunter-session1/outputs/segment_10/06_captioned.mp4':
+  Metadata:
+    major_brand     : isom
+    minor_version   : 512
+    compatible_brands: isomiso2avc1mp41
+    encoder         : Lavf61.7.100
+  Duration: 00:00:18.88, start: 0.000000, bitrate: 4643 kb/s
+  Stream #0:0[0x1](und): Video: h264 (High) (avc1 / 0x31637661), yuv420p(tv, bt709, progressive), 608x1080, 4443 kb/s, SAR 1:1 DAR 76:135, 24 fps, 24 tbr, 12288 tbn (default)
+      Metadata:
+        handler_name    : VideoHandler
+        vendor_id       : [0][0][0][0]
+        encoder         : Lavc61.19.101 h264_videotoolbox
+  Stream #0:1[0x2](und): Audio: aac (LC) (mp4a / 0x6134706D), 96000 Hz, mono, fltp, 194 kb/s (default)
+      Metadata:
+        handler_name    : SoundHandler
+        vendor_id       : [0][0][0][0]
+Stream mapping:
+  Stream #0:0 -> #0:0 (copy)
+  Stream #0:1 -> #0:1 (aac (native) -> aac (native))
+Press [q] to stop, [?] for help
+Output #0, mp4, to '/Users/apple/Documents/code/marky/marky-app/video-editor/projects/HunterZier/editing/videos/260214-hunter-session1/outputs/segment_10/06_enhanced.mp4':
+  Metadata:
+    major_brand     : isom
+    minor_version   : 512
+    compatible_brands: isomiso2avc1mp41
+    encoder         : Lavf61.7.100
+  Stream #0:0(und): Video: h264 (High) (avc1 / 0x31637661), yuv420p(tv, bt709, progressive), 608x1080 [SAR 1:1 DAR 76:135], q=2-31, 4443 kb/s, 24 fps, 24 tbr, 12288 tbn (default)
+      Metadata:
+        handler_name    : VideoHandler
+        vendor_id       : [0][0][0][0]
+        encoder         : Lavc61.19.101 h264_videotoolbox
+  Stream #0:1(und): Audio: aac (LC) (mp4a / 0x6134706D), 96000 Hz, mono, fltp, 192 kb/s (default)
+      Metadata:
+        handler_name    : SoundHandler
+        vendor_id       : [0][0][0][0]
+        encoder         : Lavc61.19.101 aac
+[aac @ 0x970c89500] Queue input is backward in time
+[aost#0:1/aac @ 0x970d04300] Non-monotonic DTS; previous: 1343488, current: 1342607; changing to 1343489. This may result in incorrect timestamps in the output file.
+[out#0/mp4 @ 0x970c04900] video:10238KiB audio:448KiB subtitle:0KiB other streams:0KiB global headers:0KiB muxing overhead: 0.138964%
+frame=  453 fps=0.0 q=-1.0 Lsize=   10702KiB time=00:00:18.87 bitrate=4644.6kbits/s speed=37.7x    
+[aac @ 0x970c89500] Qavg: 428.958
+Enhancing voice (warmth + compression + normalization)...
+✅ Output video: /Users/apple/Documents/code/marky/marky-app/video-editor/projects/HunterZier/editing/videos/260214-hunter-session1/outputs/segment_10/06_enhanced.mp4
+Round-robin: segment 10 → 05_motivational-uplifting-corporate_makesound.mp3
+✅ Output written to /Users/apple/Documents/code/marky/marky-app/video-editor/projects/HunterZier/editing/videos/260214-hunter-session1/outputs/segment_10/07_music.mp4
+Loaded 53 words from /Users/apple/Documents/code/marky/marky-app/video-editor/projects/HunterZier/editing/videos/260214-hunter-session1/outputs/segment_10/07_music-words.json
+Analyzing transcript for emoji moments (53 words, 19s)...
+
+────────────────────────────────────────────────────────────
+Emoji plan (4 overlays):
+  1. 💼  6.4–7.9s  (top-left)  The speaker mentions doing a lot of business in other states, so the briefcase represents professional activity.
+  2. 📍  10.0–11.5s  (top-right)  Reinforces the specific geographic location being discussed.
+  3. 🏠  15.2–16.6s  (top-left)  Directly visualizing the 'first time home buyer' key concept.
+  4. ✅  17.5–18.6s  (top-right)  A call to action (follow me) represented by a checkmark for engagement.
+────────────────────────────────────────────────────────────
+
+  Generated: 💼 → emoji_0.png
+  Generated: 📍 → emoji_1.png
+  Generated: 🏠 → emoji_2.png
+  Generated: ✅ → emoji_3.png
+Overlaying 4 emojis...
+✅ Output: /Users/apple/Documents/code/marky/marky-app/video-editor/projects/HunterZier/editing/videos/260214-hunter-session1/outputs/segment_10/08_emojis.mp4
+Loaded 53 words from /Users/apple/Documents/code/marky/marky-app/video-editor/projects/HunterZier/editing/videos/260214-hunter-session1/outputs/segment_10/07_music-words.json
+Analyzing transcript for infographic concept (53 words, 19s)...
+INFO: HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+
+────────────────────────────────────────────────────────────
+Infographic plan:
+  Concept:  Service area regions
+  Title:    WHERE I WORK
+  Template: compare
+  Timing:   4.2–11.2s
+  Rationale: The speaker lists multiple states and cities quickly. A visual comparison helps the viewer immediately distinguish between the primary focus area (Northwest) and the secondary markets mentioned later in the list.
+  Left:  PRIMARY: Washington (Spokane), North Idaho, Montana
+  Right: SECONDARY: Florida, Arizona
+  Tagline: Available in the Northwest & beyond
+────────────────────────────────────────────────────────────
+
+Generating infographic with Gemini 3 Pro...
+WARNING: Both GOOGLE_API_KEY and GEMINI_API_KEY are set. Using GOOGLE_API_KEY.
+INFO: Generating image with gemini-3-pro-image-preview ...
+INFO: AFC is enabled with max remote calls: 10.
+INFO: HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-3-pro-image-preview:generateContent "HTTP/1.1 200 OK"
+Rendered: /var/folders/3m/wbb812l55fv7xc2q79ttxl680000gn/T/infographic_v5ebpo61/infographic.png (1080x1920)
+Overlaying infographic at 4.2–11.2s...
+Output: /Users/apple/Documents/code/marky/marky-app/video-editor/projects/HunterZier/editing/videos/260214-hunter-session1/outputs/segment_10/09_infographic.mp4
+Done segment_10
+scripts/rerun_06_to_09_all_segments.sh: line 32: unexpected EOF while looking for matching `"'
+Command failed with exit code 2: /bin/bash scripts/rerun_06_to_09_all_segments.sh

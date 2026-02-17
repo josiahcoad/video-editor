@@ -1,0 +1,119 @@
+{
+  "run_id": "2026-02-10T19:15:51Z",
+  "model": "default",
+  "judge_model": "openai/gpt-4o",
+  "case_count": 1,
+  "run_count": 1,
+  "results": [
+    {
+      "case_id": "260210-textbook-interview",
+      "gt_segment_count": 3,
+      "proposed_segment_count": 3,
+      "proposed_segments": [
+        {
+          "segment": 1,
+          "summary": "Advice for marketing students and pros on how to transition from a consumer mindset to a producer mindset by analyzing why they stop scrolling.",
+          "hook": "Josiah delivers a direct command to 'start thinking like a producer,' which immediately challenges the viewer's passive scrolling behavior.",
+          "cuts": "1960.58:1962.44,1965.08:1978.38,1980.41:1992.12,2013.16:2025.66,2065.07:2070.29",
+          "duration": 44.6,
+          "section_count": 5,
+          "has_cold_open": true,
+          "analysis": {
+            "content_type": "multi_topic",
+            "single_or_multi": "multi",
+            "cold_open_candidate": "Efficiency doesn't always mean effectiveness.",
+            "keepable_content_seconds": 180.0
+          }
+        },
+        {
+          "segment": 2,
+          "summary": "An explanation of the 'Trust Gap' in marketing, explaining why ads work for low-cost items like screwdrivers but why high-ticket services require trust-building content.",
+          "hook": "The speaker introduces an original concept called 'The Trust Gap,' creating immediate curiosity about what it is and how it affects sales.",
+          "cuts": "599.45:611.88,615.36:625.30,631.50:644.77,659.02:666.57,667.26:691.29",
+          "duration": 67.2,
+          "section_count": 5,
+          "has_cold_open": false
+        },
+        {
+          "segment": 3,
+          "summary": "A warning against over-automating marketing with 'AI slop,' emphasizing that efficiency doesn't equal effectiveness and that true marketing is a human bridge to the user.",
+          "hook": "A very punchy, counter-intuitive statement about AI tools: 'Efficiency doesn't always mean effectiveness.'",
+          "cuts": "1004.92:1007.99,955.75:960.57,1118.61:1128.84,1190.54:1501.44,1504.72:1509.20,1529.99:1538.73",
+          "duration": 342.2,
+          "section_count": 6,
+          "has_cold_open": true
+        }
+      ],
+      "scores": {
+        "cold_viewer_test": {
+          "score": 7,
+          "reasoning": "Most segments have decent standalone openings, clear enough for a cold viewer to understand the main concept being discussed, although they slightly rely on context from prior content."
+        },
+        "hook_strength": {
+          "score": 6,
+          "reasoning": "The hooks are average, with the first and second segments providing some interest. However, the initial phrases are not particularly compelling or intriguing."
+        },
+        "narrative_coherence": {
+          "score": 5,
+          "reasoning": "Some sections within segments connect well, but there are noticeable jumps and loose ends, especially in the elongated third segment."
+        },
+        "content_selection": {
+          "score": 4,
+          "reasoning": "While the segments include some relevant content, they missed more engaging parts from the source that ground truth segments utilized effectively, especially in creating narratives."
+        },
+        "duration_accuracy": {
+          "score": 4,
+          "reasoning": "The third segment significantly exceeds the acceptable range at 342.2 seconds, affecting duration accuracy."
+        },
+        "segment_structure": {
+          "score": 5,
+          "reasoning": "There are issues with segment length and coherence, particularly with one overly long segment. The number of segments seems excessive given their individual quality."
+        }
+      },
+      "mean_score": 5.17,
+      "overall_notes": "The proposed cuts have some potential but miss key opportunities for selecting more impactful content. The third segment's duration is a major flaw, leading to structural and pacing problems. Improved selection and refinement could enhance engagement and coherence.",
+      "elapsed": {
+        "propose_s": 55.1,
+        "judge_s": 7.6
+      },
+      "run": 1
+    }
+  ],
+  "aggregate": {
+    "overall_mean": 5.17,
+    "overall_min": 5.17,
+    "overall_max": 5.17,
+    "per_dimension": {
+      "cold_viewer_test": {
+        "mean": 7.0,
+        "min": 7,
+        "max": 7
+      },
+      "hook_strength": {
+        "mean": 6.0,
+        "min": 6,
+        "max": 6
+      },
+      "narrative_coherence": {
+        "mean": 5.0,
+        "min": 5,
+        "max": 5
+      },
+      "content_selection": {
+        "mean": 4.0,
+        "min": 4,
+        "max": 4
+      },
+      "duration_accuracy": {
+        "mean": 4.0,
+        "min": 4,
+        "max": 4
+      },
+      "segment_structure": {
+        "mean": 5.0,
+        "min": 5,
+        "max": 5
+      }
+    }
+  }
+}

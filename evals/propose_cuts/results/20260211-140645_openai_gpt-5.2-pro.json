@@ -1,0 +1,228 @@
+{
+  "run_id": "2026-02-11T20:06:45Z",
+  "model": "openai/gpt-5.2-pro",
+  "judge_model": "openai/gpt-4o",
+  "case_count": 1,
+  "run_count": 1,
+  "results": [
+    {
+      "case_id": "260210-content-batch",
+      "gt_segment_count": 11,
+      "proposed_segment_count": 14,
+      "proposed_segments": [
+        {
+          "segment": 1,
+          "summary": "Hook: the awareness-to-purchase gap, and a promise to close it.",
+          "hook": "Opens with a clear problem statement: people know you exist but still won\u2019t buy.",
+          "cuts": "59.39:64.61",
+          "duration": 5.2,
+          "section_count": 1,
+          "has_cold_open": false,
+          "analysis": {
+            "content_type": "pre_recorded_batch",
+            "editing_strategy": "contiguous_batch",
+            "single_or_multi": "multi. This file is a batch recording of many standalone short-form clips with repeated hooks/retakes and repeated CTAs, separated by long gaps and clear topic resets.",
+            "cold_open_candidate": null,
+            "keepable_content_seconds": 420.0
+          }
+        },
+        {
+          "segment": 2,
+          "summary": "AI content speed \u2260 good idea: just because you can mass-produce UGC with AI, should you?",
+          "hook": "Big number + speed claim (\u201c500 UGC videos\u2026 in less than ten minutes\u201d) instantly grabs attention.",
+          "cuts": "146.36:157.42",
+          "duration": 11.1,
+          "section_count": 1,
+          "has_cold_open": false
+        },
+        {
+          "segment": 3,
+          "summary": "Simple marketing mindset shift: produce instead of consume.",
+          "hook": "Promises a single habit that makes you a better marketer.",
+          "cuts": "168.66:175.29",
+          "duration": 6.6,
+          "section_count": 1,
+          "has_cold_open": false
+        },
+        {
+          "segment": 4,
+          "summary": "Positioning: why they refuse full automation and keep humans in the loop (marketing needs a \u201csoul\u201d).",
+          "hook": "Contrarian stance: \u201cpeople ask for full automation\u2026 we say no.\u201d",
+          "cuts": "191.06:195.16,211.40:216.14,221.37:225.22",
+          "duration": 12.7,
+          "section_count": 3,
+          "has_cold_open": false
+        },
+        {
+          "segment": 5,
+          "summary": "Messaging lesson: stop centering your marketing on the product; center on the customer problem (and even change your headline accordingly).",
+          "hook": "A concrete \u201cwe changed X\u201d business example creates credibility fast.",
+          "cuts": "275.75:298.71",
+          "duration": 23.0,
+          "section_count": 1,
+          "has_cold_open": false
+        },
+        {
+          "segment": 6,
+          "summary": "Mini tip: study your own buying behavior to improve your marketing instincts.",
+          "hook": "Quick, actionable \u201chere\u2019s a trick\u201d opener.",
+          "cuts": "346.18:350.44",
+          "duration": 4.3,
+          "section_count": 1,
+          "has_cold_open": false
+        },
+        {
+          "segment": 7,
+          "summary": "Content strategy framework: turn repeated sales objections into your next content topics.",
+          "hook": "Calls out a painful truth: repeated objections = your content isn\u2019t doing its job.",
+          "cuts": "357.14:363.25,374.96:387.38,387.92:390.06,393.97:397.75",
+          "duration": 24.4,
+          "section_count": 4,
+          "has_cold_open": false
+        },
+        {
+          "segment": 8,
+          "summary": "Use social like a classroom: answer questions publicly before prospects ever book the call.",
+          "hook": "Relatable school analogy that quickly reframes social media\u2019s purpose.",
+          "cuts": "406.13:415.19,420.88:430.74,436.42:440.44",
+          "duration": 22.9,
+          "section_count": 3,
+          "has_cold_open": false
+        },
+        {
+          "segment": 9,
+          "summary": "Hard truth: low-quality content damages trust (especially with high-trust/high-ticket clients).",
+          "hook": "Strong language + high-stakes consequence (\u201cerodes trust\u201d) stops the scroll.",
+          "cuts": "529.09:537.67",
+          "duration": 8.6,
+          "section_count": 1,
+          "has_cold_open": false
+        },
+        {
+          "segment": 10,
+          "summary": "Quality vs quantity: pick quality first, then scale volume; quantity only accelerates whatever you\u2019re already doing.",
+          "hook": "Clear forced-choice framing (\u201cif you have to choose\u2026\u201d) creates instant relevance.",
+          "cuts": "566.98:607.12,620.02:625.97",
+          "duration": 46.1,
+          "section_count": 2,
+          "has_cold_open": false
+        },
+        {
+          "segment": 11,
+          "summary": "Modern buying behavior: prospects research you for weeks and want to feel connected before they ever call.",
+          "hook": "Scroll-stopper phrasing: \u201cyour potential clients are stalking you\u2026\u201d",
+          "cuts": "674.70:713.08",
+          "duration": 38.4,
+          "section_count": 1,
+          "has_cold_open": false
+        },
+        {
+          "segment": 12,
+          "summary": "Don\u2019t quit posting just because results aren\u2019t immediate\u2014your prospects are deciding right now.",
+          "hook": "Direct question to the viewer (calls out the exact behavior that\u2019s hurting them).",
+          "cuts": "724.84:727.65,740.95:748.57,763.25:768.07,770.29:771.91,778.51:784.93",
+          "duration": 23.3,
+          "section_count": 5,
+          "has_cold_open": false
+        },
+        {
+          "segment": 13,
+          "summary": "Word-of-mouth isn\u2019t enough: referrals can still get lost before they ever contact you.",
+          "hook": "Challenges a common belief (\u201cI don\u2019t need marketing, I have referrals\u201d).",
+          "cuts": "829.63:834.85,847.08:857.16",
+          "duration": 15.3,
+          "section_count": 2,
+          "has_cold_open": false
+        },
+        {
+          "segment": 14,
+          "summary": "Story proof: they chose a real estate agent largely because of her social presence (the differentiator).",
+          "hook": "Starts as a real story (\u201crecent experience\u201d) and pays off with a clear lesson: social presence wins the decision.",
+          "cuts": "860.42:906.89,914.67:920.61",
+          "duration": 52.4,
+          "section_count": 2,
+          "has_cold_open": false
+        }
+      ],
+      "scores": {
+        "cold_viewer_test": {
+          "score": 9,
+          "reasoning": "Most segments in the proposed cuts open with clear standalone statements. However, Segment 2 might confuse a viewer slightly with its repetition."
+        },
+        "hook_strength": {
+          "score": 8,
+          "reasoning": "Hooks are mostly strong, with clear and compelling openings. Segment 2, however, occupies more time on a repetitious setup, slightly diluting its hook strength."
+        },
+        "narrative_coherence": {
+          "score": 7,
+          "reasoning": "The flow is generally coherent but segments like 4 and 14 have slightly abrupt transitions due to content blending or length."
+        },
+        "content_selection": {
+          "score": 7,
+          "reasoning": "Overall, the selected content is strong, but the repetitive nature of Segment 2 and verbosity in some other segments results in missed opportunities for more impactful moments."
+        },
+        "cut_precision": {
+          "score": 6,
+          "reasoning": "While most segments start and end at logical endpoints, Segment 2 features repetitive content suggesting precision issues, and Segment 14 is too long and unwieldy."
+        },
+        "duration_accuracy": {
+          "score": 6,
+          "reasoning": "Several segments either exceed or fall short of the target duration range, impacting pacing and viewer engagement."
+        },
+        "segment_structure": {
+          "score": 7,
+          "reasoning": "The proposed cuts include more segments than the ground truth. Some are too long or too wordy, affecting audience retention."
+        }
+      },
+      "mean_score": 7.14,
+      "overall_notes": "The proposed cuts generally capture key ideas effectively with minimal coherence issues. However, repetition and verbosity, especially in Segment 2, affect pacing and engagement. Improving cut precision and tightening durations would enhance overall quality.",
+      "elapsed": {
+        "propose_s": 787.7,
+        "judge_s": 11.9
+      },
+      "run": 1
+    }
+  ],
+  "aggregate": {
+    "overall_mean": 7.14,
+    "overall_min": 7.14,
+    "overall_max": 7.14,
+    "per_dimension": {
+      "cold_viewer_test": {
+        "mean": 9.0,
+        "min": 9,
+        "max": 9
+      },
+      "hook_strength": {
+        "mean": 8.0,
+        "min": 8,
+        "max": 8
+      },
+      "narrative_coherence": {
+        "mean": 7.0,
+        "min": 7,
+        "max": 7
+      },
+      "content_selection": {
+        "mean": 7.0,
+        "min": 7,
+        "max": 7
+      },
+      "cut_precision": {
+        "mean": 6.0,
+        "min": 6,
+        "max": 6
+      },
+      "duration_accuracy": {
+        "mean": 6.0,
+        "min": 6,
+        "max": 6
+      },
+      "segment_structure": {
+        "mean": 7.0,
+        "min": 7,
+        "max": 7
+      }
+    }
+  }
+}

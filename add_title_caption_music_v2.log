@@ -1,0 +1,1406 @@
+[dotenvx@1.51.0] injecting env (29) from .env, ../fast-backend/.env
+Adding title overlay: 'BRIDGING THE TRUST GAP IN SERVICE BUSINESSES' (6.0s)
+✅ Output video: projects/JosiahCoad/editing/videos/260210-textbook-interview/outputs/with_title_caption_music_v2/segment_01_titled.mp4
+ffmpeg version 7.1.1 Copyright (c) 2000-2025 the FFmpeg developers
+  built with Apple clang version 17.0.0 (clang-1700.0.13.3)
+  configuration: --prefix=/opt/homebrew/Cellar/ffmpeg/7.1.1_3 --enable-shared --enable-pthreads --enable-version3 --cc=clang --host-cflags= --host-ldflags='-Wl,-ld_classic' --enable-ffplay --enable-gnutls --enable-gpl --enable-libaom --enable-libaribb24 --enable-libbluray --enable-libdav1d --enable-libharfbuzz --enable-libjxl --enable-libmp3lame --enable-libopus --enable-librav1e --enable-librist --enable-librubberband --enable-libsnappy --enable-libsrt --enable-libssh --enable-libsvtav1 --enable-libtesseract --enable-libtheora --enable-libvidstab --enable-libvmaf --enable-libvorbis --enable-libvpx --enable-libwebp --enable-libx264 --enable-libx265 --enable-libxml2 --enable-libxvid --enable-lzma --enable-libfontconfig --enable-libfreetype --enable-frei0r --enable-libass --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-libopenjpeg --enable-libspeex --enable-libsoxr --enable-libzmq --enable-libzimg --disable-libjack --disable-indev=jack --enable-videotoolbox --enable-audiotoolbox --enable-neon
+  libavutil      59. 39.100 / 59. 39.100
+  libavcodec     61. 19.101 / 61. 19.101
+  libavformat    61.  7.100 / 61.  7.100
+  libavdevice    61.  3.100 / 61.  3.100
+  libavfilter    10.  4.100 / 10.  4.100
+  libswscale      8.  3.100 /  8.  3.100
+  libswresample   5.  3.100 /  5.  3.100
+  libpostproc    58.  3.100 / 58.  3.100
+Input #0, mov,mp4,m4a,3gp,3g2,mj2, from 'projects/JosiahCoad/editing/videos/260210-textbook-interview/outputs/with_title_caption_music_v2/segment_01_titled.mp4':
+  Metadata:
+    major_brand     : isom
+    minor_version   : 512
+    compatible_brands: isomiso2avc1mp41
+    encoder         : Lavf61.7.100
+  Duration: 00:00:35.00, start: 0.000000, bitrate: 13417 kb/s
+  Stream #0:0[0x1](und): Video: h264 (High) (avc1 / 0x31637661), yuv420p(tv, bt709, progressive), 1080x1920, 13223 kb/s, 30 fps, 30 tbr, 15360 tbn (default)
+      Metadata:
+        handler_name    : VideoHandler
+        vendor_id       : [0][0][0][0]
+        encoder         : Lavc61.19.101 h264_videotoolbox
+  Stream #0:1[0x2](und): Audio: aac (LC) (mp4a / 0x6134706D), 44100 Hz, stereo, fltp, 188 kb/s (default)
+      Metadata:
+        handler_name    : Core Media Audio
+        vendor_id       : [0][0][0][0]
+[Parsed_subtitles_0 @ 0x808874600] libass API version: 0x1703000
+[Parsed_subtitles_0 @ 0x808874600] libass source: tarball: 0.17.3
+[Parsed_subtitles_0 @ 0x808874600] Shaper: FriBidi 1.0.15 (SIMPLE) HarfBuzz-ng 11.2.1 (COMPLEX)
+[Parsed_subtitles_0 @ 0x808874600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-Medium.ttf'
+[Parsed_subtitles_0 @ 0x808874600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-ExtraLightItalic.ttf'
+[Parsed_subtitles_0 @ 0x808874600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-ExtraLightItalic.ttf'
+[Parsed_subtitles_0 @ 0x808874600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-BoldItalic.ttf'
+[Parsed_subtitles_0 @ 0x808874600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-ExtraBoldItalic.ttf'
+[Parsed_subtitles_0 @ 0x808874600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-Light.ttf'
+[Parsed_subtitles_0 @ 0x808874600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-ThinItalic.ttf'
+[Parsed_subtitles_0 @ 0x808874600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-ExtraLight.ttf'
+[Parsed_subtitles_0 @ 0x808874600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-Black.ttf'
+[Parsed_subtitles_0 @ 0x808874600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-SemiBoldItalic.ttf'
+[Parsed_subtitles_0 @ 0x808874600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-SemiBold.ttf'
+[Parsed_subtitles_0 @ 0x808874600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-ExtraBold.ttf'
+[Parsed_subtitles_0 @ 0x808874600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-BlackItalic.ttf'
+[Parsed_subtitles_0 @ 0x808874600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-Regular.ttf'
+[Parsed_subtitles_0 @ 0x808874600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-Italic.ttf'
+[Parsed_subtitles_0 @ 0x808874600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-SemiBold.ttf'
+[Parsed_subtitles_0 @ 0x808874600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-MediumItalic.ttf'
+[Parsed_subtitles_0 @ 0x808874600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-Medium.ttf'
+[Parsed_subtitles_0 @ 0x808874600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-Bold.ttf'
+[Parsed_subtitles_0 @ 0x808874600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-LightItalic.ttf'
+[Parsed_subtitles_0 @ 0x808874600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-ExtraBoldItalic.ttf'
+[Parsed_subtitles_0 @ 0x808874600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-Thin.ttf'
+[Parsed_subtitles_0 @ 0x808874600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-SemiBoldItalic.ttf'
+[Parsed_subtitles_0 @ 0x808874600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-Black.ttf'
+[Parsed_subtitles_0 @ 0x808874600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-ExtraBoldItalic.ttf'
+[Parsed_subtitles_0 @ 0x808874600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-Light.ttf'
+[Parsed_subtitles_0 @ 0x808874600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-MediumItalic.ttf'
+[Parsed_subtitles_0 @ 0x808874600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-ExtraLightItalic.ttf'
+[Parsed_subtitles_0 @ 0x808874600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-ExtraBold.ttf'
+[Parsed_subtitles_0 @ 0x808874600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-BlackItalic.ttf'
+[Parsed_subtitles_0 @ 0x808874600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-Regular.ttf'
+[Parsed_subtitles_0 @ 0x808874600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-Bold.ttf'
+[Parsed_subtitles_0 @ 0x808874600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-Medium.ttf'
+[Parsed_subtitles_0 @ 0x808874600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-Italic.ttf'
+[Parsed_subtitles_0 @ 0x808874600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-BoldItalic.ttf'
+[Parsed_subtitles_0 @ 0x808874600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-ExtraLight.ttf'
+[Parsed_subtitles_0 @ 0x808874600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-ThinItalic.ttf'
+[Parsed_subtitles_0 @ 0x808874600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-SemiBoldItalic.ttf'
+[Parsed_subtitles_0 @ 0x808874600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-Thin.ttf'
+[Parsed_subtitles_0 @ 0x808874600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-BoldItalic.ttf'
+[Parsed_subtitles_0 @ 0x808874600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-ExtraLight.ttf'
+[Parsed_subtitles_0 @ 0x808874600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-ThinItalic.ttf'
+[Parsed_subtitles_0 @ 0x808874600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-MediumItalic.ttf'
+[Parsed_subtitles_0 @ 0x808874600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-ExtraBold.ttf'
+[Parsed_subtitles_0 @ 0x808874600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-LightItalic.ttf'
+[Parsed_subtitles_0 @ 0x808874600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-Regular.ttf'
+[Parsed_subtitles_0 @ 0x808874600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-SemiBold.ttf'
+[Parsed_subtitles_0 @ 0x808874600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-Italic.ttf'
+[Parsed_subtitles_0 @ 0x808874600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-BlackItalic.ttf'
+[Parsed_subtitles_0 @ 0x808874600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-Bold.ttf'
+[Parsed_subtitles_0 @ 0x808874600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-Thin.ttf'
+[Parsed_subtitles_0 @ 0x808874600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-Black.ttf'
+[Parsed_subtitles_0 @ 0x808874600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-LightItalic.ttf'
+[Parsed_subtitles_0 @ 0x808874600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-Light.ttf'
+[Parsed_subtitles_0 @ 0x808874600] Using font provider coretext
+Stream mapping:
+  Stream #0:0 -> #0:0 (h264 (native) -> h264 (h264_videotoolbox))
+  Stream #0:1 -> #0:1 (copy)
+Press [q] to stop, [?] for help
+[Parsed_subtitles_0 @ 0x808875200] libass API version: 0x1703000
+[Parsed_subtitles_0 @ 0x808875200] libass source: tarball: 0.17.3
+[Parsed_subtitles_0 @ 0x808875200] Shaper: FriBidi 1.0.15 (SIMPLE) HarfBuzz-ng 11.2.1 (COMPLEX)
+[Parsed_subtitles_0 @ 0x808875200] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-Medium.ttf'
+[Parsed_subtitles_0 @ 0x808875200] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-ExtraLightItalic.ttf'
+[Parsed_subtitles_0 @ 0x808875200] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-ExtraLightItalic.ttf'
+[Parsed_subtitles_0 @ 0x808875200] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-BoldItalic.ttf'
+[Parsed_subtitles_0 @ 0x808875200] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-ExtraBoldItalic.ttf'
+[Parsed_subtitles_0 @ 0x808875200] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-Light.ttf'
+[Parsed_subtitles_0 @ 0x808875200] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-ThinItalic.ttf'
+[Parsed_subtitles_0 @ 0x808875200] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-ExtraLight.ttf'
+[Parsed_subtitles_0 @ 0x808875200] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-Black.ttf'
+[Parsed_subtitles_0 @ 0x808875200] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-SemiBoldItalic.ttf'
+[Parsed_subtitles_0 @ 0x808875200] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-SemiBold.ttf'
+[Parsed_subtitles_0 @ 0x808875200] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-ExtraBold.ttf'
+[Parsed_subtitles_0 @ 0x808875200] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-BlackItalic.ttf'
+[Parsed_subtitles_0 @ 0x808875200] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-Regular.ttf'
+[Parsed_subtitles_0 @ 0x808875200] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-Italic.ttf'
+[Parsed_subtitles_0 @ 0x808875200] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-SemiBold.ttf'
+[Parsed_subtitles_0 @ 0x808875200] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-MediumItalic.ttf'
+[Parsed_subtitles_0 @ 0x808875200] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-Medium.ttf'
+[Parsed_subtitles_0 @ 0x808875200] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-Bold.ttf'
+[Parsed_subtitles_0 @ 0x808875200] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-LightItalic.ttf'
+[Parsed_subtitles_0 @ 0x808875200] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-ExtraBoldItalic.ttf'
+[Parsed_subtitles_0 @ 0x808875200] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-Thin.ttf'
+[Parsed_subtitles_0 @ 0x808875200] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-SemiBoldItalic.ttf'
+[Parsed_subtitles_0 @ 0x808875200] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-Black.ttf'
+[Parsed_subtitles_0 @ 0x808875200] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-ExtraBoldItalic.ttf'
+[Parsed_subtitles_0 @ 0x808875200] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-Light.ttf'
+[Parsed_subtitles_0 @ 0x808875200] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-MediumItalic.ttf'
+[Parsed_subtitles_0 @ 0x808875200] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-ExtraLightItalic.ttf'
+[Parsed_subtitles_0 @ 0x808875200] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-ExtraBold.ttf'
+[Parsed_subtitles_0 @ 0x808875200] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-BlackItalic.ttf'
+[Parsed_subtitles_0 @ 0x808875200] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-Regular.ttf'
+[Parsed_subtitles_0 @ 0x808875200] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-Bold.ttf'
+[Parsed_subtitles_0 @ 0x808875200] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-Medium.ttf'
+[Parsed_subtitles_0 @ 0x808875200] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-Italic.ttf'
+[Parsed_subtitles_0 @ 0x808875200] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-BoldItalic.ttf'
+[Parsed_subtitles_0 @ 0x808875200] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-ExtraLight.ttf'
+[Parsed_subtitles_0 @ 0x808875200] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-ThinItalic.ttf'
+[Parsed_subtitles_0 @ 0x808875200] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-SemiBoldItalic.ttf'
+[Parsed_subtitles_0 @ 0x808875200] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-Thin.ttf'
+[Parsed_subtitles_0 @ 0x808875200] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-BoldItalic.ttf'
+[Parsed_subtitles_0 @ 0x808875200] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-ExtraLight.ttf'
+[Parsed_subtitles_0 @ 0x808875200] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-ThinItalic.ttf'
+[Parsed_subtitles_0 @ 0x808875200] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-MediumItalic.ttf'
+[Parsed_subtitles_0 @ 0x808875200] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-ExtraBold.ttf'
+[Parsed_subtitles_0 @ 0x808875200] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-LightItalic.ttf'
+[Parsed_subtitles_0 @ 0x808875200] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-Regular.ttf'
+[Parsed_subtitles_0 @ 0x808875200] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-SemiBold.ttf'
+[Parsed_subtitles_0 @ 0x808875200] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-Italic.ttf'
+[Parsed_subtitles_0 @ 0x808875200] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-BlackItalic.ttf'
+[Parsed_subtitles_0 @ 0x808875200] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-Bold.ttf'
+[Parsed_subtitles_0 @ 0x808875200] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-Thin.ttf'
+[Parsed_subtitles_0 @ 0x808875200] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-Black.ttf'
+[Parsed_subtitles_0 @ 0x808875200] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-LightItalic.ttf'
+[Parsed_subtitles_0 @ 0x808875200] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-Light.ttf'
+[Parsed_subtitles_0 @ 0x808875200] Using font provider coretext
+Output #0, mp4, to 'projects/JosiahCoad/editing/videos/260210-textbook-interview/outputs/with_title_caption_music_v2/segment_01_captioned.mp4':
+  Metadata:
+    major_brand     : isom
+    minor_version   : 512
+    compatible_brands: isomiso2avc1mp41
+    encoder         : Lavf61.7.100
+  Stream #0:0(und): Video: h264 (avc1 / 0x31637661), yuv420p(tv, bt709, progressive), 1080x1920, q=2-31, 30 fps, 15360 tbn (default)
+      Metadata:
+        handler_name    : VideoHandler
+        vendor_id       : [0][0][0][0]
+        encoder         : Lavc61.19.101 h264_videotoolbox
+  Stream #0:1(und): Audio: aac (LC) (mp4a / 0x6134706D), 44100 Hz, stereo, fltp, 188 kb/s (default)
+      Metadata:
+        handler_name    : Core Media Audio
+        vendor_id       : [0][0][0][0]
+frame=   60 fps=0.0 q=-0.0 size=    1536KiB time=00:00:01.96 bitrate=6398.3kbits/s speed=3.92x    frame=  160 fps=159 q=-0.0 size=    5632KiB time=00:00:05.30 bitrate=8705.2kbits/s speed=5.28x    [Parsed_subtitles_0 @ 0x808875200] fontselect: (Roboto, 700, 0) -> Roboto-Bold, 0, Roboto-Bold
+frame=  261 fps=173 q=-0.0 size=   11520KiB time=00:00:08.66 bitrate=10889.1kbits/s speed=5.74x    frame=  361 fps=179 q=-0.0 size=   17408KiB time=00:00:12.00 bitrate=11883.9kbits/s speed=5.96x    frame=  461 fps=183 q=-0.0 size=   23296KiB time=00:00:15.33 bitrate=12446.2kbits/s speed=6.09x    frame=  561 fps=186 q=-0.0 size=   28928KiB time=00:00:18.66 bitrate=12695.3kbits/s speed=6.18x    frame=  661 fps=188 q=-0.0 size=   35072KiB time=00:00:22.00 bitrate=13059.6kbits/s speed=6.25x    frame=  762 fps=189 q=-0.0 size=   40704KiB time=00:00:25.36 bitrate=13145.1kbits/s speed= 6.3x    frame=  861 fps=190 q=-0.0 size=   46592KiB time=00:00:28.66 bitrate=13314.5kbits/s speed=6.33x    frame=  961 fps=191 q=-0.0 size=   52224KiB time=00:00:32.00 bitrate=13369.4kbits/s speed=6.36x    [out#0/mp4 @ 0x808874300] video:56502KiB audio:800KiB subtitle:0KiB other streams:0KiB global headers:0KiB muxing overhead: 0.053138%
+frame= 1050 fps=191 q=-0.0 Lsize=   57332KiB time=00:00:34.69 bitrate=13538.5kbits/s speed=6.32x    
+Transcribing with Deepgram...
+🔧 DEBUG [deepgram]: Starting transcription for: projects/JosiahCoad/editing/videos/260210-textbook-interview/outputs/with_title_caption_music_v2/segment_01_titled.mp4
+🔧 DEBUG [deepgram]: Extracting audio to: /var/folders/3m/wbb812l55fv7xc2q79ttxl680000gn/T/tmp_gsd2gmz.mp3
+🔧 DEBUG [deepgram]: Audio extraction completed (0.12s)
+🔧 DEBUG [deepgram]: Initializing Deepgram client...
+🔧 DEBUG [deepgram]: Deepgram client initialized (0.15s)
+🔧 DEBUG [deepgram]: Reading audio file...
+🔧 DEBUG [deepgram]: Read 0.07MB audio (0.00s)
+🔧 DEBUG [deepgram]: Calling Deepgram API (this may take 5-30 seconds)...
+🔧 DEBUG [deepgram]: Deepgram API call completed (0.89s)
+Found 145 words
+Found 1 utterances
+Word-level transcript written: projects/JosiahCoad/editing/videos/260210-textbook-interview/outputs/with_title_caption_music_v2/segment_01_captioned-words.json
+Utterance-level transcript written: projects/JosiahCoad/editing/videos/260210-textbook-interview/outputs/with_title_caption_music_v2/segment_01_captioned-utterances.json
+Caption delay: 6.0s (captions suppressed while title is showing)
+Generating smart SRT subtitle file from utterances (max 3 words per line, splits at punctuation, font size 22, caps=True)...
+SRT file written: projects/JosiahCoad/editing/videos/260210-textbook-interview/outputs/with_title_caption_music_v2/segment_01_captioned.srt
+Caption style: outline
+Caption position: 15% from bottom → MarginV=43 (ASS PlayResY=288)
+Burning subtitles into video...
+✅ Output video: projects/JosiahCoad/editing/videos/260210-textbook-interview/outputs/with_title_caption_music_v2/segment_01_captioned.mp4
+✅ SRT file: projects/JosiahCoad/editing/videos/260210-textbook-interview/outputs/with_title_caption_music_v2/segment_01_captioned.srt
+✅ Word-level transcript: projects/JosiahCoad/editing/videos/260210-textbook-interview/outputs/with_title_caption_music_v2/segment_01_captioned-words.json
+✅ Utterance-level transcript: projects/JosiahCoad/editing/videos/260210-textbook-interview/outputs/with_title_caption_music_v2/segment_01_captioned-utterances.json
+Adding title overlay: 'HOW AI GENERATED UGC VIDEOS CAN HURT YOUR BRAND' (6.0s)
+✅ Output video: projects/JosiahCoad/editing/videos/260210-textbook-interview/outputs/with_title_caption_music_v2/segment_02_titled.mp4
+ffmpeg version 7.1.1 Copyright (c) 2000-2025 the FFmpeg developers
+  built with Apple clang version 17.0.0 (clang-1700.0.13.3)
+  configuration: --prefix=/opt/homebrew/Cellar/ffmpeg/7.1.1_3 --enable-shared --enable-pthreads --enable-version3 --cc=clang --host-cflags= --host-ldflags='-Wl,-ld_classic' --enable-ffplay --enable-gnutls --enable-gpl --enable-libaom --enable-libaribb24 --enable-libbluray --enable-libdav1d --enable-libharfbuzz --enable-libjxl --enable-libmp3lame --enable-libopus --enable-librav1e --enable-librist --enable-librubberband --enable-libsnappy --enable-libsrt --enable-libssh --enable-libsvtav1 --enable-libtesseract --enable-libtheora --enable-libvidstab --enable-libvmaf --enable-libvorbis --enable-libvpx --enable-libwebp --enable-libx264 --enable-libx265 --enable-libxml2 --enable-libxvid --enable-lzma --enable-libfontconfig --enable-libfreetype --enable-frei0r --enable-libass --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-libopenjpeg --enable-libspeex --enable-libsoxr --enable-libzmq --enable-libzimg --disable-libjack --disable-indev=jack --enable-videotoolbox --enable-audiotoolbox --enable-neon
+  libavutil      59. 39.100 / 59. 39.100
+  libavcodec     61. 19.101 / 61. 19.101
+  libavformat    61.  7.100 / 61.  7.100
+  libavdevice    61.  3.100 / 61.  3.100
+  libavfilter    10.  4.100 / 10.  4.100
+  libswscale      8.  3.100 /  8.  3.100
+  libswresample   5.  3.100 /  5.  3.100
+  libpostproc    58.  3.100 / 58.  3.100
+Input #0, mov,mp4,m4a,3gp,3g2,mj2, from 'projects/JosiahCoad/editing/videos/260210-textbook-interview/outputs/with_title_caption_music_v2/segment_02_titled.mp4':
+  Metadata:
+    major_brand     : isom
+    minor_version   : 512
+    compatible_brands: isomiso2avc1mp41
+    encoder         : Lavf61.7.100
+  Duration: 00:00:34.00, start: 0.000000, bitrate: 13163 kb/s
+  Stream #0:0[0x1](und): Video: h264 (High) (avc1 / 0x31637661), yuv420p(tv, bt709, progressive), 1080x1920, 12973 kb/s, 30 fps, 30 tbr, 15360 tbn (default)
+      Metadata:
+        handler_name    : VideoHandler
+        vendor_id       : [0][0][0][0]
+        encoder         : Lavc61.19.101 h264_videotoolbox
+  Stream #0:1[0x2](und): Audio: aac (LC) (mp4a / 0x6134706D), 44100 Hz, stereo, fltp, 187 kb/s (default)
+      Metadata:
+        handler_name    : Core Media Audio
+        vendor_id       : [0][0][0][0]
+[Parsed_subtitles_0 @ 0x924c2cd80] libass API version: 0x1703000
+[Parsed_subtitles_0 @ 0x924c2cd80] libass source: tarball: 0.17.3
+[Parsed_subtitles_0 @ 0x924c2cd80] Shaper: FriBidi 1.0.15 (SIMPLE) HarfBuzz-ng 11.2.1 (COMPLEX)
+[Parsed_subtitles_0 @ 0x924c2cd80] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-Medium.ttf'
+[Parsed_subtitles_0 @ 0x924c2cd80] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-ExtraLightItalic.ttf'
+[Parsed_subtitles_0 @ 0x924c2cd80] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-ExtraLightItalic.ttf'
+[Parsed_subtitles_0 @ 0x924c2cd80] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-BoldItalic.ttf'
+[Parsed_subtitles_0 @ 0x924c2cd80] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-ExtraBoldItalic.ttf'
+[Parsed_subtitles_0 @ 0x924c2cd80] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-Light.ttf'
+[Parsed_subtitles_0 @ 0x924c2cd80] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-ThinItalic.ttf'
+[Parsed_subtitles_0 @ 0x924c2cd80] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-ExtraLight.ttf'
+[Parsed_subtitles_0 @ 0x924c2cd80] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-Black.ttf'
+[Parsed_subtitles_0 @ 0x924c2cd80] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-SemiBoldItalic.ttf'
+[Parsed_subtitles_0 @ 0x924c2cd80] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-SemiBold.ttf'
+[Parsed_subtitles_0 @ 0x924c2cd80] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-ExtraBold.ttf'
+[Parsed_subtitles_0 @ 0x924c2cd80] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-BlackItalic.ttf'
+[Parsed_subtitles_0 @ 0x924c2cd80] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-Regular.ttf'
+[Parsed_subtitles_0 @ 0x924c2cd80] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-Italic.ttf'
+[Parsed_subtitles_0 @ 0x924c2cd80] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-SemiBold.ttf'
+[Parsed_subtitles_0 @ 0x924c2cd80] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-MediumItalic.ttf'
+[Parsed_subtitles_0 @ 0x924c2cd80] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-Medium.ttf'
+[Parsed_subtitles_0 @ 0x924c2cd80] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-Bold.ttf'
+[Parsed_subtitles_0 @ 0x924c2cd80] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-LightItalic.ttf'
+[Parsed_subtitles_0 @ 0x924c2cd80] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-ExtraBoldItalic.ttf'
+[Parsed_subtitles_0 @ 0x924c2cd80] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-Thin.ttf'
+[Parsed_subtitles_0 @ 0x924c2cd80] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-SemiBoldItalic.ttf'
+[Parsed_subtitles_0 @ 0x924c2cd80] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-Black.ttf'
+[Parsed_subtitles_0 @ 0x924c2cd80] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-ExtraBoldItalic.ttf'
+[Parsed_subtitles_0 @ 0x924c2cd80] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-Light.ttf'
+[Parsed_subtitles_0 @ 0x924c2cd80] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-MediumItalic.ttf'
+[Parsed_subtitles_0 @ 0x924c2cd80] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-ExtraLightItalic.ttf'
+[Parsed_subtitles_0 @ 0x924c2cd80] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-ExtraBold.ttf'
+[Parsed_subtitles_0 @ 0x924c2cd80] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-BlackItalic.ttf'
+[Parsed_subtitles_0 @ 0x924c2cd80] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-Regular.ttf'
+[Parsed_subtitles_0 @ 0x924c2cd80] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-Bold.ttf'
+[Parsed_subtitles_0 @ 0x924c2cd80] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-Medium.ttf'
+[Parsed_subtitles_0 @ 0x924c2cd80] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-Italic.ttf'
+[Parsed_subtitles_0 @ 0x924c2cd80] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-BoldItalic.ttf'
+[Parsed_subtitles_0 @ 0x924c2cd80] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-ExtraLight.ttf'
+[Parsed_subtitles_0 @ 0x924c2cd80] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-ThinItalic.ttf'
+[Parsed_subtitles_0 @ 0x924c2cd80] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-SemiBoldItalic.ttf'
+[Parsed_subtitles_0 @ 0x924c2cd80] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-Thin.ttf'
+[Parsed_subtitles_0 @ 0x924c2cd80] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-BoldItalic.ttf'
+[Parsed_subtitles_0 @ 0x924c2cd80] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-ExtraLight.ttf'
+[Parsed_subtitles_0 @ 0x924c2cd80] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-ThinItalic.ttf'
+[Parsed_subtitles_0 @ 0x924c2cd80] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-MediumItalic.ttf'
+[Parsed_subtitles_0 @ 0x924c2cd80] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-ExtraBold.ttf'
+[Parsed_subtitles_0 @ 0x924c2cd80] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-LightItalic.ttf'
+[Parsed_subtitles_0 @ 0x924c2cd80] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-Regular.ttf'
+[Parsed_subtitles_0 @ 0x924c2cd80] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-SemiBold.ttf'
+[Parsed_subtitles_0 @ 0x924c2cd80] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-Italic.ttf'
+[Parsed_subtitles_0 @ 0x924c2cd80] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-BlackItalic.ttf'
+[Parsed_subtitles_0 @ 0x924c2cd80] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-Bold.ttf'
+[Parsed_subtitles_0 @ 0x924c2cd80] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-Thin.ttf'
+[Parsed_subtitles_0 @ 0x924c2cd80] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-Black.ttf'
+[Parsed_subtitles_0 @ 0x924c2cd80] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-LightItalic.ttf'
+[Parsed_subtitles_0 @ 0x924c2cd80] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-Light.ttf'
+[Parsed_subtitles_0 @ 0x924c2cd80] Using font provider coretext
+Stream mapping:
+  Stream #0:0 -> #0:0 (h264 (native) -> h264 (h264_videotoolbox))
+  Stream #0:1 -> #0:1 (copy)
+Press [q] to stop, [?] for help
+[Parsed_subtitles_0 @ 0x924c2f780] libass API version: 0x1703000
+[Parsed_subtitles_0 @ 0x924c2f780] libass source: tarball: 0.17.3
+[Parsed_subtitles_0 @ 0x924c2f780] Shaper: FriBidi 1.0.15 (SIMPLE) HarfBuzz-ng 11.2.1 (COMPLEX)
+[Parsed_subtitles_0 @ 0x924c2f780] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-Medium.ttf'
+[Parsed_subtitles_0 @ 0x924c2f780] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-ExtraLightItalic.ttf'
+[Parsed_subtitles_0 @ 0x924c2f780] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-ExtraLightItalic.ttf'
+[Parsed_subtitles_0 @ 0x924c2f780] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-BoldItalic.ttf'
+[Parsed_subtitles_0 @ 0x924c2f780] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-ExtraBoldItalic.ttf'
+[Parsed_subtitles_0 @ 0x924c2f780] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-Light.ttf'
+[Parsed_subtitles_0 @ 0x924c2f780] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-ThinItalic.ttf'
+[Parsed_subtitles_0 @ 0x924c2f780] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-ExtraLight.ttf'
+[Parsed_subtitles_0 @ 0x924c2f780] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-Black.ttf'
+[Parsed_subtitles_0 @ 0x924c2f780] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-SemiBoldItalic.ttf'
+[Parsed_subtitles_0 @ 0x924c2f780] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-SemiBold.ttf'
+[Parsed_subtitles_0 @ 0x924c2f780] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-ExtraBold.ttf'
+[Parsed_subtitles_0 @ 0x924c2f780] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-BlackItalic.ttf'
+[Parsed_subtitles_0 @ 0x924c2f780] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-Regular.ttf'
+[Parsed_subtitles_0 @ 0x924c2f780] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-Italic.ttf'
+[Parsed_subtitles_0 @ 0x924c2f780] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-SemiBold.ttf'
+[Parsed_subtitles_0 @ 0x924c2f780] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-MediumItalic.ttf'
+[Parsed_subtitles_0 @ 0x924c2f780] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-Medium.ttf'
+[Parsed_subtitles_0 @ 0x924c2f780] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-Bold.ttf'
+[Parsed_subtitles_0 @ 0x924c2f780] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-LightItalic.ttf'
+[Parsed_subtitles_0 @ 0x924c2f780] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-ExtraBoldItalic.ttf'
+[Parsed_subtitles_0 @ 0x924c2f780] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-Thin.ttf'
+[Parsed_subtitles_0 @ 0x924c2f780] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-SemiBoldItalic.ttf'
+[Parsed_subtitles_0 @ 0x924c2f780] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-Black.ttf'
+[Parsed_subtitles_0 @ 0x924c2f780] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-ExtraBoldItalic.ttf'
+[Parsed_subtitles_0 @ 0x924c2f780] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-Light.ttf'
+[Parsed_subtitles_0 @ 0x924c2f780] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-MediumItalic.ttf'
+[Parsed_subtitles_0 @ 0x924c2f780] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-ExtraLightItalic.ttf'
+[Parsed_subtitles_0 @ 0x924c2f780] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-ExtraBold.ttf'
+[Parsed_subtitles_0 @ 0x924c2f780] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-BlackItalic.ttf'
+[Parsed_subtitles_0 @ 0x924c2f780] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-Regular.ttf'
+[Parsed_subtitles_0 @ 0x924c2f780] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-Bold.ttf'
+[Parsed_subtitles_0 @ 0x924c2f780] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-Medium.ttf'
+[Parsed_subtitles_0 @ 0x924c2f780] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-Italic.ttf'
+[Parsed_subtitles_0 @ 0x924c2f780] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-BoldItalic.ttf'
+[Parsed_subtitles_0 @ 0x924c2f780] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-ExtraLight.ttf'
+[Parsed_subtitles_0 @ 0x924c2f780] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-ThinItalic.ttf'
+[Parsed_subtitles_0 @ 0x924c2f780] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-SemiBoldItalic.ttf'
+[Parsed_subtitles_0 @ 0x924c2f780] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-Thin.ttf'
+[Parsed_subtitles_0 @ 0x924c2f780] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-BoldItalic.ttf'
+[Parsed_subtitles_0 @ 0x924c2f780] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-ExtraLight.ttf'
+[Parsed_subtitles_0 @ 0x924c2f780] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-ThinItalic.ttf'
+[Parsed_subtitles_0 @ 0x924c2f780] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-MediumItalic.ttf'
+[Parsed_subtitles_0 @ 0x924c2f780] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-ExtraBold.ttf'
+[Parsed_subtitles_0 @ 0x924c2f780] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-LightItalic.ttf'
+[Parsed_subtitles_0 @ 0x924c2f780] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-Regular.ttf'
+[Parsed_subtitles_0 @ 0x924c2f780] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-SemiBold.ttf'
+[Parsed_subtitles_0 @ 0x924c2f780] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-Italic.ttf'
+[Parsed_subtitles_0 @ 0x924c2f780] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-BlackItalic.ttf'
+[Parsed_subtitles_0 @ 0x924c2f780] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-Bold.ttf'
+[Parsed_subtitles_0 @ 0x924c2f780] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-Thin.ttf'
+[Parsed_subtitles_0 @ 0x924c2f780] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-Black.ttf'
+[Parsed_subtitles_0 @ 0x924c2f780] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-LightItalic.ttf'
+[Parsed_subtitles_0 @ 0x924c2f780] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-Light.ttf'
+[Parsed_subtitles_0 @ 0x924c2f780] Using font provider coretext
+Output #0, mp4, to 'projects/JosiahCoad/editing/videos/260210-textbook-interview/outputs/with_title_caption_music_v2/segment_02_captioned.mp4':
+  Metadata:
+    major_brand     : isom
+    minor_version   : 512
+    compatible_brands: isomiso2avc1mp41
+    encoder         : Lavf61.7.100
+  Stream #0:0(und): Video: h264 (avc1 / 0x31637661), yuv420p(tv, bt709, progressive), 1080x1920, q=2-31, 30 fps, 15360 tbn (default)
+      Metadata:
+        handler_name    : VideoHandler
+        vendor_id       : [0][0][0][0]
+        encoder         : Lavc61.19.101 h264_videotoolbox
+  Stream #0:1(und): Audio: aac (LC) (mp4a / 0x6134706D), 44100 Hz, stereo, fltp, 187 kb/s (default)
+      Metadata:
+        handler_name    : Core Media Audio
+        vendor_id       : [0][0][0][0]
+frame=   60 fps=0.0 q=-0.0 size=    1536KiB time=00:00:01.96 bitrate=6398.3kbits/s speed=3.93x    frame=  160 fps=159 q=-0.0 size=    5376KiB time=00:00:05.30 bitrate=8309.5kbits/s speed=5.28x    [Parsed_subtitles_0 @ 0x924c2f780] fontselect: (Roboto, 700, 0) -> Roboto-Bold, 0, Roboto-Bold
+frame=  261 fps=173 q=-0.0 size=   11520KiB time=00:00:08.66 bitrate=10889.1kbits/s speed=5.74x    frame=  361 fps=179 q=-0.0 size=   17408KiB time=00:00:12.00 bitrate=11883.9kbits/s speed=5.96x    frame=  448 fps=178 q=-0.0 size=   22528KiB time=00:00:14.90 bitrate=12385.9kbits/s speed=5.92x    frame=  549 fps=182 q=-0.0 size=   28416KiB time=00:00:18.26 bitrate=12743.7kbits/s speed=6.05x    frame=  640 fps=182 q=-0.0 size=   33536KiB time=00:00:21.30 bitrate=12898.0kbits/s speed=6.04x    frame=  740 fps=184 q=-0.0 size=   39424KiB time=00:00:24.63 bitrate=13110.8kbits/s speed=6.11x    frame=  840 fps=185 q=-0.0 size=   45312KiB time=00:00:27.96 bitrate=13272.8kbits/s speed=6.17x    frame=  940 fps=187 q=-0.0 size=   51200KiB time=00:00:31.30 bitrate=13400.3kbits/s speed=6.22x    [out#0/mp4 @ 0x924c2ca80] video:53838KiB audio:758KiB subtitle:0KiB other streams:0KiB global headers:0KiB muxing overhead: 0.053411%
+frame= 1020 fps=188 q=-0.0 Lsize=   54625KiB time=00:00:33.06 bitrate=13533.2kbits/s speed=6.08x    
+Transcribing with Deepgram...
+🔧 DEBUG [deepgram]: Starting transcription for: projects/JosiahCoad/editing/videos/260210-textbook-interview/outputs/with_title_caption_music_v2/segment_02_titled.mp4
+🔧 DEBUG [deepgram]: Extracting audio to: /var/folders/3m/wbb812l55fv7xc2q79ttxl680000gn/T/tmp_evi4ruq.mp3
+🔧 DEBUG [deepgram]: Audio extraction completed (0.12s)
+🔧 DEBUG [deepgram]: Initializing Deepgram client...
+🔧 DEBUG [deepgram]: Deepgram client initialized (0.13s)
+🔧 DEBUG [deepgram]: Reading audio file...
+🔧 DEBUG [deepgram]: Read 0.06MB audio (0.00s)
+🔧 DEBUG [deepgram]: Calling Deepgram API (this may take 5-30 seconds)...
+🔧 DEBUG [deepgram]: Deepgram API call completed (0.69s)
+Found 146 words
+Found 1 utterances
+Word-level transcript written: projects/JosiahCoad/editing/videos/260210-textbook-interview/outputs/with_title_caption_music_v2/segment_02_captioned-words.json
+Utterance-level transcript written: projects/JosiahCoad/editing/videos/260210-textbook-interview/outputs/with_title_caption_music_v2/segment_02_captioned-utterances.json
+Caption delay: 6.0s (captions suppressed while title is showing)
+Generating smart SRT subtitle file from utterances (max 3 words per line, splits at punctuation, font size 22, caps=True)...
+SRT file written: projects/JosiahCoad/editing/videos/260210-textbook-interview/outputs/with_title_caption_music_v2/segment_02_captioned.srt
+Caption style: outline
+Caption position: 15% from bottom → MarginV=43 (ASS PlayResY=288)
+Burning subtitles into video...
+✅ Output video: projects/JosiahCoad/editing/videos/260210-textbook-interview/outputs/with_title_caption_music_v2/segment_02_captioned.mp4
+✅ SRT file: projects/JosiahCoad/editing/videos/260210-textbook-interview/outputs/with_title_caption_music_v2/segment_02_captioned.srt
+✅ Word-level transcript: projects/JosiahCoad/editing/videos/260210-textbook-interview/outputs/with_title_caption_music_v2/segment_02_captioned-words.json
+✅ Utterance-level transcript: projects/JosiahCoad/editing/videos/260210-textbook-interview/outputs/with_title_caption_music_v2/segment_02_captioned-utterances.json
+Adding title overlay: 'HOW TO GET MARKETING IDEAS FROM ADS YOU CONSUME' (6.0s)
+✅ Output video: projects/JosiahCoad/editing/videos/260210-textbook-interview/outputs/with_title_caption_music_v2/segment_03_titled.mp4
+ffmpeg version 7.1.1 Copyright (c) 2000-2025 the FFmpeg developers
+  built with Apple clang version 17.0.0 (clang-1700.0.13.3)
+  configuration: --prefix=/opt/homebrew/Cellar/ffmpeg/7.1.1_3 --enable-shared --enable-pthreads --enable-version3 --cc=clang --host-cflags= --host-ldflags='-Wl,-ld_classic' --enable-ffplay --enable-gnutls --enable-gpl --enable-libaom --enable-libaribb24 --enable-libbluray --enable-libdav1d --enable-libharfbuzz --enable-libjxl --enable-libmp3lame --enable-libopus --enable-librav1e --enable-librist --enable-librubberband --enable-libsnappy --enable-libsrt --enable-libssh --enable-libsvtav1 --enable-libtesseract --enable-libtheora --enable-libvidstab --enable-libvmaf --enable-libvorbis --enable-libvpx --enable-libwebp --enable-libx264 --enable-libx265 --enable-libxml2 --enable-libxvid --enable-lzma --enable-libfontconfig --enable-libfreetype --enable-frei0r --enable-libass --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-libopenjpeg --enable-libspeex --enable-libsoxr --enable-libzmq --enable-libzimg --disable-libjack --disable-indev=jack --enable-videotoolbox --enable-audiotoolbox --enable-neon
+  libavutil      59. 39.100 / 59. 39.100
+  libavcodec     61. 19.101 / 61. 19.101
+  libavformat    61.  7.100 / 61.  7.100
+  libavdevice    61.  3.100 / 61.  3.100
+  libavfilter    10.  4.100 / 10.  4.100
+  libswscale      8.  3.100 /  8.  3.100
+  libswresample   5.  3.100 /  5.  3.100
+  libpostproc    58.  3.100 / 58.  3.100
+Input #0, mov,mp4,m4a,3gp,3g2,mj2, from 'projects/JosiahCoad/editing/videos/260210-textbook-interview/outputs/with_title_caption_music_v2/segment_03_titled.mp4':
+  Metadata:
+    major_brand     : isom
+    minor_version   : 512
+    compatible_brands: isomiso2avc1mp41
+    encoder         : Lavf61.7.100
+  Duration: 00:00:39.03, start: 0.000000, bitrate: 13305 kb/s
+  Stream #0:0[0x1](und): Video: h264 (High) (avc1 / 0x31637661), yuv420p(tv, bt2020nc/bt2020/arib-std-b67, progressive), 1080x1920, 13104 kb/s, 38.77 fps, 39 tbr, 19968 tbn (default)
+      Metadata:
+        handler_name    : VideoHandler
+        vendor_id       : [0][0][0][0]
+        encoder         : Lavc61.19.101 h264_videotoolbox
+      Side data:
+        Ambient Viewing Environment, ambient_illuminance=314.000000, ambient_light_x=0.312700, ambient_light_y=0.329000
+  Stream #0:1[0x2](und): Audio: aac (LC) (mp4a / 0x6134706D), 96000 Hz, stereo, fltp, 195 kb/s (default)
+      Metadata:
+        handler_name    : SoundHandler
+        vendor_id       : [0][0][0][0]
+[Parsed_subtitles_0 @ 0xbe0c04b40] libass API version: 0x1703000
+[Parsed_subtitles_0 @ 0xbe0c04b40] libass source: tarball: 0.17.3
+[Parsed_subtitles_0 @ 0xbe0c04b40] Shaper: FriBidi 1.0.15 (SIMPLE) HarfBuzz-ng 11.2.1 (COMPLEX)
+[Parsed_subtitles_0 @ 0xbe0c04b40] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-Medium.ttf'
+[Parsed_subtitles_0 @ 0xbe0c04b40] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-ExtraLightItalic.ttf'
+[Parsed_subtitles_0 @ 0xbe0c04b40] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-ExtraLightItalic.ttf'
+[Parsed_subtitles_0 @ 0xbe0c04b40] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-BoldItalic.ttf'
+[Parsed_subtitles_0 @ 0xbe0c04b40] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-ExtraBoldItalic.ttf'
+[Parsed_subtitles_0 @ 0xbe0c04b40] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-Light.ttf'
+[Parsed_subtitles_0 @ 0xbe0c04b40] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-ThinItalic.ttf'
+[Parsed_subtitles_0 @ 0xbe0c04b40] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-ExtraLight.ttf'
+[Parsed_subtitles_0 @ 0xbe0c04b40] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-Black.ttf'
+[Parsed_subtitles_0 @ 0xbe0c04b40] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-SemiBoldItalic.ttf'
+[Parsed_subtitles_0 @ 0xbe0c04b40] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-SemiBold.ttf'
+[Parsed_subtitles_0 @ 0xbe0c04b40] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-ExtraBold.ttf'
+[Parsed_subtitles_0 @ 0xbe0c04b40] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-BlackItalic.ttf'
+[Parsed_subtitles_0 @ 0xbe0c04b40] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-Regular.ttf'
+[Parsed_subtitles_0 @ 0xbe0c04b40] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-Italic.ttf'
+[Parsed_subtitles_0 @ 0xbe0c04b40] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-SemiBold.ttf'
+[Parsed_subtitles_0 @ 0xbe0c04b40] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-MediumItalic.ttf'
+[Parsed_subtitles_0 @ 0xbe0c04b40] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-Medium.ttf'
+[Parsed_subtitles_0 @ 0xbe0c04b40] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-Bold.ttf'
+[Parsed_subtitles_0 @ 0xbe0c04b40] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-LightItalic.ttf'
+[Parsed_subtitles_0 @ 0xbe0c04b40] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-ExtraBoldItalic.ttf'
+[Parsed_subtitles_0 @ 0xbe0c04b40] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-Thin.ttf'
+[Parsed_subtitles_0 @ 0xbe0c04b40] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-SemiBoldItalic.ttf'
+[Parsed_subtitles_0 @ 0xbe0c04b40] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-Black.ttf'
+[Parsed_subtitles_0 @ 0xbe0c04b40] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-ExtraBoldItalic.ttf'
+[Parsed_subtitles_0 @ 0xbe0c04b40] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-Light.ttf'
+[Parsed_subtitles_0 @ 0xbe0c04b40] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-MediumItalic.ttf'
+[Parsed_subtitles_0 @ 0xbe0c04b40] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-ExtraLightItalic.ttf'
+[Parsed_subtitles_0 @ 0xbe0c04b40] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-ExtraBold.ttf'
+[Parsed_subtitles_0 @ 0xbe0c04b40] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-BlackItalic.ttf'
+[Parsed_subtitles_0 @ 0xbe0c04b40] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-Regular.ttf'
+[Parsed_subtitles_0 @ 0xbe0c04b40] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-Bold.ttf'
+[Parsed_subtitles_0 @ 0xbe0c04b40] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-Medium.ttf'
+[Parsed_subtitles_0 @ 0xbe0c04b40] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-Italic.ttf'
+[Parsed_subtitles_0 @ 0xbe0c04b40] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-BoldItalic.ttf'
+[Parsed_subtitles_0 @ 0xbe0c04b40] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-ExtraLight.ttf'
+[Parsed_subtitles_0 @ 0xbe0c04b40] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-ThinItalic.ttf'
+[Parsed_subtitles_0 @ 0xbe0c04b40] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-SemiBoldItalic.ttf'
+[Parsed_subtitles_0 @ 0xbe0c04b40] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-Thin.ttf'
+[Parsed_subtitles_0 @ 0xbe0c04b40] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-BoldItalic.ttf'
+[Parsed_subtitles_0 @ 0xbe0c04b40] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-ExtraLight.ttf'
+[Parsed_subtitles_0 @ 0xbe0c04b40] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-ThinItalic.ttf'
+[Parsed_subtitles_0 @ 0xbe0c04b40] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-MediumItalic.ttf'
+[Parsed_subtitles_0 @ 0xbe0c04b40] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-ExtraBold.ttf'
+[Parsed_subtitles_0 @ 0xbe0c04b40] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-LightItalic.ttf'
+[Parsed_subtitles_0 @ 0xbe0c04b40] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-Regular.ttf'
+[Parsed_subtitles_0 @ 0xbe0c04b40] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-SemiBold.ttf'
+[Parsed_subtitles_0 @ 0xbe0c04b40] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-Italic.ttf'
+[Parsed_subtitles_0 @ 0xbe0c04b40] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-BlackItalic.ttf'
+[Parsed_subtitles_0 @ 0xbe0c04b40] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-Bold.ttf'
+[Parsed_subtitles_0 @ 0xbe0c04b40] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-Thin.ttf'
+[Parsed_subtitles_0 @ 0xbe0c04b40] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-Black.ttf'
+[Parsed_subtitles_0 @ 0xbe0c04b40] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-LightItalic.ttf'
+[Parsed_subtitles_0 @ 0xbe0c04b40] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-Light.ttf'
+[Parsed_subtitles_0 @ 0xbe0c04b40] Using font provider coretext
+Stream mapping:
+  Stream #0:0 -> #0:0 (h264 (native) -> h264 (h264_videotoolbox))
+  Stream #0:1 -> #0:1 (copy)
+Press [q] to stop, [?] for help
+[Parsed_subtitles_0 @ 0xbe0c07600] libass API version: 0x1703000
+[Parsed_subtitles_0 @ 0xbe0c07600] libass source: tarball: 0.17.3
+[Parsed_subtitles_0 @ 0xbe0c07600] Shaper: FriBidi 1.0.15 (SIMPLE) HarfBuzz-ng 11.2.1 (COMPLEX)
+[Parsed_subtitles_0 @ 0xbe0c07600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-Medium.ttf'
+[Parsed_subtitles_0 @ 0xbe0c07600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-ExtraLightItalic.ttf'
+[Parsed_subtitles_0 @ 0xbe0c07600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-ExtraLightItalic.ttf'
+[Parsed_subtitles_0 @ 0xbe0c07600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-BoldItalic.ttf'
+[Parsed_subtitles_0 @ 0xbe0c07600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-ExtraBoldItalic.ttf'
+[Parsed_subtitles_0 @ 0xbe0c07600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-Light.ttf'
+[Parsed_subtitles_0 @ 0xbe0c07600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-ThinItalic.ttf'
+[Parsed_subtitles_0 @ 0xbe0c07600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-ExtraLight.ttf'
+[Parsed_subtitles_0 @ 0xbe0c07600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-Black.ttf'
+[Parsed_subtitles_0 @ 0xbe0c07600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-SemiBoldItalic.ttf'
+[Parsed_subtitles_0 @ 0xbe0c07600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-SemiBold.ttf'
+[Parsed_subtitles_0 @ 0xbe0c07600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-ExtraBold.ttf'
+[Parsed_subtitles_0 @ 0xbe0c07600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-BlackItalic.ttf'
+[Parsed_subtitles_0 @ 0xbe0c07600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-Regular.ttf'
+[Parsed_subtitles_0 @ 0xbe0c07600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-Italic.ttf'
+[Parsed_subtitles_0 @ 0xbe0c07600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-SemiBold.ttf'
+[Parsed_subtitles_0 @ 0xbe0c07600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-MediumItalic.ttf'
+[Parsed_subtitles_0 @ 0xbe0c07600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-Medium.ttf'
+[Parsed_subtitles_0 @ 0xbe0c07600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-Bold.ttf'
+[Parsed_subtitles_0 @ 0xbe0c07600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-LightItalic.ttf'
+[Parsed_subtitles_0 @ 0xbe0c07600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-ExtraBoldItalic.ttf'
+[Parsed_subtitles_0 @ 0xbe0c07600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-Thin.ttf'
+[Parsed_subtitles_0 @ 0xbe0c07600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-SemiBoldItalic.ttf'
+[Parsed_subtitles_0 @ 0xbe0c07600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-Black.ttf'
+[Parsed_subtitles_0 @ 0xbe0c07600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-ExtraBoldItalic.ttf'
+[Parsed_subtitles_0 @ 0xbe0c07600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-Light.ttf'
+[Parsed_subtitles_0 @ 0xbe0c07600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-MediumItalic.ttf'
+[Parsed_subtitles_0 @ 0xbe0c07600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-ExtraLightItalic.ttf'
+[Parsed_subtitles_0 @ 0xbe0c07600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-ExtraBold.ttf'
+[Parsed_subtitles_0 @ 0xbe0c07600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-BlackItalic.ttf'
+[Parsed_subtitles_0 @ 0xbe0c07600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-Regular.ttf'
+[Parsed_subtitles_0 @ 0xbe0c07600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-Bold.ttf'
+[Parsed_subtitles_0 @ 0xbe0c07600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-Medium.ttf'
+[Parsed_subtitles_0 @ 0xbe0c07600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-Italic.ttf'
+[Parsed_subtitles_0 @ 0xbe0c07600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-BoldItalic.ttf'
+[Parsed_subtitles_0 @ 0xbe0c07600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-ExtraLight.ttf'
+[Parsed_subtitles_0 @ 0xbe0c07600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-ThinItalic.ttf'
+[Parsed_subtitles_0 @ 0xbe0c07600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-SemiBoldItalic.ttf'
+[Parsed_subtitles_0 @ 0xbe0c07600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-Thin.ttf'
+[Parsed_subtitles_0 @ 0xbe0c07600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-BoldItalic.ttf'
+[Parsed_subtitles_0 @ 0xbe0c07600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-ExtraLight.ttf'
+[Parsed_subtitles_0 @ 0xbe0c07600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-ThinItalic.ttf'
+[Parsed_subtitles_0 @ 0xbe0c07600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-MediumItalic.ttf'
+[Parsed_subtitles_0 @ 0xbe0c07600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-ExtraBold.ttf'
+[Parsed_subtitles_0 @ 0xbe0c07600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-LightItalic.ttf'
+[Parsed_subtitles_0 @ 0xbe0c07600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-Regular.ttf'
+[Parsed_subtitles_0 @ 0xbe0c07600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-SemiBold.ttf'
+[Parsed_subtitles_0 @ 0xbe0c07600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-Italic.ttf'
+[Parsed_subtitles_0 @ 0xbe0c07600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-BlackItalic.ttf'
+[Parsed_subtitles_0 @ 0xbe0c07600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-Bold.ttf'
+[Parsed_subtitles_0 @ 0xbe0c07600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-Thin.ttf'
+[Parsed_subtitles_0 @ 0xbe0c07600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-Black.ttf'
+[Parsed_subtitles_0 @ 0xbe0c07600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-LightItalic.ttf'
+[Parsed_subtitles_0 @ 0xbe0c07600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-Light.ttf'
+[Parsed_subtitles_0 @ 0xbe0c07600] Using font provider coretext
+Output #0, mp4, to 'projects/JosiahCoad/editing/videos/260210-textbook-interview/outputs/with_title_caption_music_v2/segment_03_captioned.mp4':
+  Metadata:
+    major_brand     : isom
+    minor_version   : 512
+    compatible_brands: isomiso2avc1mp41
+    encoder         : Lavf61.7.100
+  Stream #0:0(und): Video: h264 (avc1 / 0x31637661), yuv420p(tv, bt2020nc/bt2020/arib-std-b67, progressive), 1080x1920, q=2-31, 39 fps, 19968 tbn (default)
+      Metadata:
+        handler_name    : VideoHandler
+        vendor_id       : [0][0][0][0]
+        encoder         : Lavc61.19.101 h264_videotoolbox
+      Side data:
+        Ambient Viewing Environment, ambient_illuminance=314.000000, ambient_light_x=0.312700, ambient_light_y=0.329000
+  Stream #0:1(und): Audio: aac (LC) (mp4a / 0x6134706D), 96000 Hz, stereo, fltp, 195 kb/s (default)
+      Metadata:
+        handler_name    : SoundHandler
+        vendor_id       : [0][0][0][0]
+frame=   60 fps=0.0 q=-0.0 size=    1280KiB time=00:00:01.51 bitrate=6931.5kbits/s speed=3.01x    frame=  160 fps=159 q=-0.0 size=    4096KiB time=00:00:04.07 bitrate=8230.4kbits/s speed=4.06x    [Parsed_subtitles_0 @ 0xbe0c07600] fontselect: (Roboto, 700, 0) -> Roboto-Bold, 0, Roboto-Bold
+frame=  261 fps=173 q=-0.0 size=    7936KiB time=00:00:06.66 bitrate=9751.8kbits/s speed=4.42x    frame=  361 fps=179 q=-0.0 size=   12544KiB time=00:00:09.23 bitrate=11132.4kbits/s speed=4.59x    frame=  461 fps=183 q=-0.0 size=   17152KiB time=00:00:11.79 bitrate=11912.8kbits/s speed=4.69x    frame=  562 fps=186 q=-0.0 size=   21504KiB time=00:00:14.38 bitrate=12246.5kbits/s speed=4.76x    frame=  663 fps=188 q=-0.0 size=   26112KiB time=00:00:16.97 bitrate=12601.9kbits/s speed=4.82x    frame=  763 fps=189 q=-0.0 size=   30464KiB time=00:00:19.53 bitrate=12772.8kbits/s speed=4.85x    frame=  864 fps=191 q=-0.0 size=   35072KiB time=00:00:22.12 bitrate=12983.9kbits/s speed=4.88x    frame=  964 fps=191 q=-0.0 size=   39680KiB time=00:00:24.69 bitrate=13164.4kbits/s speed= 4.9x    frame= 1064 fps=192 q=-0.0 size=   44032KiB time=00:00:27.25 bitrate=13234.0kbits/s speed=4.92x    frame= 1165 fps=193 q=-0.0 size=   48640KiB time=00:00:29.84 bitrate=13350.4kbits/s speed=4.94x    frame= 1265 fps=193 q=-0.0 size=   52992KiB time=00:00:32.41 bitrate=13394.2kbits/s speed=4.95x    frame= 1366 fps=194 q=-0.0 size=   57600KiB time=00:00:35.00 bitrate=13481.7kbits/s speed=4.96x    frame= 1466 fps=194 q=-0.0 size=   61952KiB time=00:00:37.56 bitrate=13510.5kbits/s speed=4.97x    [out#0/mp4 @ 0xbe0c04840] video:62399KiB audio:909KiB subtitle:0KiB other streams:0KiB global headers:0KiB muxing overhead: 0.074967%
+frame= 1513 fps=194 q=-0.0 Lsize=   63355KiB time=00:00:38.00 bitrate=13658.1kbits/s speed=4.88x    
+Transcribing with Deepgram...
+🔧 DEBUG [deepgram]: Starting transcription for: projects/JosiahCoad/editing/videos/260210-textbook-interview/outputs/with_title_caption_music_v2/segment_03_titled.mp4
+🔧 DEBUG [deepgram]: Extracting audio to: /var/folders/3m/wbb812l55fv7xc2q79ttxl680000gn/T/tmpbgo4tpn9.mp3
+🔧 DEBUG [deepgram]: Audio extraction completed (0.15s)
+🔧 DEBUG [deepgram]: Initializing Deepgram client...
+🔧 DEBUG [deepgram]: Deepgram client initialized (0.14s)
+🔧 DEBUG [deepgram]: Reading audio file...
+🔧 DEBUG [deepgram]: Read 0.07MB audio (0.00s)
+🔧 DEBUG [deepgram]: Calling Deepgram API (this may take 5-30 seconds)...
+🔧 DEBUG [deepgram]: Deepgram API call completed (1.12s)
+Found 170 words
+Found 1 utterances
+Word-level transcript written: projects/JosiahCoad/editing/videos/260210-textbook-interview/outputs/with_title_caption_music_v2/segment_03_captioned-words.json
+Utterance-level transcript written: projects/JosiahCoad/editing/videos/260210-textbook-interview/outputs/with_title_caption_music_v2/segment_03_captioned-utterances.json
+Caption delay: 6.0s (captions suppressed while title is showing)
+Generating smart SRT subtitle file from utterances (max 3 words per line, splits at punctuation, font size 22, caps=True)...
+SRT file written: projects/JosiahCoad/editing/videos/260210-textbook-interview/outputs/with_title_caption_music_v2/segment_03_captioned.srt
+Caption style: outline
+Caption position: 15% from bottom → MarginV=43 (ASS PlayResY=288)
+Burning subtitles into video...
+✅ Output video: projects/JosiahCoad/editing/videos/260210-textbook-interview/outputs/with_title_caption_music_v2/segment_03_captioned.mp4
+✅ SRT file: projects/JosiahCoad/editing/videos/260210-textbook-interview/outputs/with_title_caption_music_v2/segment_03_captioned.srt
+✅ Word-level transcript: projects/JosiahCoad/editing/videos/260210-textbook-interview/outputs/with_title_caption_music_v2/segment_03_captioned-words.json
+✅ Utterance-level transcript: projects/JosiahCoad/editing/videos/260210-textbook-interview/outputs/with_title_caption_music_v2/segment_03_captioned-utterances.json
+Adding title overlay: 'HOW TO SELL MORE THROUGH SOCIAL MEDIA' (6.0s)
+✅ Output video: projects/JosiahCoad/editing/videos/260210-textbook-interview/outputs/with_title_caption_music_v2/segment_04_titled.mp4
+ffmpeg version 7.1.1 Copyright (c) 2000-2025 the FFmpeg developers
+  built with Apple clang version 17.0.0 (clang-1700.0.13.3)
+  configuration: --prefix=/opt/homebrew/Cellar/ffmpeg/7.1.1_3 --enable-shared --enable-pthreads --enable-version3 --cc=clang --host-cflags= --host-ldflags='-Wl,-ld_classic' --enable-ffplay --enable-gnutls --enable-gpl --enable-libaom --enable-libaribb24 --enable-libbluray --enable-libdav1d --enable-libharfbuzz --enable-libjxl --enable-libmp3lame --enable-libopus --enable-librav1e --enable-librist --enable-librubberband --enable-libsnappy --enable-libsrt --enable-libssh --enable-libsvtav1 --enable-libtesseract --enable-libtheora --enable-libvidstab --enable-libvmaf --enable-libvorbis --enable-libvpx --enable-libwebp --enable-libx264 --enable-libx265 --enable-libxml2 --enable-libxvid --enable-lzma --enable-libfontconfig --enable-libfreetype --enable-frei0r --enable-libass --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-libopenjpeg --enable-libspeex --enable-libsoxr --enable-libzmq --enable-libzimg --disable-libjack --disable-indev=jack --enable-videotoolbox --enable-audiotoolbox --enable-neon
+  libavutil      59. 39.100 / 59. 39.100
+  libavcodec     61. 19.101 / 61. 19.101
+  libavformat    61.  7.100 / 61.  7.100
+  libavdevice    61.  3.100 / 61.  3.100
+  libavfilter    10.  4.100 / 10.  4.100
+  libswscale      8.  3.100 /  8.  3.100
+  libswresample   5.  3.100 /  5.  3.100
+  libpostproc    58.  3.100 / 58.  3.100
+Input #0, mov,mp4,m4a,3gp,3g2,mj2, from 'projects/JosiahCoad/editing/videos/260210-textbook-interview/outputs/with_title_caption_music_v2/segment_04_titled.mp4':
+  Metadata:
+    major_brand     : isom
+    minor_version   : 512
+    compatible_brands: isomiso2avc1mp41
+    encoder         : Lavf61.7.100
+  Duration: 00:00:36.00, start: 0.000000, bitrate: 13327 kb/s
+  Stream #0:0[0x1](und): Video: h264 (High) (avc1 / 0x31637661), yuv420p(tv, bt2020nc/bt2020/arib-std-b67, progressive), 1080x1920, 13128 kb/s, 39.61 fps, 40 tbr, 10240 tbn (default)
+      Metadata:
+        handler_name    : VideoHandler
+        vendor_id       : [0][0][0][0]
+        encoder         : Lavc61.19.101 h264_videotoolbox
+      Side data:
+        Ambient Viewing Environment, ambient_illuminance=314.000000, ambient_light_x=0.312700, ambient_light_y=0.329000
+  Stream #0:1[0x2](und): Audio: aac (LC) (mp4a / 0x6134706D), 48000 Hz, stereo, fltp, 195 kb/s (default)
+      Metadata:
+        handler_name    : SoundHandler
+        vendor_id       : [0][0][0][0]
+[Parsed_subtitles_0 @ 0x7aac74600] libass API version: 0x1703000
+[Parsed_subtitles_0 @ 0x7aac74600] libass source: tarball: 0.17.3
+[Parsed_subtitles_0 @ 0x7aac74600] Shaper: FriBidi 1.0.15 (SIMPLE) HarfBuzz-ng 11.2.1 (COMPLEX)
+[Parsed_subtitles_0 @ 0x7aac74600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-Medium.ttf'
+[Parsed_subtitles_0 @ 0x7aac74600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-ExtraLightItalic.ttf'
+[Parsed_subtitles_0 @ 0x7aac74600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-ExtraLightItalic.ttf'
+[Parsed_subtitles_0 @ 0x7aac74600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-BoldItalic.ttf'
+[Parsed_subtitles_0 @ 0x7aac74600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-ExtraBoldItalic.ttf'
+[Parsed_subtitles_0 @ 0x7aac74600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-Light.ttf'
+[Parsed_subtitles_0 @ 0x7aac74600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-ThinItalic.ttf'
+[Parsed_subtitles_0 @ 0x7aac74600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-ExtraLight.ttf'
+[Parsed_subtitles_0 @ 0x7aac74600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-Black.ttf'
+[Parsed_subtitles_0 @ 0x7aac74600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-SemiBoldItalic.ttf'
+[Parsed_subtitles_0 @ 0x7aac74600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-SemiBold.ttf'
+[Parsed_subtitles_0 @ 0x7aac74600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-ExtraBold.ttf'
+[Parsed_subtitles_0 @ 0x7aac74600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-BlackItalic.ttf'
+[Parsed_subtitles_0 @ 0x7aac74600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-Regular.ttf'
+[Parsed_subtitles_0 @ 0x7aac74600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-Italic.ttf'
+[Parsed_subtitles_0 @ 0x7aac74600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-SemiBold.ttf'
+[Parsed_subtitles_0 @ 0x7aac74600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-MediumItalic.ttf'
+[Parsed_subtitles_0 @ 0x7aac74600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-Medium.ttf'
+[Parsed_subtitles_0 @ 0x7aac74600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-Bold.ttf'
+[Parsed_subtitles_0 @ 0x7aac74600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-LightItalic.ttf'
+[Parsed_subtitles_0 @ 0x7aac74600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-ExtraBoldItalic.ttf'
+[Parsed_subtitles_0 @ 0x7aac74600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-Thin.ttf'
+[Parsed_subtitles_0 @ 0x7aac74600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-SemiBoldItalic.ttf'
+[Parsed_subtitles_0 @ 0x7aac74600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-Black.ttf'
+[Parsed_subtitles_0 @ 0x7aac74600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-ExtraBoldItalic.ttf'
+[Parsed_subtitles_0 @ 0x7aac74600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-Light.ttf'
+[Parsed_subtitles_0 @ 0x7aac74600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-MediumItalic.ttf'
+[Parsed_subtitles_0 @ 0x7aac74600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-ExtraLightItalic.ttf'
+[Parsed_subtitles_0 @ 0x7aac74600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-ExtraBold.ttf'
+[Parsed_subtitles_0 @ 0x7aac74600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-BlackItalic.ttf'
+[Parsed_subtitles_0 @ 0x7aac74600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-Regular.ttf'
+[Parsed_subtitles_0 @ 0x7aac74600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-Bold.ttf'
+[Parsed_subtitles_0 @ 0x7aac74600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-Medium.ttf'
+[Parsed_subtitles_0 @ 0x7aac74600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-Italic.ttf'
+[Parsed_subtitles_0 @ 0x7aac74600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-BoldItalic.ttf'
+[Parsed_subtitles_0 @ 0x7aac74600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-ExtraLight.ttf'
+[Parsed_subtitles_0 @ 0x7aac74600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-ThinItalic.ttf'
+[Parsed_subtitles_0 @ 0x7aac74600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-SemiBoldItalic.ttf'
+[Parsed_subtitles_0 @ 0x7aac74600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-Thin.ttf'
+[Parsed_subtitles_0 @ 0x7aac74600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-BoldItalic.ttf'
+[Parsed_subtitles_0 @ 0x7aac74600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-ExtraLight.ttf'
+[Parsed_subtitles_0 @ 0x7aac74600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-ThinItalic.ttf'
+[Parsed_subtitles_0 @ 0x7aac74600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-MediumItalic.ttf'
+[Parsed_subtitles_0 @ 0x7aac74600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-ExtraBold.ttf'
+[Parsed_subtitles_0 @ 0x7aac74600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-LightItalic.ttf'
+[Parsed_subtitles_0 @ 0x7aac74600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-Regular.ttf'
+[Parsed_subtitles_0 @ 0x7aac74600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-SemiBold.ttf'
+[Parsed_subtitles_0 @ 0x7aac74600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-Italic.ttf'
+[Parsed_subtitles_0 @ 0x7aac74600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-BlackItalic.ttf'
+[Parsed_subtitles_0 @ 0x7aac74600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-Bold.ttf'
+[Parsed_subtitles_0 @ 0x7aac74600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-Thin.ttf'
+[Parsed_subtitles_0 @ 0x7aac74600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-Black.ttf'
+[Parsed_subtitles_0 @ 0x7aac74600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-LightItalic.ttf'
+[Parsed_subtitles_0 @ 0x7aac74600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-Light.ttf'
+[Parsed_subtitles_0 @ 0x7aac74600] Using font provider coretext
+Stream mapping:
+  Stream #0:0 -> #0:0 (h264 (native) -> h264 (h264_videotoolbox))
+  Stream #0:1 -> #0:1 (copy)
+Press [q] to stop, [?] for help
+[Parsed_subtitles_0 @ 0x7aac77300] libass API version: 0x1703000
+[Parsed_subtitles_0 @ 0x7aac77300] libass source: tarball: 0.17.3
+[Parsed_subtitles_0 @ 0x7aac77300] Shaper: FriBidi 1.0.15 (SIMPLE) HarfBuzz-ng 11.2.1 (COMPLEX)
+[Parsed_subtitles_0 @ 0x7aac77300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-Medium.ttf'
+[Parsed_subtitles_0 @ 0x7aac77300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-ExtraLightItalic.ttf'
+[Parsed_subtitles_0 @ 0x7aac77300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-ExtraLightItalic.ttf'
+[Parsed_subtitles_0 @ 0x7aac77300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-BoldItalic.ttf'
+[Parsed_subtitles_0 @ 0x7aac77300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-ExtraBoldItalic.ttf'
+[Parsed_subtitles_0 @ 0x7aac77300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-Light.ttf'
+[Parsed_subtitles_0 @ 0x7aac77300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-ThinItalic.ttf'
+[Parsed_subtitles_0 @ 0x7aac77300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-ExtraLight.ttf'
+[Parsed_subtitles_0 @ 0x7aac77300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-Black.ttf'
+[Parsed_subtitles_0 @ 0x7aac77300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-SemiBoldItalic.ttf'
+[Parsed_subtitles_0 @ 0x7aac77300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-SemiBold.ttf'
+[Parsed_subtitles_0 @ 0x7aac77300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-ExtraBold.ttf'
+[Parsed_subtitles_0 @ 0x7aac77300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-BlackItalic.ttf'
+[Parsed_subtitles_0 @ 0x7aac77300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-Regular.ttf'
+[Parsed_subtitles_0 @ 0x7aac77300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-Italic.ttf'
+[Parsed_subtitles_0 @ 0x7aac77300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-SemiBold.ttf'
+[Parsed_subtitles_0 @ 0x7aac77300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-MediumItalic.ttf'
+[Parsed_subtitles_0 @ 0x7aac77300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-Medium.ttf'
+[Parsed_subtitles_0 @ 0x7aac77300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-Bold.ttf'
+[Parsed_subtitles_0 @ 0x7aac77300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-LightItalic.ttf'
+[Parsed_subtitles_0 @ 0x7aac77300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-ExtraBoldItalic.ttf'
+[Parsed_subtitles_0 @ 0x7aac77300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-Thin.ttf'
+[Parsed_subtitles_0 @ 0x7aac77300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-SemiBoldItalic.ttf'
+[Parsed_subtitles_0 @ 0x7aac77300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-Black.ttf'
+[Parsed_subtitles_0 @ 0x7aac77300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-ExtraBoldItalic.ttf'
+[Parsed_subtitles_0 @ 0x7aac77300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-Light.ttf'
+[Parsed_subtitles_0 @ 0x7aac77300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-MediumItalic.ttf'
+[Parsed_subtitles_0 @ 0x7aac77300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-ExtraLightItalic.ttf'
+[Parsed_subtitles_0 @ 0x7aac77300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-ExtraBold.ttf'
+[Parsed_subtitles_0 @ 0x7aac77300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-BlackItalic.ttf'
+[Parsed_subtitles_0 @ 0x7aac77300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-Regular.ttf'
+[Parsed_subtitles_0 @ 0x7aac77300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-Bold.ttf'
+[Parsed_subtitles_0 @ 0x7aac77300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-Medium.ttf'
+[Parsed_subtitles_0 @ 0x7aac77300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-Italic.ttf'
+[Parsed_subtitles_0 @ 0x7aac77300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-BoldItalic.ttf'
+[Parsed_subtitles_0 @ 0x7aac77300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-ExtraLight.ttf'
+[Parsed_subtitles_0 @ 0x7aac77300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-ThinItalic.ttf'
+[Parsed_subtitles_0 @ 0x7aac77300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-SemiBoldItalic.ttf'
+[Parsed_subtitles_0 @ 0x7aac77300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-Thin.ttf'
+[Parsed_subtitles_0 @ 0x7aac77300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-BoldItalic.ttf'
+[Parsed_subtitles_0 @ 0x7aac77300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-ExtraLight.ttf'
+[Parsed_subtitles_0 @ 0x7aac77300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-ThinItalic.ttf'
+[Parsed_subtitles_0 @ 0x7aac77300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-MediumItalic.ttf'
+[Parsed_subtitles_0 @ 0x7aac77300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-ExtraBold.ttf'
+[Parsed_subtitles_0 @ 0x7aac77300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-LightItalic.ttf'
+[Parsed_subtitles_0 @ 0x7aac77300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-Regular.ttf'
+[Parsed_subtitles_0 @ 0x7aac77300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-SemiBold.ttf'
+[Parsed_subtitles_0 @ 0x7aac77300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-Italic.ttf'
+[Parsed_subtitles_0 @ 0x7aac77300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-BlackItalic.ttf'
+[Parsed_subtitles_0 @ 0x7aac77300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-Bold.ttf'
+[Parsed_subtitles_0 @ 0x7aac77300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-Thin.ttf'
+[Parsed_subtitles_0 @ 0x7aac77300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-Black.ttf'
+[Parsed_subtitles_0 @ 0x7aac77300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-LightItalic.ttf'
+[Parsed_subtitles_0 @ 0x7aac77300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-Light.ttf'
+[Parsed_subtitles_0 @ 0x7aac77300] Using font provider coretext
+Output #0, mp4, to 'projects/JosiahCoad/editing/videos/260210-textbook-interview/outputs/with_title_caption_music_v2/segment_04_captioned.mp4':
+  Metadata:
+    major_brand     : isom
+    minor_version   : 512
+    compatible_brands: isomiso2avc1mp41
+    encoder         : Lavf61.7.100
+  Stream #0:0(und): Video: h264 (avc1 / 0x31637661), yuv420p(tv, bt2020nc/bt2020/arib-std-b67, progressive), 1080x1920, q=2-31, 40 fps, 10240 tbn (default)
+      Metadata:
+        handler_name    : VideoHandler
+        vendor_id       : [0][0][0][0]
+        encoder         : Lavc61.19.101 h264_videotoolbox
+      Side data:
+        Ambient Viewing Environment, ambient_illuminance=314.000000, ambient_light_x=0.312700, ambient_light_y=0.329000
+  Stream #0:1(und): Audio: aac (LC) (mp4a / 0x6134706D), 48000 Hz, stereo, fltp, 195 kb/s (default)
+      Metadata:
+        handler_name    : SoundHandler
+        vendor_id       : [0][0][0][0]
+frame=   62 fps=0.0 q=-0.0 size=    1536KiB time=00:00:01.52 bitrate=8251.3kbits/s speed=2.99x    frame=  163 fps=160 q=-0.0 size=    4608KiB time=00:00:04.07 bitrate=9263.6kbits/s speed=3.99x    [Parsed_subtitles_0 @ 0x7aac77300] fontselect: (Roboto, 700, 0) -> Roboto-Bold, 0, Roboto-Bold
+frame=  263 fps=173 q=-0.0 size=    8192KiB time=00:00:06.57 bitrate=10206.7kbits/s speed=4.33x    frame=  344 fps=170 q=-0.0 size=   11520KiB time=00:00:08.62 bitrate=10941.7kbits/s speed=4.26x    frame=  446 fps=176 q=-0.0 size=   16128KiB time=00:00:11.17 bitrate=11822.9kbits/s speed=4.41x    frame=  547 fps=180 q=-0.0 size=   20480KiB time=00:00:13.75 bitrate=12201.6kbits/s speed=4.52x    frame=  648 fps=183 q=-0.0 size=   24832KiB time=00:00:16.27 bitrate=12499.2kbits/s speed=4.59x    frame=  749 fps=185 q=-0.0 size=   29440KiB time=00:00:18.82 bitrate=12811.3kbits/s speed=4.64x    frame=  851 fps=186 q=-0.0 size=   33792KiB time=00:00:21.37 bitrate=12950.9kbits/s speed=4.68x    frame=  953 fps=188 q=-0.0 size=   38400KiB time=00:00:23.95 bitrate=13134.6kbits/s speed=4.72x    frame= 1053 fps=189 q=-0.0 size=   42752KiB time=00:00:26.45 bitrate=13241.0kbits/s speed=4.74x    frame= 1154 fps=190 q=-0.0 size=   47104KiB time=00:00:29.00 bitrate=13306.1kbits/s speed=4.77x    frame= 1255 fps=190 q=-0.0 size=   51456KiB time=00:00:31.52 bitrate=13371.2kbits/s speed=4.78x    frame= 1355 fps=191 q=-0.0 size=   55808KiB time=00:00:34.05 bitrate=13426.7kbits/s speed= 4.8x    [out#0/mp4 @ 0x7aac74300] video:57718KiB audio:845KiB subtitle:0KiB other streams:0KiB global headers:0KiB muxing overhead: 0.052766%
+frame= 1426 fps=191 q=-0.0 Lsize=   58594KiB time=00:00:35.37 bitrate=13567.3kbits/s speed=4.75x    
+Transcribing with Deepgram...
+🔧 DEBUG [deepgram]: Starting transcription for: projects/JosiahCoad/editing/videos/260210-textbook-interview/outputs/with_title_caption_music_v2/segment_04_titled.mp4
+🔧 DEBUG [deepgram]: Extracting audio to: /var/folders/3m/wbb812l55fv7xc2q79ttxl680000gn/T/tmplogmf_go.mp3
+🔧 DEBUG [deepgram]: Audio extraction completed (0.13s)
+🔧 DEBUG [deepgram]: Initializing Deepgram client...
+🔧 DEBUG [deepgram]: Deepgram client initialized (0.15s)
+🔧 DEBUG [deepgram]: Reading audio file...
+🔧 DEBUG [deepgram]: Read 0.07MB audio (0.00s)
+🔧 DEBUG [deepgram]: Calling Deepgram API (this may take 5-30 seconds)...
+🔧 DEBUG [deepgram]: Deepgram API call completed (0.60s)
+Found 151 words
+Found 1 utterances
+Word-level transcript written: projects/JosiahCoad/editing/videos/260210-textbook-interview/outputs/with_title_caption_music_v2/segment_04_captioned-words.json
+Utterance-level transcript written: projects/JosiahCoad/editing/videos/260210-textbook-interview/outputs/with_title_caption_music_v2/segment_04_captioned-utterances.json
+Caption delay: 6.0s (captions suppressed while title is showing)
+Generating smart SRT subtitle file from utterances (max 3 words per line, splits at punctuation, font size 22, caps=True)...
+SRT file written: projects/JosiahCoad/editing/videos/260210-textbook-interview/outputs/with_title_caption_music_v2/segment_04_captioned.srt
+Caption style: outline
+Caption position: 15% from bottom → MarginV=43 (ASS PlayResY=288)
+Burning subtitles into video...
+✅ Output video: projects/JosiahCoad/editing/videos/260210-textbook-interview/outputs/with_title_caption_music_v2/segment_04_captioned.mp4
+✅ SRT file: projects/JosiahCoad/editing/videos/260210-textbook-interview/outputs/with_title_caption_music_v2/segment_04_captioned.srt
+✅ Word-level transcript: projects/JosiahCoad/editing/videos/260210-textbook-interview/outputs/with_title_caption_music_v2/segment_04_captioned-words.json
+✅ Utterance-level transcript: projects/JosiahCoad/editing/videos/260210-textbook-interview/outputs/with_title_caption_music_v2/segment_04_captioned-utterances.json
+Adding title overlay: 'HOW TO USE AI FOR SOCIAL MEDIA CONTENT EFFICIENCY' (6.0s)
+✅ Output video: projects/JosiahCoad/editing/videos/260210-textbook-interview/outputs/with_title_caption_music_v2/segment_05_titled.mp4
+ffmpeg version 7.1.1 Copyright (c) 2000-2025 the FFmpeg developers
+  built with Apple clang version 17.0.0 (clang-1700.0.13.3)
+  configuration: --prefix=/opt/homebrew/Cellar/ffmpeg/7.1.1_3 --enable-shared --enable-pthreads --enable-version3 --cc=clang --host-cflags= --host-ldflags='-Wl,-ld_classic' --enable-ffplay --enable-gnutls --enable-gpl --enable-libaom --enable-libaribb24 --enable-libbluray --enable-libdav1d --enable-libharfbuzz --enable-libjxl --enable-libmp3lame --enable-libopus --enable-librav1e --enable-librist --enable-librubberband --enable-libsnappy --enable-libsrt --enable-libssh --enable-libsvtav1 --enable-libtesseract --enable-libtheora --enable-libvidstab --enable-libvmaf --enable-libvorbis --enable-libvpx --enable-libwebp --enable-libx264 --enable-libx265 --enable-libxml2 --enable-libxvid --enable-lzma --enable-libfontconfig --enable-libfreetype --enable-frei0r --enable-libass --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-libopenjpeg --enable-libspeex --enable-libsoxr --enable-libzmq --enable-libzimg --disable-libjack --disable-indev=jack --enable-videotoolbox --enable-audiotoolbox --enable-neon
+  libavutil      59. 39.100 / 59. 39.100
+  libavcodec     61. 19.101 / 61. 19.101
+  libavformat    61.  7.100 / 61.  7.100
+  libavdevice    61.  3.100 / 61.  3.100
+  libavfilter    10.  4.100 / 10.  4.100
+  libswscale      8.  3.100 /  8.  3.100
+  libswresample   5.  3.100 /  5.  3.100
+  libpostproc    58.  3.100 / 58.  3.100
+Input #0, mov,mp4,m4a,3gp,3g2,mj2, from 'projects/JosiahCoad/editing/videos/260210-textbook-interview/outputs/with_title_caption_music_v2/segment_05_titled.mp4':
+  Metadata:
+    major_brand     : isom
+    minor_version   : 512
+    compatible_brands: isomiso2avc1mp41
+    encoder         : Lavf61.7.100
+  Duration: 00:00:28.98, start: 0.000000, bitrate: 13703 kb/s
+  Stream #0:0[0x1](und): Video: h264 (High) (avc1 / 0x31637661), yuv420p(tv, bt2020nc/bt2020/arib-std-b67, progressive), 1080x1920, 13500 kb/s, 49.79 fps, 50 tbr, 12800 tbn (default)
+      Metadata:
+        handler_name    : VideoHandler
+        vendor_id       : [0][0][0][0]
+        encoder         : Lavc61.19.101 h264_videotoolbox
+      Side data:
+        Ambient Viewing Environment, ambient_illuminance=314.000000, ambient_light_x=0.312700, ambient_light_y=0.329000
+  Stream #0:1[0x2](und): Audio: aac (LC) (mp4a / 0x6134706D), 48000 Hz, stereo, fltp, 197 kb/s (default)
+      Metadata:
+        handler_name    : SoundHandler
+        vendor_id       : [0][0][0][0]
+[Parsed_subtitles_0 @ 0xa24c04b40] libass API version: 0x1703000
+[Parsed_subtitles_0 @ 0xa24c04b40] libass source: tarball: 0.17.3
+[Parsed_subtitles_0 @ 0xa24c04b40] Shaper: FriBidi 1.0.15 (SIMPLE) HarfBuzz-ng 11.2.1 (COMPLEX)
+[Parsed_subtitles_0 @ 0xa24c04b40] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-Medium.ttf'
+[Parsed_subtitles_0 @ 0xa24c04b40] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-ExtraLightItalic.ttf'
+[Parsed_subtitles_0 @ 0xa24c04b40] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-ExtraLightItalic.ttf'
+[Parsed_subtitles_0 @ 0xa24c04b40] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-BoldItalic.ttf'
+[Parsed_subtitles_0 @ 0xa24c04b40] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-ExtraBoldItalic.ttf'
+[Parsed_subtitles_0 @ 0xa24c04b40] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-Light.ttf'
+[Parsed_subtitles_0 @ 0xa24c04b40] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-ThinItalic.ttf'
+[Parsed_subtitles_0 @ 0xa24c04b40] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-ExtraLight.ttf'
+[Parsed_subtitles_0 @ 0xa24c04b40] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-Black.ttf'
+[Parsed_subtitles_0 @ 0xa24c04b40] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-SemiBoldItalic.ttf'
+[Parsed_subtitles_0 @ 0xa24c04b40] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-SemiBold.ttf'
+[Parsed_subtitles_0 @ 0xa24c04b40] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-ExtraBold.ttf'
+[Parsed_subtitles_0 @ 0xa24c04b40] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-BlackItalic.ttf'
+[Parsed_subtitles_0 @ 0xa24c04b40] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-Regular.ttf'
+[Parsed_subtitles_0 @ 0xa24c04b40] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-Italic.ttf'
+[Parsed_subtitles_0 @ 0xa24c04b40] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-SemiBold.ttf'
+[Parsed_subtitles_0 @ 0xa24c04b40] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-MediumItalic.ttf'
+[Parsed_subtitles_0 @ 0xa24c04b40] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-Medium.ttf'
+[Parsed_subtitles_0 @ 0xa24c04b40] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-Bold.ttf'
+[Parsed_subtitles_0 @ 0xa24c04b40] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-LightItalic.ttf'
+[Parsed_subtitles_0 @ 0xa24c04b40] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-ExtraBoldItalic.ttf'
+[Parsed_subtitles_0 @ 0xa24c04b40] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-Thin.ttf'
+[Parsed_subtitles_0 @ 0xa24c04b40] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-SemiBoldItalic.ttf'
+[Parsed_subtitles_0 @ 0xa24c04b40] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-Black.ttf'
+[Parsed_subtitles_0 @ 0xa24c04b40] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-ExtraBoldItalic.ttf'
+[Parsed_subtitles_0 @ 0xa24c04b40] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-Light.ttf'
+[Parsed_subtitles_0 @ 0xa24c04b40] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-MediumItalic.ttf'
+[Parsed_subtitles_0 @ 0xa24c04b40] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-ExtraLightItalic.ttf'
+[Parsed_subtitles_0 @ 0xa24c04b40] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-ExtraBold.ttf'
+[Parsed_subtitles_0 @ 0xa24c04b40] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-BlackItalic.ttf'
+[Parsed_subtitles_0 @ 0xa24c04b40] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-Regular.ttf'
+[Parsed_subtitles_0 @ 0xa24c04b40] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-Bold.ttf'
+[Parsed_subtitles_0 @ 0xa24c04b40] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-Medium.ttf'
+[Parsed_subtitles_0 @ 0xa24c04b40] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-Italic.ttf'
+[Parsed_subtitles_0 @ 0xa24c04b40] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-BoldItalic.ttf'
+[Parsed_subtitles_0 @ 0xa24c04b40] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-ExtraLight.ttf'
+[Parsed_subtitles_0 @ 0xa24c04b40] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-ThinItalic.ttf'
+[Parsed_subtitles_0 @ 0xa24c04b40] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-SemiBoldItalic.ttf'
+[Parsed_subtitles_0 @ 0xa24c04b40] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-Thin.ttf'
+[Parsed_subtitles_0 @ 0xa24c04b40] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-BoldItalic.ttf'
+[Parsed_subtitles_0 @ 0xa24c04b40] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-ExtraLight.ttf'
+[Parsed_subtitles_0 @ 0xa24c04b40] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-ThinItalic.ttf'
+[Parsed_subtitles_0 @ 0xa24c04b40] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-MediumItalic.ttf'
+[Parsed_subtitles_0 @ 0xa24c04b40] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-ExtraBold.ttf'
+[Parsed_subtitles_0 @ 0xa24c04b40] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-LightItalic.ttf'
+[Parsed_subtitles_0 @ 0xa24c04b40] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-Regular.ttf'
+[Parsed_subtitles_0 @ 0xa24c04b40] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-SemiBold.ttf'
+[Parsed_subtitles_0 @ 0xa24c04b40] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-Italic.ttf'
+[Parsed_subtitles_0 @ 0xa24c04b40] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-BlackItalic.ttf'
+[Parsed_subtitles_0 @ 0xa24c04b40] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-Bold.ttf'
+[Parsed_subtitles_0 @ 0xa24c04b40] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-Thin.ttf'
+[Parsed_subtitles_0 @ 0xa24c04b40] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-Black.ttf'
+[Parsed_subtitles_0 @ 0xa24c04b40] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-LightItalic.ttf'
+[Parsed_subtitles_0 @ 0xa24c04b40] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-Light.ttf'
+[Parsed_subtitles_0 @ 0xa24c04b40] Using font provider coretext
+Stream mapping:
+  Stream #0:0 -> #0:0 (h264 (native) -> h264 (h264_videotoolbox))
+  Stream #0:1 -> #0:1 (copy)
+Press [q] to stop, [?] for help
+[Parsed_subtitles_0 @ 0xa24c052c0] libass API version: 0x1703000
+[Parsed_subtitles_0 @ 0xa24c052c0] libass source: tarball: 0.17.3
+[Parsed_subtitles_0 @ 0xa24c052c0] Shaper: FriBidi 1.0.15 (SIMPLE) HarfBuzz-ng 11.2.1 (COMPLEX)
+[Parsed_subtitles_0 @ 0xa24c052c0] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-Medium.ttf'
+[Parsed_subtitles_0 @ 0xa24c052c0] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-ExtraLightItalic.ttf'
+[Parsed_subtitles_0 @ 0xa24c052c0] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-ExtraLightItalic.ttf'
+[Parsed_subtitles_0 @ 0xa24c052c0] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-BoldItalic.ttf'
+[Parsed_subtitles_0 @ 0xa24c052c0] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-ExtraBoldItalic.ttf'
+[Parsed_subtitles_0 @ 0xa24c052c0] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-Light.ttf'
+[Parsed_subtitles_0 @ 0xa24c052c0] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-ThinItalic.ttf'
+[Parsed_subtitles_0 @ 0xa24c052c0] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-ExtraLight.ttf'
+[Parsed_subtitles_0 @ 0xa24c052c0] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-Black.ttf'
+[Parsed_subtitles_0 @ 0xa24c052c0] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-SemiBoldItalic.ttf'
+[Parsed_subtitles_0 @ 0xa24c052c0] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-SemiBold.ttf'
+[Parsed_subtitles_0 @ 0xa24c052c0] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-ExtraBold.ttf'
+[Parsed_subtitles_0 @ 0xa24c052c0] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-BlackItalic.ttf'
+[Parsed_subtitles_0 @ 0xa24c052c0] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-Regular.ttf'
+[Parsed_subtitles_0 @ 0xa24c052c0] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-Italic.ttf'
+[Parsed_subtitles_0 @ 0xa24c052c0] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-SemiBold.ttf'
+[Parsed_subtitles_0 @ 0xa24c052c0] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-MediumItalic.ttf'
+[Parsed_subtitles_0 @ 0xa24c052c0] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-Medium.ttf'
+[Parsed_subtitles_0 @ 0xa24c052c0] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-Bold.ttf'
+[Parsed_subtitles_0 @ 0xa24c052c0] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-LightItalic.ttf'
+[Parsed_subtitles_0 @ 0xa24c052c0] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-ExtraBoldItalic.ttf'
+[Parsed_subtitles_0 @ 0xa24c052c0] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-Thin.ttf'
+[Parsed_subtitles_0 @ 0xa24c052c0] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-SemiBoldItalic.ttf'
+[Parsed_subtitles_0 @ 0xa24c052c0] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-Black.ttf'
+[Parsed_subtitles_0 @ 0xa24c052c0] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-ExtraBoldItalic.ttf'
+[Parsed_subtitles_0 @ 0xa24c052c0] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-Light.ttf'
+[Parsed_subtitles_0 @ 0xa24c052c0] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-MediumItalic.ttf'
+[Parsed_subtitles_0 @ 0xa24c052c0] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-ExtraLightItalic.ttf'
+[Parsed_subtitles_0 @ 0xa24c052c0] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-ExtraBold.ttf'
+[Parsed_subtitles_0 @ 0xa24c052c0] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-BlackItalic.ttf'
+[Parsed_subtitles_0 @ 0xa24c052c0] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-Regular.ttf'
+[Parsed_subtitles_0 @ 0xa24c052c0] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-Bold.ttf'
+[Parsed_subtitles_0 @ 0xa24c052c0] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-Medium.ttf'
+[Parsed_subtitles_0 @ 0xa24c052c0] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-Italic.ttf'
+[Parsed_subtitles_0 @ 0xa24c052c0] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-BoldItalic.ttf'
+[Parsed_subtitles_0 @ 0xa24c052c0] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-ExtraLight.ttf'
+[Parsed_subtitles_0 @ 0xa24c052c0] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-ThinItalic.ttf'
+[Parsed_subtitles_0 @ 0xa24c052c0] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-SemiBoldItalic.ttf'
+[Parsed_subtitles_0 @ 0xa24c052c0] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-Thin.ttf'
+[Parsed_subtitles_0 @ 0xa24c052c0] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-BoldItalic.ttf'
+[Parsed_subtitles_0 @ 0xa24c052c0] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-ExtraLight.ttf'
+[Parsed_subtitles_0 @ 0xa24c052c0] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-ThinItalic.ttf'
+[Parsed_subtitles_0 @ 0xa24c052c0] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-MediumItalic.ttf'
+[Parsed_subtitles_0 @ 0xa24c052c0] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-ExtraBold.ttf'
+[Parsed_subtitles_0 @ 0xa24c052c0] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-LightItalic.ttf'
+[Parsed_subtitles_0 @ 0xa24c052c0] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-Regular.ttf'
+[Parsed_subtitles_0 @ 0xa24c052c0] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-SemiBold.ttf'
+[Parsed_subtitles_0 @ 0xa24c052c0] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-Italic.ttf'
+[Parsed_subtitles_0 @ 0xa24c052c0] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-BlackItalic.ttf'
+[Parsed_subtitles_0 @ 0xa24c052c0] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-Bold.ttf'
+[Parsed_subtitles_0 @ 0xa24c052c0] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-Thin.ttf'
+[Parsed_subtitles_0 @ 0xa24c052c0] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-Black.ttf'
+[Parsed_subtitles_0 @ 0xa24c052c0] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-LightItalic.ttf'
+[Parsed_subtitles_0 @ 0xa24c052c0] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-Light.ttf'
+[Parsed_subtitles_0 @ 0xa24c052c0] Using font provider coretext
+Output #0, mp4, to 'projects/JosiahCoad/editing/videos/260210-textbook-interview/outputs/with_title_caption_music_v2/segment_05_captioned.mp4':
+  Metadata:
+    major_brand     : isom
+    minor_version   : 512
+    compatible_brands: isomiso2avc1mp41
+    encoder         : Lavf61.7.100
+  Stream #0:0(und): Video: h264 (avc1 / 0x31637661), yuv420p(tv, bt2020nc/bt2020/arib-std-b67, progressive), 1080x1920, q=2-31, 50 fps, 12800 tbn (default)
+      Metadata:
+        handler_name    : VideoHandler
+        vendor_id       : [0][0][0][0]
+        encoder         : Lavc61.19.101 h264_videotoolbox
+      Side data:
+        Ambient Viewing Environment, ambient_illuminance=314.000000, ambient_light_x=0.312700, ambient_light_y=0.329000
+  Stream #0:1(und): Audio: aac (LC) (mp4a / 0x6134706D), 48000 Hz, stereo, fltp, 197 kb/s (default)
+      Metadata:
+        handler_name    : SoundHandler
+        vendor_id       : [0][0][0][0]
+frame=   56 fps=0.0 q=-0.0 size=    1024KiB time=00:00:01.10 bitrate=7626.4kbits/s speed=2.19x    frame=  156 fps=155 q=-0.0 size=    3328KiB time=00:00:03.10 bitrate=8794.6kbits/s speed=3.09x    frame=  258 fps=171 q=-0.0 size=    6656KiB time=00:00:05.14 bitrate=10608.2kbits/s speed= 3.4x    [Parsed_subtitles_0 @ 0xa24c052c0] fontselect: (Roboto, 700, 0) -> Roboto-Bold, 0, Roboto-Bold
+frame=  359 fps=178 q=-0.0 size=   10496KiB time=00:00:07.16 bitrate=12008.9kbits/s speed=3.54x    frame=  460 fps=182 q=-0.0 size=   14080KiB time=00:00:09.18 bitrate=12564.7kbits/s speed=3.63x    frame=  560 fps=185 q=-0.0 size=   17664KiB time=00:00:11.18 bitrate=12943.1kbits/s speed=3.69x    frame=  661 fps=187 q=-0.0 size=   21248KiB time=00:00:13.20 bitrate=13186.7kbits/s speed=3.74x    frame=  761 fps=189 q=-0.0 size=   24576KiB time=00:00:15.20 bitrate=13245.2kbits/s speed=3.77x    frame=  861 fps=190 q=-0.0 size=   28160KiB time=00:00:17.20 bitrate=13412.0kbits/s speed=3.79x    frame=  961 fps=191 q=-0.0 size=   31488KiB time=00:00:19.20 bitrate=13434.9kbits/s speed=3.81x    frame= 1063 fps=192 q=-0.0 size=   35328KiB time=00:00:21.24 bitrate=13625.6kbits/s speed=3.83x    frame= 1163 fps=192 q=-0.0 size=   38656KiB time=00:00:23.24 bitrate=13626.1kbits/s speed=3.84x    frame= 1265 fps=193 q=-0.0 size=   42240KiB time=00:00:25.28 bitrate=13687.9kbits/s speed=3.86x    frame= 1366 fps=193 q=-0.0 size=   45824KiB time=00:00:27.30 bitrate=13750.6kbits/s speed=3.86x    [out#0/mp4 @ 0xa24c04840] video:47741KiB audio:692KiB subtitle:0KiB other streams:0KiB global headers:0KiB muxing overhead: 0.052430%
+frame= 1443 fps=193 q=-0.0 Lsize=   48458KiB time=00:00:28.63 bitrate=13861.2kbits/s speed=3.83x    
+Transcribing with Deepgram...
+🔧 DEBUG [deepgram]: Starting transcription for: projects/JosiahCoad/editing/videos/260210-textbook-interview/outputs/with_title_caption_music_v2/segment_05_titled.mp4
+🔧 DEBUG [deepgram]: Extracting audio to: /var/folders/3m/wbb812l55fv7xc2q79ttxl680000gn/T/tmpd474b9qa.mp3
+🔧 DEBUG [deepgram]: Audio extraction completed (0.11s)
+🔧 DEBUG [deepgram]: Initializing Deepgram client...
+🔧 DEBUG [deepgram]: Deepgram client initialized (0.16s)
+🔧 DEBUG [deepgram]: Reading audio file...
+🔧 DEBUG [deepgram]: Read 0.06MB audio (0.00s)
+🔧 DEBUG [deepgram]: Calling Deepgram API (this may take 5-30 seconds)...
+🔧 DEBUG [deepgram]: Deepgram API call completed (0.72s)
+Found 121 words
+Found 2 utterances
+Word-level transcript written: projects/JosiahCoad/editing/videos/260210-textbook-interview/outputs/with_title_caption_music_v2/segment_05_captioned-words.json
+Utterance-level transcript written: projects/JosiahCoad/editing/videos/260210-textbook-interview/outputs/with_title_caption_music_v2/segment_05_captioned-utterances.json
+Caption delay: 6.0s (captions suppressed while title is showing)
+Generating smart SRT subtitle file from utterances (max 3 words per line, splits at punctuation, font size 22, caps=True)...
+SRT file written: projects/JosiahCoad/editing/videos/260210-textbook-interview/outputs/with_title_caption_music_v2/segment_05_captioned.srt
+Caption style: outline
+Caption position: 15% from bottom → MarginV=43 (ASS PlayResY=288)
+Burning subtitles into video...
+✅ Output video: projects/JosiahCoad/editing/videos/260210-textbook-interview/outputs/with_title_caption_music_v2/segment_05_captioned.mp4
+✅ SRT file: projects/JosiahCoad/editing/videos/260210-textbook-interview/outputs/with_title_caption_music_v2/segment_05_captioned.srt
+✅ Word-level transcript: projects/JosiahCoad/editing/videos/260210-textbook-interview/outputs/with_title_caption_music_v2/segment_05_captioned-words.json
+✅ Utterance-level transcript: projects/JosiahCoad/editing/videos/260210-textbook-interview/outputs/with_title_caption_music_v2/segment_05_captioned-utterances.json
+Adding title overlay: 'WHY PUT HUMAN QUALITY CONTROL IN AI CONTENT MARKETING' (6.0s)
+✅ Output video: projects/JosiahCoad/editing/videos/260210-textbook-interview/outputs/with_title_caption_music_v2/segment_06_titled.mp4
+ffmpeg version 7.1.1 Copyright (c) 2000-2025 the FFmpeg developers
+  built with Apple clang version 17.0.0 (clang-1700.0.13.3)
+  configuration: --prefix=/opt/homebrew/Cellar/ffmpeg/7.1.1_3 --enable-shared --enable-pthreads --enable-version3 --cc=clang --host-cflags= --host-ldflags='-Wl,-ld_classic' --enable-ffplay --enable-gnutls --enable-gpl --enable-libaom --enable-libaribb24 --enable-libbluray --enable-libdav1d --enable-libharfbuzz --enable-libjxl --enable-libmp3lame --enable-libopus --enable-librav1e --enable-librist --enable-librubberband --enable-libsnappy --enable-libsrt --enable-libssh --enable-libsvtav1 --enable-libtesseract --enable-libtheora --enable-libvidstab --enable-libvmaf --enable-libvorbis --enable-libvpx --enable-libwebp --enable-libx264 --enable-libx265 --enable-libxml2 --enable-libxvid --enable-lzma --enable-libfontconfig --enable-libfreetype --enable-frei0r --enable-libass --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-libopenjpeg --enable-libspeex --enable-libsoxr --enable-libzmq --enable-libzimg --disable-libjack --disable-indev=jack --enable-videotoolbox --enable-audiotoolbox --enable-neon
+  libavutil      59. 39.100 / 59. 39.100
+  libavcodec     61. 19.101 / 61. 19.101
+  libavformat    61.  7.100 / 61.  7.100
+  libavdevice    61.  3.100 / 61.  3.100
+  libavfilter    10.  4.100 / 10.  4.100
+  libswscale      8.  3.100 /  8.  3.100
+  libswresample   5.  3.100 /  5.  3.100
+  libpostproc    58.  3.100 / 58.  3.100
+Input #0, mov,mp4,m4a,3gp,3g2,mj2, from 'projects/JosiahCoad/editing/videos/260210-textbook-interview/outputs/with_title_caption_music_v2/segment_06_titled.mp4':
+  Metadata:
+    major_brand     : isom
+    minor_version   : 512
+    compatible_brands: isomiso2avc1mp41
+    encoder         : Lavf61.7.100
+  Duration: 00:00:53.00, start: 0.000000, bitrate: 13666 kb/s
+  Stream #0:0[0x1](und): Video: h264 (High) (avc1 / 0x31637661), yuv420p(tv, bt2020nc/bt2020/arib-std-b67, progressive), 1080x1920, 13463 kb/s, 38.96 fps, 39 tbr, 19968 tbn (default)
+      Metadata:
+        handler_name    : VideoHandler
+        vendor_id       : [0][0][0][0]
+        encoder         : Lavc61.19.101 h264_videotoolbox
+      Side data:
+        Ambient Viewing Environment, ambient_illuminance=314.000000, ambient_light_x=0.312700, ambient_light_y=0.329000
+  Stream #0:1[0x2](und): Audio: aac (LC) (mp4a / 0x6134706D), 48000 Hz, stereo, fltp, 196 kb/s (default)
+      Metadata:
+        handler_name    : SoundHandler
+        vendor_id       : [0][0][0][0]
+[Parsed_subtitles_0 @ 0x94482c600] libass API version: 0x1703000
+[Parsed_subtitles_0 @ 0x94482c600] libass source: tarball: 0.17.3
+[Parsed_subtitles_0 @ 0x94482c600] Shaper: FriBidi 1.0.15 (SIMPLE) HarfBuzz-ng 11.2.1 (COMPLEX)
+[Parsed_subtitles_0 @ 0x94482c600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-Medium.ttf'
+[Parsed_subtitles_0 @ 0x94482c600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-ExtraLightItalic.ttf'
+[Parsed_subtitles_0 @ 0x94482c600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-ExtraLightItalic.ttf'
+[Parsed_subtitles_0 @ 0x94482c600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-BoldItalic.ttf'
+[Parsed_subtitles_0 @ 0x94482c600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-ExtraBoldItalic.ttf'
+[Parsed_subtitles_0 @ 0x94482c600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-Light.ttf'
+[Parsed_subtitles_0 @ 0x94482c600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-ThinItalic.ttf'
+[Parsed_subtitles_0 @ 0x94482c600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-ExtraLight.ttf'
+[Parsed_subtitles_0 @ 0x94482c600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-Black.ttf'
+[Parsed_subtitles_0 @ 0x94482c600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-SemiBoldItalic.ttf'
+[Parsed_subtitles_0 @ 0x94482c600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-SemiBold.ttf'
+[Parsed_subtitles_0 @ 0x94482c600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-ExtraBold.ttf'
+[Parsed_subtitles_0 @ 0x94482c600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-BlackItalic.ttf'
+[Parsed_subtitles_0 @ 0x94482c600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-Regular.ttf'
+[Parsed_subtitles_0 @ 0x94482c600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-Italic.ttf'
+[Parsed_subtitles_0 @ 0x94482c600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-SemiBold.ttf'
+[Parsed_subtitles_0 @ 0x94482c600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-MediumItalic.ttf'
+[Parsed_subtitles_0 @ 0x94482c600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-Medium.ttf'
+[Parsed_subtitles_0 @ 0x94482c600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-Bold.ttf'
+[Parsed_subtitles_0 @ 0x94482c600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-LightItalic.ttf'
+[Parsed_subtitles_0 @ 0x94482c600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-ExtraBoldItalic.ttf'
+[Parsed_subtitles_0 @ 0x94482c600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-Thin.ttf'
+[Parsed_subtitles_0 @ 0x94482c600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-SemiBoldItalic.ttf'
+[Parsed_subtitles_0 @ 0x94482c600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-Black.ttf'
+[Parsed_subtitles_0 @ 0x94482c600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-ExtraBoldItalic.ttf'
+[Parsed_subtitles_0 @ 0x94482c600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-Light.ttf'
+[Parsed_subtitles_0 @ 0x94482c600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-MediumItalic.ttf'
+[Parsed_subtitles_0 @ 0x94482c600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-ExtraLightItalic.ttf'
+[Parsed_subtitles_0 @ 0x94482c600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-ExtraBold.ttf'
+[Parsed_subtitles_0 @ 0x94482c600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-BlackItalic.ttf'
+[Parsed_subtitles_0 @ 0x94482c600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-Regular.ttf'
+[Parsed_subtitles_0 @ 0x94482c600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-Bold.ttf'
+[Parsed_subtitles_0 @ 0x94482c600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-Medium.ttf'
+[Parsed_subtitles_0 @ 0x94482c600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-Italic.ttf'
+[Parsed_subtitles_0 @ 0x94482c600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-BoldItalic.ttf'
+[Parsed_subtitles_0 @ 0x94482c600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-ExtraLight.ttf'
+[Parsed_subtitles_0 @ 0x94482c600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-ThinItalic.ttf'
+[Parsed_subtitles_0 @ 0x94482c600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-SemiBoldItalic.ttf'
+[Parsed_subtitles_0 @ 0x94482c600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-Thin.ttf'
+[Parsed_subtitles_0 @ 0x94482c600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-BoldItalic.ttf'
+[Parsed_subtitles_0 @ 0x94482c600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-ExtraLight.ttf'
+[Parsed_subtitles_0 @ 0x94482c600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-ThinItalic.ttf'
+[Parsed_subtitles_0 @ 0x94482c600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-MediumItalic.ttf'
+[Parsed_subtitles_0 @ 0x94482c600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-ExtraBold.ttf'
+[Parsed_subtitles_0 @ 0x94482c600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-LightItalic.ttf'
+[Parsed_subtitles_0 @ 0x94482c600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-Regular.ttf'
+[Parsed_subtitles_0 @ 0x94482c600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-SemiBold.ttf'
+[Parsed_subtitles_0 @ 0x94482c600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-Italic.ttf'
+[Parsed_subtitles_0 @ 0x94482c600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-BlackItalic.ttf'
+[Parsed_subtitles_0 @ 0x94482c600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-Bold.ttf'
+[Parsed_subtitles_0 @ 0x94482c600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-Thin.ttf'
+[Parsed_subtitles_0 @ 0x94482c600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-Black.ttf'
+[Parsed_subtitles_0 @ 0x94482c600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-LightItalic.ttf'
+[Parsed_subtitles_0 @ 0x94482c600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-Light.ttf'
+[Parsed_subtitles_0 @ 0x94482c600] Using font provider coretext
+Stream mapping:
+  Stream #0:0 -> #0:0 (h264 (native) -> h264 (h264_videotoolbox))
+  Stream #0:1 -> #0:1 (copy)
+Press [q] to stop, [?] for help
+[Parsed_subtitles_0 @ 0x94482f300] libass API version: 0x1703000
+[Parsed_subtitles_0 @ 0x94482f300] libass source: tarball: 0.17.3
+[Parsed_subtitles_0 @ 0x94482f300] Shaper: FriBidi 1.0.15 (SIMPLE) HarfBuzz-ng 11.2.1 (COMPLEX)
+[Parsed_subtitles_0 @ 0x94482f300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-Medium.ttf'
+[Parsed_subtitles_0 @ 0x94482f300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-ExtraLightItalic.ttf'
+[Parsed_subtitles_0 @ 0x94482f300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-ExtraLightItalic.ttf'
+[Parsed_subtitles_0 @ 0x94482f300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-BoldItalic.ttf'
+[Parsed_subtitles_0 @ 0x94482f300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-ExtraBoldItalic.ttf'
+[Parsed_subtitles_0 @ 0x94482f300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-Light.ttf'
+[Parsed_subtitles_0 @ 0x94482f300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-ThinItalic.ttf'
+[Parsed_subtitles_0 @ 0x94482f300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-ExtraLight.ttf'
+[Parsed_subtitles_0 @ 0x94482f300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-Black.ttf'
+[Parsed_subtitles_0 @ 0x94482f300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-SemiBoldItalic.ttf'
+[Parsed_subtitles_0 @ 0x94482f300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-SemiBold.ttf'
+[Parsed_subtitles_0 @ 0x94482f300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-ExtraBold.ttf'
+[Parsed_subtitles_0 @ 0x94482f300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-BlackItalic.ttf'
+[Parsed_subtitles_0 @ 0x94482f300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-Regular.ttf'
+[Parsed_subtitles_0 @ 0x94482f300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-Italic.ttf'
+[Parsed_subtitles_0 @ 0x94482f300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-SemiBold.ttf'
+[Parsed_subtitles_0 @ 0x94482f300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-MediumItalic.ttf'
+[Parsed_subtitles_0 @ 0x94482f300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-Medium.ttf'
+[Parsed_subtitles_0 @ 0x94482f300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-Bold.ttf'
+[Parsed_subtitles_0 @ 0x94482f300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-LightItalic.ttf'
+[Parsed_subtitles_0 @ 0x94482f300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-ExtraBoldItalic.ttf'
+[Parsed_subtitles_0 @ 0x94482f300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-Thin.ttf'
+[Parsed_subtitles_0 @ 0x94482f300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-SemiBoldItalic.ttf'
+[Parsed_subtitles_0 @ 0x94482f300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-Black.ttf'
+[Parsed_subtitles_0 @ 0x94482f300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-ExtraBoldItalic.ttf'
+[Parsed_subtitles_0 @ 0x94482f300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-Light.ttf'
+[Parsed_subtitles_0 @ 0x94482f300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-MediumItalic.ttf'
+[Parsed_subtitles_0 @ 0x94482f300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-ExtraLightItalic.ttf'
+[Parsed_subtitles_0 @ 0x94482f300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-ExtraBold.ttf'
+[Parsed_subtitles_0 @ 0x94482f300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-BlackItalic.ttf'
+[Parsed_subtitles_0 @ 0x94482f300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-Regular.ttf'
+[Parsed_subtitles_0 @ 0x94482f300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-Bold.ttf'
+[Parsed_subtitles_0 @ 0x94482f300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-Medium.ttf'
+[Parsed_subtitles_0 @ 0x94482f300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-Italic.ttf'
+[Parsed_subtitles_0 @ 0x94482f300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-BoldItalic.ttf'
+[Parsed_subtitles_0 @ 0x94482f300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-ExtraLight.ttf'
+[Parsed_subtitles_0 @ 0x94482f300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-ThinItalic.ttf'
+[Parsed_subtitles_0 @ 0x94482f300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-SemiBoldItalic.ttf'
+[Parsed_subtitles_0 @ 0x94482f300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-Thin.ttf'
+[Parsed_subtitles_0 @ 0x94482f300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-BoldItalic.ttf'
+[Parsed_subtitles_0 @ 0x94482f300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-ExtraLight.ttf'
+[Parsed_subtitles_0 @ 0x94482f300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-ThinItalic.ttf'
+[Parsed_subtitles_0 @ 0x94482f300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-MediumItalic.ttf'
+[Parsed_subtitles_0 @ 0x94482f300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-ExtraBold.ttf'
+[Parsed_subtitles_0 @ 0x94482f300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-LightItalic.ttf'
+[Parsed_subtitles_0 @ 0x94482f300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-Regular.ttf'
+[Parsed_subtitles_0 @ 0x94482f300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-SemiBold.ttf'
+[Parsed_subtitles_0 @ 0x94482f300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-Italic.ttf'
+[Parsed_subtitles_0 @ 0x94482f300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-BlackItalic.ttf'
+[Parsed_subtitles_0 @ 0x94482f300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-Bold.ttf'
+[Parsed_subtitles_0 @ 0x94482f300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-Thin.ttf'
+[Parsed_subtitles_0 @ 0x94482f300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-Black.ttf'
+[Parsed_subtitles_0 @ 0x94482f300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-LightItalic.ttf'
+[Parsed_subtitles_0 @ 0x94482f300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-Light.ttf'
+[Parsed_subtitles_0 @ 0x94482f300] Using font provider coretext
+Output #0, mp4, to 'projects/JosiahCoad/editing/videos/260210-textbook-interview/outputs/with_title_caption_music_v2/segment_06_captioned.mp4':
+  Metadata:
+    major_brand     : isom
+    minor_version   : 512
+    compatible_brands: isomiso2avc1mp41
+    encoder         : Lavf61.7.100
+  Stream #0:0(und): Video: h264 (avc1 / 0x31637661), yuv420p(tv, bt2020nc/bt2020/arib-std-b67, progressive), 1080x1920, q=2-31, 39 fps, 19968 tbn (default)
+      Metadata:
+        handler_name    : VideoHandler
+        vendor_id       : [0][0][0][0]
+        encoder         : Lavc61.19.101 h264_videotoolbox
+      Side data:
+        Ambient Viewing Environment, ambient_illuminance=314.000000, ambient_light_x=0.312700, ambient_light_y=0.329000
+  Stream #0:1(und): Audio: aac (LC) (mp4a / 0x6134706D), 48000 Hz, stereo, fltp, 196 kb/s (default)
+      Metadata:
+        handler_name    : SoundHandler
+        vendor_id       : [0][0][0][0]
+frame=   60 fps=0.0 q=-0.0 size=    1280KiB time=00:00:01.51 bitrate=6931.5kbits/s speed=3.01x    frame=  161 fps=160 q=-0.0 size=    4608KiB time=00:00:04.10 bitrate=9201.3kbits/s speed=4.07x    [Parsed_subtitles_0 @ 0x94482f300] fontselect: (Roboto, 700, 0) -> Roboto-Bold, 0, Roboto-Bold
+frame=  263 fps=173 q=-0.0 size=    8192KiB time=00:00:06.71 bitrate=9989.5kbits/s speed=4.42x    frame=  365 fps=180 q=-0.0 size=   12800KiB time=00:00:09.33 bitrate=11234.8kbits/s speed= 4.6x    frame=  466 fps=184 q=-0.0 size=   17152KiB time=00:00:11.92 bitrate=11784.7kbits/s speed= 4.7x    frame=  567 fps=186 q=-0.0 size=   21760KiB time=00:00:14.51 bitrate=12282.8kbits/s speed=4.77x    frame=  667 fps=188 q=-0.0 size=   26368KiB time=00:00:17.07 bitrate=12649.1kbits/s speed=4.82x    frame=  769 fps=190 q=-0.0 size=   30976KiB time=00:00:19.69 bitrate=12886.0kbits/s speed=4.86x    frame=  869 fps=191 q=-0.0 size=   35328KiB time=00:00:22.25 bitrate=13003.3kbits/s speed=4.88x    frame=  970 fps=192 q=-0.0 size=   39936KiB time=00:00:24.84 bitrate=13167.3kbits/s speed=4.91x    frame= 1070 fps=192 q=-0.0 size=   44288KiB time=00:00:27.41 bitrate=13236.2kbits/s speed=4.92x    frame= 1172 fps=193 q=-0.0 size=   48896KiB time=00:00:30.02 bitrate=13340.5kbits/s speed=4.94x    frame= 1273 fps=193 q=-0.0 size=   53504KiB time=00:00:32.61 bitrate=13438.6kbits/s speed=4.95x    frame= 1374 fps=194 q=-0.0 size=   57856KiB time=00:00:35.20 bitrate=13462.7kbits/s speed=4.96x    frame= 1475 fps=194 q=-0.0 size=   62464KiB time=00:00:37.79 bitrate=13539.0kbits/s speed=4.97x    frame= 1577 fps=194 q=-0.0 size=   67072KiB time=00:00:40.41 bitrate=13596.9kbits/s speed=4.98x    frame= 1678 fps=195 q=-0.0 size=   71424KiB time=00:00:43.00 bitrate=13607.1kbits/s speed=4.99x    frame= 1779 fps=195 q=-0.0 size=   76032KiB time=00:00:45.58 bitrate=13662.2kbits/s speed=   5x    frame= 1880 fps=195 q=-0.0 size=   80640KiB time=00:00:48.17 bitrate=13711.3kbits/s speed=   5x    frame= 1967 fps=194 q=-0.0 size=   84480KiB time=00:00:50.41 bitrate=13728.6kbits/s speed=4.97x    [out#0/mp4 @ 0x94482c300] video:87448KiB audio:1268KiB subtitle:0KiB other streams:0KiB global headers:0KiB muxing overhead: 0.051489%
+frame= 2065 fps=194 q=-0.0 Lsize=   88762KiB time=00:00:52.77 bitrate=13779.3kbits/s speed=4.97x    
+Transcribing with Deepgram...
+🔧 DEBUG [deepgram]: Starting transcription for: projects/JosiahCoad/editing/videos/260210-textbook-interview/outputs/with_title_caption_music_v2/segment_06_titled.mp4
+🔧 DEBUG [deepgram]: Extracting audio to: /var/folders/3m/wbb812l55fv7xc2q79ttxl680000gn/T/tmp2l2xlqrx.mp3
+🔧 DEBUG [deepgram]: Audio extraction completed (0.18s)
+🔧 DEBUG [deepgram]: Initializing Deepgram client...
+🔧 DEBUG [deepgram]: Deepgram client initialized (0.13s)
+🔧 DEBUG [deepgram]: Reading audio file...
+🔧 DEBUG [deepgram]: Read 0.10MB audio (0.00s)
+🔧 DEBUG [deepgram]: Calling Deepgram API (this may take 5-30 seconds)...
+🔧 DEBUG [deepgram]: Deepgram API call completed (0.90s)
+Found 233 words
+Found 1 utterances
+Word-level transcript written: projects/JosiahCoad/editing/videos/260210-textbook-interview/outputs/with_title_caption_music_v2/segment_06_captioned-words.json
+Utterance-level transcript written: projects/JosiahCoad/editing/videos/260210-textbook-interview/outputs/with_title_caption_music_v2/segment_06_captioned-utterances.json
+Caption delay: 6.0s (captions suppressed while title is showing)
+Generating smart SRT subtitle file from utterances (max 3 words per line, splits at punctuation, font size 22, caps=True)...
+SRT file written: projects/JosiahCoad/editing/videos/260210-textbook-interview/outputs/with_title_caption_music_v2/segment_06_captioned.srt
+Caption style: outline
+Caption position: 15% from bottom → MarginV=43 (ASS PlayResY=288)
+Burning subtitles into video...
+✅ Output video: projects/JosiahCoad/editing/videos/260210-textbook-interview/outputs/with_title_caption_music_v2/segment_06_captioned.mp4
+✅ SRT file: projects/JosiahCoad/editing/videos/260210-textbook-interview/outputs/with_title_caption_music_v2/segment_06_captioned.srt
+✅ Word-level transcript: projects/JosiahCoad/editing/videos/260210-textbook-interview/outputs/with_title_caption_music_v2/segment_06_captioned-words.json
+✅ Utterance-level transcript: projects/JosiahCoad/editing/videos/260210-textbook-interview/outputs/with_title_caption_music_v2/segment_06_captioned-utterances.json
+Adding title overlay: 'HOW TO TRANSFORM CONTENT FEATURES INTO CUSTOMER BENEFITS' (6.0s)
+✅ Output video: projects/JosiahCoad/editing/videos/260210-textbook-interview/outputs/with_title_caption_music_v2/segment_07_titled.mp4
+ffmpeg version 7.1.1 Copyright (c) 2000-2025 the FFmpeg developers
+  built with Apple clang version 17.0.0 (clang-1700.0.13.3)
+  configuration: --prefix=/opt/homebrew/Cellar/ffmpeg/7.1.1_3 --enable-shared --enable-pthreads --enable-version3 --cc=clang --host-cflags= --host-ldflags='-Wl,-ld_classic' --enable-ffplay --enable-gnutls --enable-gpl --enable-libaom --enable-libaribb24 --enable-libbluray --enable-libdav1d --enable-libharfbuzz --enable-libjxl --enable-libmp3lame --enable-libopus --enable-librav1e --enable-librist --enable-librubberband --enable-libsnappy --enable-libsrt --enable-libssh --enable-libsvtav1 --enable-libtesseract --enable-libtheora --enable-libvidstab --enable-libvmaf --enable-libvorbis --enable-libvpx --enable-libwebp --enable-libx264 --enable-libx265 --enable-libxml2 --enable-libxvid --enable-lzma --enable-libfontconfig --enable-libfreetype --enable-frei0r --enable-libass --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-libopenjpeg --enable-libspeex --enable-libsoxr --enable-libzmq --enable-libzimg --disable-libjack --disable-indev=jack --enable-videotoolbox --enable-audiotoolbox --enable-neon
+  libavutil      59. 39.100 / 59. 39.100
+  libavcodec     61. 19.101 / 61. 19.101
+  libavformat    61.  7.100 / 61.  7.100
+  libavdevice    61.  3.100 / 61.  3.100
+  libavfilter    10.  4.100 / 10.  4.100
+  libswscale      8.  3.100 /  8.  3.100
+  libswresample   5.  3.100 /  5.  3.100
+  libpostproc    58.  3.100 / 58.  3.100
+Input #0, mov,mp4,m4a,3gp,3g2,mj2, from 'projects/JosiahCoad/editing/videos/260210-textbook-interview/outputs/with_title_caption_music_v2/segment_07_titled.mp4':
+  Metadata:
+    major_brand     : isom
+    minor_version   : 512
+    compatible_brands: isomiso2avc1mp41
+    encoder         : Lavf61.7.100
+  Duration: 00:00:45.00, start: 0.000000, bitrate: 13520 kb/s
+  Stream #0:0[0x1](und): Video: h264 (High) (avc1 / 0x31637661), yuv420p(tv, bt2020nc/bt2020/arib-std-b67, progressive), 1080x1920, 13320 kb/s, 44.36 fps, 45 tbr, 11520 tbn (default)
+      Metadata:
+        handler_name    : VideoHandler
+        vendor_id       : [0][0][0][0]
+        encoder         : Lavc61.19.101 h264_videotoolbox
+      Side data:
+        Ambient Viewing Environment, ambient_illuminance=314.000000, ambient_light_x=0.312700, ambient_light_y=0.329000
+  Stream #0:1[0x2](und): Audio: aac (LC) (mp4a / 0x6134706D), 48000 Hz, stereo, fltp, 196 kb/s (default)
+      Metadata:
+        handler_name    : SoundHandler
+        vendor_id       : [0][0][0][0]
+[Parsed_subtitles_0 @ 0xb35418600] libass API version: 0x1703000
+[Parsed_subtitles_0 @ 0xb35418600] libass source: tarball: 0.17.3
+[Parsed_subtitles_0 @ 0xb35418600] Shaper: FriBidi 1.0.15 (SIMPLE) HarfBuzz-ng 11.2.1 (COMPLEX)
+[Parsed_subtitles_0 @ 0xb35418600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-Medium.ttf'
+[Parsed_subtitles_0 @ 0xb35418600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-ExtraLightItalic.ttf'
+[Parsed_subtitles_0 @ 0xb35418600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-ExtraLightItalic.ttf'
+[Parsed_subtitles_0 @ 0xb35418600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-BoldItalic.ttf'
+[Parsed_subtitles_0 @ 0xb35418600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-ExtraBoldItalic.ttf'
+[Parsed_subtitles_0 @ 0xb35418600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-Light.ttf'
+[Parsed_subtitles_0 @ 0xb35418600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-ThinItalic.ttf'
+[Parsed_subtitles_0 @ 0xb35418600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-ExtraLight.ttf'
+[Parsed_subtitles_0 @ 0xb35418600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-Black.ttf'
+[Parsed_subtitles_0 @ 0xb35418600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-SemiBoldItalic.ttf'
+[Parsed_subtitles_0 @ 0xb35418600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-SemiBold.ttf'
+[Parsed_subtitles_0 @ 0xb35418600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-ExtraBold.ttf'
+[Parsed_subtitles_0 @ 0xb35418600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-BlackItalic.ttf'
+[Parsed_subtitles_0 @ 0xb35418600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-Regular.ttf'
+[Parsed_subtitles_0 @ 0xb35418600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-Italic.ttf'
+[Parsed_subtitles_0 @ 0xb35418600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-SemiBold.ttf'
+[Parsed_subtitles_0 @ 0xb35418600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-MediumItalic.ttf'
+[Parsed_subtitles_0 @ 0xb35418600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-Medium.ttf'
+[Parsed_subtitles_0 @ 0xb35418600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-Bold.ttf'
+[Parsed_subtitles_0 @ 0xb35418600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-LightItalic.ttf'
+[Parsed_subtitles_0 @ 0xb35418600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-ExtraBoldItalic.ttf'
+[Parsed_subtitles_0 @ 0xb35418600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-Thin.ttf'
+[Parsed_subtitles_0 @ 0xb35418600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-SemiBoldItalic.ttf'
+[Parsed_subtitles_0 @ 0xb35418600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-Black.ttf'
+[Parsed_subtitles_0 @ 0xb35418600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-ExtraBoldItalic.ttf'
+[Parsed_subtitles_0 @ 0xb35418600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-Light.ttf'
+[Parsed_subtitles_0 @ 0xb35418600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-MediumItalic.ttf'
+[Parsed_subtitles_0 @ 0xb35418600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-ExtraLightItalic.ttf'
+[Parsed_subtitles_0 @ 0xb35418600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-ExtraBold.ttf'
+[Parsed_subtitles_0 @ 0xb35418600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-BlackItalic.ttf'
+[Parsed_subtitles_0 @ 0xb35418600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-Regular.ttf'
+[Parsed_subtitles_0 @ 0xb35418600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-Bold.ttf'
+[Parsed_subtitles_0 @ 0xb35418600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-Medium.ttf'
+[Parsed_subtitles_0 @ 0xb35418600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-Italic.ttf'
+[Parsed_subtitles_0 @ 0xb35418600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-BoldItalic.ttf'
+[Parsed_subtitles_0 @ 0xb35418600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-ExtraLight.ttf'
+[Parsed_subtitles_0 @ 0xb35418600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-ThinItalic.ttf'
+[Parsed_subtitles_0 @ 0xb35418600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-SemiBoldItalic.ttf'
+[Parsed_subtitles_0 @ 0xb35418600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-Thin.ttf'
+[Parsed_subtitles_0 @ 0xb35418600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-BoldItalic.ttf'
+[Parsed_subtitles_0 @ 0xb35418600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-ExtraLight.ttf'
+[Parsed_subtitles_0 @ 0xb35418600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-ThinItalic.ttf'
+[Parsed_subtitles_0 @ 0xb35418600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-MediumItalic.ttf'
+[Parsed_subtitles_0 @ 0xb35418600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-ExtraBold.ttf'
+[Parsed_subtitles_0 @ 0xb35418600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-LightItalic.ttf'
+[Parsed_subtitles_0 @ 0xb35418600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-Regular.ttf'
+[Parsed_subtitles_0 @ 0xb35418600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-SemiBold.ttf'
+[Parsed_subtitles_0 @ 0xb35418600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-Italic.ttf'
+[Parsed_subtitles_0 @ 0xb35418600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-BlackItalic.ttf'
+[Parsed_subtitles_0 @ 0xb35418600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-Bold.ttf'
+[Parsed_subtitles_0 @ 0xb35418600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-Thin.ttf'
+[Parsed_subtitles_0 @ 0xb35418600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-Black.ttf'
+[Parsed_subtitles_0 @ 0xb35418600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-LightItalic.ttf'
+[Parsed_subtitles_0 @ 0xb35418600] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-Light.ttf'
+[Parsed_subtitles_0 @ 0xb35418600] Using font provider coretext
+Stream mapping:
+  Stream #0:0 -> #0:0 (h264 (native) -> h264 (h264_videotoolbox))
+  Stream #0:1 -> #0:1 (copy)
+Press [q] to stop, [?] for help
+[Parsed_subtitles_0 @ 0xb3541b300] libass API version: 0x1703000
+[Parsed_subtitles_0 @ 0xb3541b300] libass source: tarball: 0.17.3
+[Parsed_subtitles_0 @ 0xb3541b300] Shaper: FriBidi 1.0.15 (SIMPLE) HarfBuzz-ng 11.2.1 (COMPLEX)
+[Parsed_subtitles_0 @ 0xb3541b300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-Medium.ttf'
+[Parsed_subtitles_0 @ 0xb3541b300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-ExtraLightItalic.ttf'
+[Parsed_subtitles_0 @ 0xb3541b300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-ExtraLightItalic.ttf'
+[Parsed_subtitles_0 @ 0xb3541b300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-BoldItalic.ttf'
+[Parsed_subtitles_0 @ 0xb3541b300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-ExtraBoldItalic.ttf'
+[Parsed_subtitles_0 @ 0xb3541b300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-Light.ttf'
+[Parsed_subtitles_0 @ 0xb3541b300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-ThinItalic.ttf'
+[Parsed_subtitles_0 @ 0xb3541b300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-ExtraLight.ttf'
+[Parsed_subtitles_0 @ 0xb3541b300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-Black.ttf'
+[Parsed_subtitles_0 @ 0xb3541b300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-SemiBoldItalic.ttf'
+[Parsed_subtitles_0 @ 0xb3541b300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-SemiBold.ttf'
+[Parsed_subtitles_0 @ 0xb3541b300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-ExtraBold.ttf'
+[Parsed_subtitles_0 @ 0xb3541b300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-BlackItalic.ttf'
+[Parsed_subtitles_0 @ 0xb3541b300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-Regular.ttf'
+[Parsed_subtitles_0 @ 0xb3541b300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-Italic.ttf'
+[Parsed_subtitles_0 @ 0xb3541b300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-SemiBold.ttf'
+[Parsed_subtitles_0 @ 0xb3541b300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-MediumItalic.ttf'
+[Parsed_subtitles_0 @ 0xb3541b300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-Medium.ttf'
+[Parsed_subtitles_0 @ 0xb3541b300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-Bold.ttf'
+[Parsed_subtitles_0 @ 0xb3541b300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-LightItalic.ttf'
+[Parsed_subtitles_0 @ 0xb3541b300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-ExtraBoldItalic.ttf'
+[Parsed_subtitles_0 @ 0xb3541b300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-Thin.ttf'
+[Parsed_subtitles_0 @ 0xb3541b300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-SemiBoldItalic.ttf'
+[Parsed_subtitles_0 @ 0xb3541b300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-Black.ttf'
+[Parsed_subtitles_0 @ 0xb3541b300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-ExtraBoldItalic.ttf'
+[Parsed_subtitles_0 @ 0xb3541b300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-Light.ttf'
+[Parsed_subtitles_0 @ 0xb3541b300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-MediumItalic.ttf'
+[Parsed_subtitles_0 @ 0xb3541b300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-ExtraLightItalic.ttf'
+[Parsed_subtitles_0 @ 0xb3541b300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-ExtraBold.ttf'
+[Parsed_subtitles_0 @ 0xb3541b300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-BlackItalic.ttf'
+[Parsed_subtitles_0 @ 0xb3541b300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-Regular.ttf'
+[Parsed_subtitles_0 @ 0xb3541b300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-Bold.ttf'
+[Parsed_subtitles_0 @ 0xb3541b300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-Medium.ttf'
+[Parsed_subtitles_0 @ 0xb3541b300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-Italic.ttf'
+[Parsed_subtitles_0 @ 0xb3541b300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-BoldItalic.ttf'
+[Parsed_subtitles_0 @ 0xb3541b300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-ExtraLight.ttf'
+[Parsed_subtitles_0 @ 0xb3541b300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-ThinItalic.ttf'
+[Parsed_subtitles_0 @ 0xb3541b300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-SemiBoldItalic.ttf'
+[Parsed_subtitles_0 @ 0xb3541b300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-Thin.ttf'
+[Parsed_subtitles_0 @ 0xb3541b300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-BoldItalic.ttf'
+[Parsed_subtitles_0 @ 0xb3541b300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-ExtraLight.ttf'
+[Parsed_subtitles_0 @ 0xb3541b300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-ThinItalic.ttf'
+[Parsed_subtitles_0 @ 0xb3541b300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-MediumItalic.ttf'
+[Parsed_subtitles_0 @ 0xb3541b300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-ExtraBold.ttf'
+[Parsed_subtitles_0 @ 0xb3541b300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-LightItalic.ttf'
+[Parsed_subtitles_0 @ 0xb3541b300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_SemiCondensed-Regular.ttf'
+[Parsed_subtitles_0 @ 0xb3541b300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-SemiBold.ttf'
+[Parsed_subtitles_0 @ 0xb3541b300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-Italic.ttf'
+[Parsed_subtitles_0 @ 0xb3541b300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-BlackItalic.ttf'
+[Parsed_subtitles_0 @ 0xb3541b300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-Bold.ttf'
+[Parsed_subtitles_0 @ 0xb3541b300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-Thin.ttf'
+[Parsed_subtitles_0 @ 0xb3541b300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto-Black.ttf'
+[Parsed_subtitles_0 @ 0xb3541b300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-LightItalic.ttf'
+[Parsed_subtitles_0 @ 0xb3541b300] Loading font file '/Users/apple/Downloads/Roboto/static/Roboto_Condensed-Light.ttf'
+[Parsed_subtitles_0 @ 0xb3541b300] Using font provider coretext
+Output #0, mp4, to 'projects/JosiahCoad/editing/videos/260210-textbook-interview/outputs/with_title_caption_music_v2/segment_07_captioned.mp4':
+  Metadata:
+    major_brand     : isom
+    minor_version   : 512
+    compatible_brands: isomiso2avc1mp41
+    encoder         : Lavf61.7.100
+  Stream #0:0(und): Video: h264 (avc1 / 0x31637661), yuv420p(tv, bt2020nc/bt2020/arib-std-b67, progressive), 1080x1920, q=2-31, 45 fps, 11520 tbn (default)
+      Metadata:
+        handler_name    : VideoHandler
+        vendor_id       : [0][0][0][0]
+        encoder         : Lavc61.19.101 h264_videotoolbox
+      Side data:
+        Ambient Viewing Environment, ambient_illuminance=314.000000, ambient_light_x=0.312700, ambient_light_y=0.329000
+  Stream #0:1(und): Audio: aac (LC) (mp4a / 0x6134706D), 48000 Hz, stereo, fltp, 196 kb/s (default)
+      Metadata:
+        handler_name    : SoundHandler
+        vendor_id       : [0][0][0][0]
+frame=   60 fps=0.0 q=-0.0 size=    1280KiB time=00:00:01.33 bitrate=7864.6kbits/s speed=2.61x    frame=  161 fps=159 q=-0.0 size=    3840KiB time=00:00:03.57 bitrate=8792.5kbits/s speed=3.54x    [Parsed_subtitles_0 @ 0xb3541b300] fontselect: (Roboto, 700, 0) -> Roboto-Bold, 0, Roboto-Bold
+frame=  261 fps=172 q=-0.0 size=    7168KiB time=00:00:05.82 bitrate=10085.6kbits/s speed=3.84x    frame=  363 fps=179 q=-0.0 size=   10752KiB time=00:00:08.11 bitrate=10859.3kbits/s speed=   4x    frame=  464 fps=183 q=-0.0 size=   14592KiB time=00:00:10.37 bitrate=11518.7kbits/s speed= 4.1x    frame=  564 fps=186 q=-0.0 size=   18432KiB time=00:00:12.62 bitrate=11962.7kbits/s speed=4.16x    frame=  665 fps=188 q=-0.0 size=   22528KiB time=00:00:14.91 bitrate=12376.7kbits/s speed=4.21x    frame=  767 fps=189 q=-0.0 size=   26368KiB time=00:00:17.20 bitrate=12558.5kbits/s speed=4.25x    frame=  868 fps=191 q=-0.0 size=   30464KiB time=00:00:19.46 bitrate=12819.9kbits/s speed=4.27x    frame=  968 fps=191 q=-0.0 size=   34304KiB time=00:00:21.71 bitrate=12943.5kbits/s speed=4.29x    frame= 1070 fps=192 q=-0.0 size=   38400KiB time=00:00:23.97 bitrate=13119.4kbits/s speed=4.31x    frame= 1171 fps=193 q=-0.0 size=   42240KiB time=00:00:26.24 bitrate=13184.9kbits/s speed=4.32x    frame= 1272 fps=193 q=-0.0 size=   46336KiB time=00:00:28.51 bitrate=13313.6kbits/s speed=4.33x    frame= 1374 fps=194 q=-0.0 size=   50176KiB time=00:00:30.80 bitrate=13345.5kbits/s speed=4.34x    frame= 1475 fps=194 q=-0.0 size=   54272KiB time=00:00:33.06 bitrate=13445.5kbits/s speed=4.35x    frame= 1575 fps=194 q=-0.0 size=   58112KiB time=00:00:35.31 bitrate=13481.7kbits/s speed=4.36x    frame= 1676 fps=195 q=-0.0 size=   62208KiB time=00:00:37.57 bitrate=13561.4kbits/s speed=4.37x    frame= 1769 fps=194 q=-0.0 size=   65792KiB time=00:00:39.66 bitrate=13587.4kbits/s speed=4.35x    frame= 1869 fps=194 q=-0.0 size=   69632KiB time=00:00:41.91 bitrate=13610.4kbits/s speed=4.36x    frame= 1970 fps=195 q=-0.0 size=   73472KiB time=00:00:44.15 bitrate=13631.0kbits/s speed=4.36x    [out#0/mp4 @ 0xb35418300] video:73176KiB audio:1063KiB subtitle:0KiB other streams:0KiB global headers:0KiB muxing overhead: 0.048659%
+frame= 1996 fps=195 q=-0.0 Lsize=   74275KiB time=00:00:44.35 bitrate=13719.5kbits/s speed=4.33x    
+Transcribing with Deepgram...
+🔧 DEBUG [deepgram]: Starting transcription for: projects/JosiahCoad/editing/videos/260210-textbook-interview/outputs/with_title_caption_music_v2/segment_07_titled.mp4
+🔧 DEBUG [deepgram]: Extracting audio to: /var/folders/3m/wbb812l55fv7xc2q79ttxl680000gn/T/tmp55_iobrt.mp3
+🔧 DEBUG [deepgram]: Audio extraction completed (0.16s)
+🔧 DEBUG [deepgram]: Initializing Deepgram client...
+🔧 DEBUG [deepgram]: Deepgram client initialized (0.13s)
+🔧 DEBUG [deepgram]: Reading audio file...
+🔧 DEBUG [deepgram]: Read 0.09MB audio (0.00s)
+🔧 DEBUG [deepgram]: Calling Deepgram API (this may take 5-30 seconds)...
+🔧 DEBUG [deepgram]: Deepgram API call completed (0.77s)
+Found 206 words
+Found 1 utterances
+Word-level transcript written: projects/JosiahCoad/editing/videos/260210-textbook-interview/outputs/with_title_caption_music_v2/segment_07_captioned-words.json
+Utterance-level transcript written: projects/JosiahCoad/editing/videos/260210-textbook-interview/outputs/with_title_caption_music_v2/segment_07_captioned-utterances.json
+Caption delay: 6.0s (captions suppressed while title is showing)
+Generating smart SRT subtitle file from utterances (max 3 words per line, splits at punctuation, font size 22, caps=True)...
+SRT file written: projects/JosiahCoad/editing/videos/260210-textbook-interview/outputs/with_title_caption_music_v2/segment_07_captioned.srt
+Caption style: outline
+Caption position: 15% from bottom → MarginV=43 (ASS PlayResY=288)
+Burning subtitles into video...
+✅ Output video: projects/JosiahCoad/editing/videos/260210-textbook-interview/outputs/with_title_caption_music_v2/segment_07_captioned.mp4
+✅ SRT file: projects/JosiahCoad/editing/videos/260210-textbook-interview/outputs/with_title_caption_music_v2/segment_07_captioned.srt
+✅ Word-level transcript: projects/JosiahCoad/editing/videos/260210-textbook-interview/outputs/with_title_caption_music_v2/segment_07_captioned-words.json
+✅ Utterance-level transcript: projects/JosiahCoad/editing/videos/260210-textbook-interview/outputs/with_title_caption_music_v2/segment_07_captioned-utterances.json
+Searching for music: corporate upbeat background
+Searching Openverse for music with tags: corporate upbeat background...
+Downloading from: https://prod-1.storage.jamendo.com/?trackid=1021968&format=mp32...
+Downloaded music to: projects/JosiahCoad/editing/videos/260210-textbook-interview/outputs/with_title_caption_music_v2/_music_track.mp3
+
+--- Segment 1: segment_01.mp4 ---
+  1. Adding title (6s): 'bridging the trust gap in service businesses'
+  2. Adding captions
+  3. Adding music
+  ✅ segment_01.mp4
+
+--- Segment 2: segment_02.mp4 ---
+  1. Adding title (6s): 'how ai generated ugc videos can hurt your brand'
+  2. Adding captions
+  3. Adding music
+  ✅ segment_02.mp4
+
+--- Segment 3: segment_03.mp4 ---
+  1. Adding title (6s): 'how to get marketing ideas from ads you consume'
+  2. Adding captions
+  3. Adding music
+  ✅ segment_03.mp4
+
+--- Segment 4: segment_04.mp4 ---
+  1. Adding title (6s): 'how to sell more through social media'
+  2. Adding captions
+  3. Adding music
+  ✅ segment_04.mp4
+
+--- Segment 5: segment_05.mp4 ---
+  1. Adding title (6s): 'how to use ai for social media content efficiency'
+  2. Adding captions
+  3. Adding music
+  ✅ segment_05.mp4
+
+--- Segment 6: segment_06.mp4 ---
+  1. Adding title (6s): 'why put human quality control in ai content marketing'
+  2. Adding captions
+  3. Adding music
+  ✅ segment_06.mp4
+
+--- Segment 7: segment_07.mp4 ---
+  1. Adding title (6s): 'how to transform content features into customer benefits'
+  2. Adding captions
+  3. Adding music
+  ✅ segment_07.mp4
+
+🎉 Done. Outputs in projects/JosiahCoad/editing/videos/260210-textbook-interview/outputs/with_title_caption_music_v2

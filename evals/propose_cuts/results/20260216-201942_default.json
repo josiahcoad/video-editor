@@ -1,0 +1,210 @@
+{
+  "run_id": "2026-02-17T02:19:42Z",
+  "model": "default",
+  "judge_model": "openai/gpt-4o",
+  "case_count": 1,
+  "run_count": 1,
+  "results": [
+    {
+      "case_id": "260210-content-batch",
+      "gt_segment_count": 11,
+      "proposed_segment_count": 12,
+      "proposed_segments": [
+        {
+          "segment": 1,
+          "summary": "Closing the gap between awareness and purchase.",
+          "hook": "Stakes/tension: 'there's a gap between people knowing you exist and actually wanting to buy'.",
+          "cuts": "59.39:64.61",
+          "duration": 5.2,
+          "section_count": 1,
+          "has_cold_open": false,
+          "analysis": {
+            "content_type": "pre_recorded_batch",
+            "editing_strategy": "contiguous_batch",
+            "single_or_multi": "multi",
+            "cold_open_candidate": null,
+            "keepable_content_seconds": 350.0
+          }
+        },
+        {
+          "segment": 2,
+          "summary": "Questioning the ethics and utility of AI-generated content volume.",
+          "hook": "Named concept / curiosity: 'just because we can do a lot of cool stuff with AI'.",
+          "cuts": "133.19:140.00,151.32:157.42",
+          "duration": 12.9,
+          "section_count": 2,
+          "has_cold_open": false
+        },
+        {
+          "segment": 3,
+          "summary": "The habit of thinking like a producer to improve marketing skills.",
+          "hook": "Named concept / curiosity: 'think like a producer not a consumer'.",
+          "cuts": "168.66:175.29",
+          "duration": 6.6,
+          "section_count": 1,
+          "has_cold_open": false
+        },
+        {
+          "segment": 4,
+          "summary": "Why full automation is rejected in favor of marketing with a soul.",
+          "hook": "Stakes / tension: 'people keep asking us for full automation and here's why we say no'.",
+          "cuts": "211.40:216.14,229.69:233.10",
+          "duration": 8.1,
+          "section_count": 2,
+          "has_cold_open": false
+        },
+        {
+          "segment": 5,
+          "summary": "Shifting focus from product-centric to problem-centric marketing.",
+          "hook": "Named concept / curiosity: 'stopped centering around the product and started centering around the problem'.",
+          "cuts": "275.75:282.98,294.37:298.71",
+          "duration": 11.6,
+          "section_count": 2,
+          "has_cold_open": false
+        },
+        {
+          "segment": 6,
+          "summary": "Using self-observation of purchasing behavior to improve marketing.",
+          "hook": "Named concept / curiosity: 'inspect your own purchasing behavior'.",
+          "cuts": "346.18:350.44",
+          "duration": 4.3,
+          "section_count": 1,
+          "has_cold_open": false
+        },
+        {
+          "segment": 7,
+          "summary": "Turning sales objections into a content strategy.",
+          "hook": "Stakes / tension: 'if you keep hearing the same three objections... you're not using your content strategy correctly'.",
+          "cuts": "357.14:363.25,374.96:380.34,386.88:390.06,393.97:397.75",
+          "duration": 18.4,
+          "section_count": 4,
+          "has_cold_open": false
+        },
+        {
+          "segment": 8,
+          "summary": "Using social media as a classroom to answer client questions early.",
+          "hook": "Named concept / curiosity: 'use social media as a sort of classroom'.",
+          "cuts": "406.13:415.19,420.88:430.74",
+          "duration": 18.9,
+          "section_count": 2,
+          "has_cold_open": false
+        },
+        {
+          "segment": 9,
+          "summary": "The danger of low-quality content and why quality must precede quantity.",
+          "hook": "Stakes / tension: 'producing crap content... actively erodes the trust of your high net worth clients'.",
+          "cuts": "529.09:537.67,593.00:599.52,604.62:607.12",
+          "duration": 17.6,
+          "section_count": 3,
+          "has_cold_open": false
+        },
+        {
+          "segment": 10,
+          "summary": "The reality of potential clients 'stalking' your social presence before contact.",
+          "hook": "Stakes / tension: 'is it weird to think that your potential clients are stalking you for weeks'.",
+          "cuts": "674.70:680.07,704.79:713.08",
+          "duration": 13.7,
+          "section_count": 2,
+          "has_cold_open": false
+        },
+        {
+          "segment": 11,
+          "summary": "Why stopping your content strategy is abandoning prospects at the finish line.",
+          "hook": "Stakes / tension: 'you're abandoning your prospects right when they are deciding if they want to contact you'.",
+          "cuts": "740.95:748.57,763.57:768.07",
+          "duration": 12.1,
+          "section_count": 2,
+          "has_cold_open": false
+        },
+        {
+          "segment": 12,
+          "summary": "Why word-of-mouth isn't enough and how social presence validates referrals.",
+          "hook": "Stakes / tension: 'how many people do you think are being referred to you and then being lost before they even ever get a chance to reach out'.",
+          "cuts": "829.63:834.85,847.08:857.16,860.42:874.18,903.99:906.89",
+          "duration": 32.0,
+          "section_count": 4,
+          "has_cold_open": false
+        }
+      ],
+      "scores": {
+        "cold_viewer_test": {
+          "score": 9,
+          "reasoning": "Most segments open with clear, standalone statements, making them easy for a scrolling viewer to understand from the start, except for some minor context assumed in longer segments."
+        },
+        "hook_strength": {
+          "score": 8,
+          "reasoning": "The majority of segments begin with compelling opens that draw the viewer in, although a few could have stronger hooks to maintain attention initially."
+        },
+        "narrative_coherence": {
+          "score": 8,
+          "reasoning": "The sequence of sections within segments is mostly coherent, with slight room for improvement in transitions, which may feel abrupt in some areas."
+        },
+        "content_selection": {
+          "score": 8,
+          "reasoning": "The selected content covers key themes, matching much of the ground truth's strong points, though some minor additional content could enhance engagement."
+        },
+        "cut_precision": {
+          "score": 9,
+          "reasoning": "Segments generally start and stop on complete, natural sentence boundaries, with only a few minor boundary issues."
+        },
+        "duration_accuracy": {
+          "score": 10,
+          "reasoning": "All proposed segments fall within the target duration range, maintaining consistency in timing."
+        },
+        "segment_structure": {
+          "score": 8,
+          "reasoning": "The structure is mostly appropriate, with a similar number of segments to the ground truth, though some variation in segment length and content density is noticeable."
+        }
+      },
+      "mean_score": 8.57,
+      "overall_notes": "The proposed cuts capture the essence of the ground truth, effectively delivering key messages in succinct segments. There is a good mix of standalone clarity and engaging content that aligns well with the principal themes of the source material. While slightly more attention could be given to hooks and transitions, the proposed segments are generally strong and clearly communicate the intended messages.",
+      "elapsed": {
+        "propose_s": 18.1,
+        "judge_s": 8.2
+      },
+      "run": 1
+    }
+  ],
+  "aggregate": {
+    "overall_mean": 8.57,
+    "overall_min": 8.57,
+    "overall_max": 8.57,
+    "per_dimension": {
+      "cold_viewer_test": {
+        "mean": 9.0,
+        "min": 9,
+        "max": 9
+      },
+      "hook_strength": {
+        "mean": 8.0,
+        "min": 8,
+        "max": 8
+      },
+      "narrative_coherence": {
+        "mean": 8.0,
+        "min": 8,
+        "max": 8
+      },
+      "content_selection": {
+        "mean": 8.0,
+        "min": 8,
+        "max": 8
+      },
+      "cut_precision": {
+        "mean": 9.0,
+        "min": 9,
+        "max": 9
+      },
+      "duration_accuracy": {
+        "mean": 10.0,
+        "min": 10,
+        "max": 10
+      },
+      "segment_structure": {
+        "mean": 8.0,
+        "min": 8,
+        "max": 8
+      }
+    }
+  }
+}

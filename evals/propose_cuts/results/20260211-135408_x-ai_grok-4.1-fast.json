@@ -1,0 +1,210 @@
+{
+  "run_id": "2026-02-11T19:54:08Z",
+  "model": "x-ai/grok-4.1-fast",
+  "judge_model": "openai/gpt-4o",
+  "case_count": 1,
+  "run_count": 1,
+  "results": [
+    {
+      "case_id": "260210-content-batch",
+      "gt_segment_count": 11,
+      "proposed_segment_count": 12,
+      "proposed_segments": [
+        {
+          "segment": 1,
+          "summary": "Just because we can do cool AI stuff, should we? Questioning AI ethics.",
+          "hook": "Provocative question challenging blind AI adoption grabs attention on ethics.",
+          "cuts": "98.38:103.84",
+          "duration": 5.5,
+          "section_count": 1,
+          "has_cold_open": false,
+          "analysis": {
+            "content_type": "pre_recorded_batch",
+            "editing_strategy": "contiguous_batch",
+            "single_or_multi": "multi. The transcript shows multiple self-contained short-form clips recorded back-to-back, with clear retakes (same hook repeated 2-5 times with variations), large timestamp gaps between topics (10-30s+), standalone hooks/intros per topic, and independent topics that don't reference each other.",
+            "cold_open_candidate": null,
+            "keepable_content_seconds": 520.0
+          }
+        },
+        {
+          "segment": 2,
+          "summary": "You can make 500 UGC videos with AI in under 10 minutes, but should you?",
+          "hook": "Bold claim about AI speed with ethical twist hooks creators.",
+          "cuts": "151.32:157.42",
+          "duration": 6.1,
+          "section_count": 1,
+          "has_cold_open": false
+        },
+        {
+          "segment": 3,
+          "summary": "Habit to become better marketer: think like producer, not consumer.",
+          "hook": "Practical everyday habit promise for marketers.",
+          "cuts": "168.99:175.29",
+          "duration": 6.3,
+          "section_count": 1,
+          "has_cold_open": false
+        },
+        {
+          "segment": 4,
+          "summary": "Why Marquee keeps humans in the loop instead of full autopilot.",
+          "hook": "Reveals company philosophy against full AI automation.",
+          "cuts": "191.06:195.16",
+          "duration": 4.1,
+          "section_count": 1,
+          "has_cold_open": false
+        },
+        {
+          "segment": 5,
+          "summary": "Why we say no to full automation despite demands.",
+          "hook": "Contrarian stance on popular automation request.",
+          "cuts": "211.72:216.14",
+          "duration": 4.4,
+          "section_count": 1,
+          "has_cold_open": false
+        },
+        {
+          "segment": 6,
+          "summary": "Good marketing has a soul; here's how we keep it.",
+          "hook": "Emotional hook on marketing's human soul.",
+          "cuts": "229.76:233.10",
+          "duration": 3.3,
+          "section_count": 1,
+          "has_cold_open": false
+        },
+        {
+          "segment": 7,
+          "summary": "Shifted from product-centric to problem-centric marketing at Marquee.",
+          "hook": "Recent company change shares insider insight.",
+          "cuts": "275.75:282.98",
+          "duration": 7.2,
+          "section_count": 1,
+          "has_cold_open": false
+        },
+        {
+          "segment": 8,
+          "summary": "Trick: inspect your own purchasing behavior to improve as marketer.",
+          "hook": "Simple actionable trick for self-improvement.",
+          "cuts": "346.18:350.44",
+          "duration": 4.3,
+          "section_count": 1,
+          "has_cold_open": false
+        },
+        {
+          "segment": 9,
+          "summary": "Repeated sales objections mean wrong content strategy.",
+          "hook": "Direct diagnosis of common sales problem.",
+          "cuts": "357.14:363.25",
+          "duration": 6.1,
+          "section_count": 1,
+          "has_cold_open": false
+        },
+        {
+          "segment": 10,
+          "summary": "Actionable: write down top 3 sales objections now.",
+          "hook": "Urgent call to grab pen/paper for immediate value.",
+          "cuts": "374.96:380.34",
+          "duration": 5.4,
+          "section_count": 1,
+          "has_cold_open": false
+        },
+        {
+          "segment": 11,
+          "summary": "Use social media as classroom to pre-answer client questions.",
+          "hook": "Analogy from school to business hooks educators/marketers.",
+          "cuts": "420.88:430.74",
+          "duration": 9.9,
+          "section_count": 1,
+          "has_cold_open": false
+        },
+        {
+          "segment": 12,
+          "summary": "Bad content erodes trust with high-net-worth clients.",
+          "hook": "Harsh truth on content quality's impact.",
+          "cuts": "529.09:537.67",
+          "duration": 8.6,
+          "section_count": 1,
+          "has_cold_open": false
+        }
+      ],
+      "scores": {
+        "cold_viewer_test": {
+          "score": 9,
+          "reasoning": "The proposed segments generally open with clear and self-contained statements, making them understandable for a cold viewer. However, a few segments require slight prior context for better comprehension."
+        },
+        "hook_strength": {
+          "score": 7,
+          "reasoning": "Most segments have solid hooks that prompt curiosity or interest, but they are not exceptionally compelling \u2014 they're solid rather than standout."
+        },
+        "narrative_coherence": {
+          "score": 8,
+          "reasoning": "The segments generally maintain a logical flow and sequence, but some transitions could be smoother to enhance coherence."
+        },
+        "content_selection": {
+          "score": 6,
+          "reasoning": "While many key moments are captured, some proposed cuts miss out on more engaging elements captured in the ground truth, such as deeper explorations of each point."
+        },
+        "cut_precision": {
+          "score": 7,
+          "reasoning": "Most cuts start and end at natural sentence boundaries, but a few have minor issues, such as segment 10 which cuts slightly early."
+        },
+        "duration_accuracy": {
+          "score": 9,
+          "reasoning": "All segments fall within the acceptable duration range, with none significantly exceeding or undershooting the target limits."
+        },
+        "segment_structure": {
+          "score": 7,
+          "reasoning": "The structure is reasonable with several concise segments, but the machine has more segments than the ground truth, which divides content that could be merged for better coherence."
+        }
+      },
+      "mean_score": 7.57,
+      "overall_notes": "The proposed cuts offer a decent alternative to the ground truth, adequately presenting several key ideas. However, they could benefit from tighter coherence and more strategic content selection to highlight engaging insights and narratives more effectively.",
+      "elapsed": {
+        "propose_s": 42.5,
+        "judge_s": 5.7
+      },
+      "run": 1
+    }
+  ],
+  "aggregate": {
+    "overall_mean": 7.57,
+    "overall_min": 7.57,
+    "overall_max": 7.57,
+    "per_dimension": {
+      "cold_viewer_test": {
+        "mean": 9.0,
+        "min": 9,
+        "max": 9
+      },
+      "hook_strength": {
+        "mean": 7.0,
+        "min": 7,
+        "max": 7
+      },
+      "narrative_coherence": {
+        "mean": 8.0,
+        "min": 8,
+        "max": 8
+      },
+      "content_selection": {
+        "mean": 6.0,
+        "min": 6,
+        "max": 6
+      },
+      "cut_precision": {
+        "mean": 7.0,
+        "min": 7,
+        "max": 7
+      },
+      "duration_accuracy": {
+        "mean": 9.0,
+        "min": 9,
+        "max": 9
+      },
+      "segment_structure": {
+        "mean": 7.0,
+        "min": 7,
+        "max": 7
+      }
+    }
+  }
+}

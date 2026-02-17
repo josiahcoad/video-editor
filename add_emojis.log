@@ -1,0 +1,200 @@
+[dotenvx@1.51.0] injecting env (8) from .env
+Transcribing 11_eye_contact.mp4...
+Transcribed: 145 words
+Analyzing transcript for emoji moments (145 words, 35s)...
+
+────────────────────────────────────────────────────────────
+Emoji plan (4 overlays):
+  1. 🤝  1.5–3.0s  (top-left)  Reinforces the concept of relationships and building trust as the key differentiator.
+  2. 🛒  10.4–11.9s  (top-right)  Matches the specific mention of the major retailer Walmart and the intent to buy.
+  3. 🪛  12.0–13.5s  (top-left)  A concrete noun (screwdriver) provides a clear visual anchor for the example being given.
+  4. 🏘️  29.0–30.5s  (top-right)  Visualizes the specific service industry mention of real estate agents in the trust gap list.
+────────────────────────────────────────────────────────────
+
+  Generated: 🤝 → emoji_0.png
+  Generated: 🛒 → emoji_1.png
+  Generated: 🪛 → emoji_2.png
+  Generated: 🏘️ → emoji_3.png
+Overlaying 4 emojis...
+✅ Output: /Users/apple/Documents/code/marky/marky-app/video-editor/projects/JosiahCoad/editing/videos/260210-textbook-interview/outputs/with_emojis/segment_01.mp4
+🔧 DEBUG [deepgram]: Starting transcription for: /Users/apple/Documents/code/marky/marky-app/video-editor/projects/JosiahCoad/editing/videos/260210-textbook-interview/outputs/segment_01/11_eye_contact.mp4
+🔧 DEBUG [deepgram]: Extracting audio to: /var/folders/3m/wbb812l55fv7xc2q79ttxl680000gn/T/tmpglx6cx0_.mp3
+🔧 DEBUG [deepgram]: Audio extraction completed (0.12s)
+🔧 DEBUG [deepgram]: Initializing Deepgram client...
+🔧 DEBUG [deepgram]: Deepgram client initialized (0.11s)
+🔧 DEBUG [deepgram]: Reading audio file...
+🔧 DEBUG [deepgram]: Read 0.07MB audio (0.00s)
+🔧 DEBUG [deepgram]: Calling Deepgram API (this may take 5-30 seconds)...
+🔧 DEBUG [deepgram]: Deepgram API call completed (0.73s)
+Transcribing 11_eye-contact.mp4...
+Transcribed: 146 words
+Analyzing transcript for emoji moments (146 words, 33s)...
+
+────────────────────────────────────────────────────────────
+Emoji plan (4 overlays):
+  1. 🤖  9.3–10.7s  (top-right)  Reinforces the mention of AI technology and automated tools.
+  2. 🎥  12.6–14.2s  (top-left)  Visual representation for the mention of creation and videos.
+  3. 👤  20.4–21.9s  (top-right)  Highlights the concept of a 'fake person' vs human identity in marketing.
+  4. 📉  30.4–31.9s  (top-left)  Visualizes the 'cost' and loss mentioned regarding brand equity.
+────────────────────────────────────────────────────────────
+
+  Generated: 🤖 → emoji_0.png
+  Generated: 🎥 → emoji_1.png
+  Generated: 👤 → emoji_2.png
+  Generated: 📉 → emoji_3.png
+Overlaying 4 emojis...
+✅ Output: /Users/apple/Documents/code/marky/marky-app/video-editor/projects/JosiahCoad/editing/videos/260210-textbook-interview/outputs/with_emojis/segment_02.mp4
+🔧 DEBUG [deepgram]: Starting transcription for: /Users/apple/Documents/code/marky/marky-app/video-editor/projects/JosiahCoad/editing/videos/260210-textbook-interview/outputs/segment_02/11_eye-contact.mp4
+🔧 DEBUG [deepgram]: Extracting audio to: /var/folders/3m/wbb812l55fv7xc2q79ttxl680000gn/T/tmph4gjbfqk.mp3
+🔧 DEBUG [deepgram]: Audio extraction completed (0.12s)
+🔧 DEBUG [deepgram]: Initializing Deepgram client...
+🔧 DEBUG [deepgram]: Deepgram client initialized (0.18s)
+🔧 DEBUG [deepgram]: Reading audio file...
+🔧 DEBUG [deepgram]: Read 0.06MB audio (0.00s)
+🔧 DEBUG [deepgram]: Calling Deepgram API (this may take 5-30 seconds)...
+🔧 DEBUG [deepgram]: Deepgram API call completed (0.77s)
+Transcribing 10_final.mp4...
+Transcribed: 170 words
+Analyzing transcript for emoji moments (170 words, 38s)...
+
+────────────────────────────────────────────────────────────
+Emoji plan (4 overlays):
+  1. 🎯  3.3–4.8s  (top-right)  Reinforces the goal of becoming a 'best marketer'.
+  2. 📺  9.0–10.5s  (top-left)  Visual representation of 'ads' and media consumption.
+  3. 💡  19.9–21.4s  (top-right)  The word 'lighting' is a key technical detail in the producer mindset example.
+  4. ⏳  29.5–31.0s  (top-left)  Emphasizes the longevity and 'time' spent during the speech.
+────────────────────────────────────────────────────────────
+
+  Generated: 🎯 → emoji_0.png
+  Generated: 📺 → emoji_1.png
+  Generated: 💡 → emoji_2.png
+  Generated: ⏳ → emoji_3.png
+Overlaying 4 emojis...
+✅ Output: /Users/apple/Documents/code/marky/marky-app/video-editor/projects/JosiahCoad/editing/videos/260210-textbook-interview/outputs/with_emojis/segment_03.mp4
+🔧 DEBUG [deepgram]: Starting transcription for: /Users/apple/Documents/code/marky/marky-app/video-editor/projects/JosiahCoad/editing/videos/260210-textbook-interview/outputs/segment_03/10_final.mp4
+🔧 DEBUG [deepgram]: Extracting audio to: /var/folders/3m/wbb812l55fv7xc2q79ttxl680000gn/T/tmpykvf61ua.mp3
+🔧 DEBUG [deepgram]: Audio extraction completed (0.50s)
+🔧 DEBUG [deepgram]: Initializing Deepgram client...
+🔧 DEBUG [deepgram]: Deepgram client initialized (0.22s)
+🔧 DEBUG [deepgram]: Reading audio file...
+🔧 DEBUG [deepgram]: Read 0.07MB audio (0.00s)
+🔧 DEBUG [deepgram]: Calling Deepgram API (this may take 5-30 seconds)...
+🔧 DEBUG [deepgram]: Deepgram API call completed (0.89s)
+Transcribing 03_jumpcut.mp4...
+Transcribed: 151 words
+Analyzing transcript for emoji moments (151 words, 35s)...
+
+────────────────────────────────────────────────────────────
+Emoji plan (4 overlays):
+  1. ☀️  2.3–3.8s  (top-left)  Reinforces the mention of the sun being the center of the user's focus.
+  2. 💰  11.6–13.1s  (top-right)  Emphasizes the concept of selling and revenue growth via social media.
+  3. 🌍  20.8–22.3s  (top-left)  Visual representation of the earth/universe shift mentioned in the core analogy.
+  4. ⚙️  29.6–31.1s  (top-right)  Supports the talk about being a technical founder and building new technologies.
+────────────────────────────────────────────────────────────
+
+  Generated: ☀️ → emoji_0.png
+  Generated: 💰 → emoji_1.png
+  Generated: 🌍 → emoji_2.png
+  Generated: ⚙️ → emoji_3.png
+Overlaying 4 emojis...
+✅ Output: /Users/apple/Documents/code/marky/marky-app/video-editor/projects/JosiahCoad/editing/videos/260210-textbook-interview/outputs/with_emojis/segment_04.mp4
+🔧 DEBUG [deepgram]: Starting transcription for: /Users/apple/Documents/code/marky/marky-app/video-editor/projects/JosiahCoad/editing/videos/260210-textbook-interview/outputs/segment_04/03_jumpcut.mp4
+🔧 DEBUG [deepgram]: Extracting audio to: /var/folders/3m/wbb812l55fv7xc2q79ttxl680000gn/T/tmpd77wtyn9.mp3
+🔧 DEBUG [deepgram]: Audio extraction completed (0.15s)
+🔧 DEBUG [deepgram]: Initializing Deepgram client...
+🔧 DEBUG [deepgram]: Deepgram client initialized (0.11s)
+🔧 DEBUG [deepgram]: Reading audio file...
+🔧 DEBUG [deepgram]: Read 0.07MB audio (0.00s)
+🔧 DEBUG [deepgram]: Calling Deepgram API (this may take 5-30 seconds)...
+🔧 DEBUG [deepgram]: Deepgram API call completed (0.93s)
+Transcribing 03_jumpcut.mp4...
+Transcribed: 121 words
+Analyzing transcript for emoji moments (121 words, 29s)...
+
+────────────────────────────────────────────────────────────
+Emoji plan (4 overlays):
+  1. ⛏️  4.8–6.3s  (top-left)  Uses a tool emoji to visually represent the verb 'dig'.
+  2. 📄  13.2–14.7s  (top-right)  Represents the 'life cycle' and professional content flow discussed.
+  3. 📱  18.1–19.6s  (top-left)  Reinforces the mention of 'social media' presence.
+  4. ⚡  23.5–25.0s  (top-right)  Visualizes the concept of being 'efficient' and high-speed performance.
+────────────────────────────────────────────────────────────
+
+  Generated: ⛏️ → emoji_0.png
+  Generated: 📄 → emoji_1.png
+  Generated: 📱 → emoji_2.png
+  Generated: ⚡ → emoji_3.png
+Overlaying 4 emojis...
+✅ Output: /Users/apple/Documents/code/marky/marky-app/video-editor/projects/JosiahCoad/editing/videos/260210-textbook-interview/outputs/with_emojis/segment_05.mp4
+🔧 DEBUG [deepgram]: Starting transcription for: /Users/apple/Documents/code/marky/marky-app/video-editor/projects/JosiahCoad/editing/videos/260210-textbook-interview/outputs/segment_05/03_jumpcut.mp4
+🔧 DEBUG [deepgram]: Extracting audio to: /var/folders/3m/wbb812l55fv7xc2q79ttxl680000gn/T/tmpn9hkrn45.mp3
+🔧 DEBUG [deepgram]: Audio extraction completed (0.12s)
+🔧 DEBUG [deepgram]: Initializing Deepgram client...
+🔧 DEBUG [deepgram]: Deepgram client initialized (0.11s)
+🔧 DEBUG [deepgram]: Reading audio file...
+🔧 DEBUG [deepgram]: Read 0.06MB audio (0.00s)
+🔧 DEBUG [deepgram]: Calling Deepgram API (this may take 5-30 seconds)...
+🔧 DEBUG [deepgram]: Deepgram API call completed (0.72s)
+Transcribing 03_jumpcut.mp4...
+Transcribed: 233 words
+Analyzing transcript for emoji moments (233 words, 53s)...
+
+────────────────────────────────────────────────────────────
+Emoji plan (4 overlays):
+  1. 🌉  5.9–7.4s  (top-left)  Reinforces the core metaphor of marketing being a 'bridge' for value.
+  2. 🤖  15.8–17.3s  (top-right)  Highlights the mention of AI and contrasts it with the human-centric value.
+  3. ✅  23.9–25.4s  (top-left)  Visually supports the concept of quality control and checking processes.
+  4. 💰  44.6–46.1s  (top-right)  Emphasizes the ultimate goal of 'sales' occurring at the end of the sentence.
+────────────────────────────────────────────────────────────
+
+  Generated: 🌉 → emoji_0.png
+  Generated: 🤖 → emoji_1.png
+  Generated: ✅ → emoji_2.png
+  Generated: 💰 → emoji_3.png
+Overlaying 4 emojis...
+✅ Output: /Users/apple/Documents/code/marky/marky-app/video-editor/projects/JosiahCoad/editing/videos/260210-textbook-interview/outputs/with_emojis/segment_06.mp4
+🔧 DEBUG [deepgram]: Starting transcription for: /Users/apple/Documents/code/marky/marky-app/video-editor/projects/JosiahCoad/editing/videos/260210-textbook-interview/outputs/segment_06/03_jumpcut.mp4
+🔧 DEBUG [deepgram]: Extracting audio to: /var/folders/3m/wbb812l55fv7xc2q79ttxl680000gn/T/tmp3lz1t9ix.mp3
+🔧 DEBUG [deepgram]: Audio extraction completed (0.20s)
+🔧 DEBUG [deepgram]: Initializing Deepgram client...
+🔧 DEBUG [deepgram]: Deepgram client initialized (0.12s)
+🔧 DEBUG [deepgram]: Reading audio file...
+🔧 DEBUG [deepgram]: Read 0.10MB audio (0.00s)
+🔧 DEBUG [deepgram]: Calling Deepgram API (this may take 5-30 seconds)...
+🔧 DEBUG [deepgram]: Deepgram API call completed (2.90s)
+Transcribing 03_jumpcut.mp4...
+Transcribed: 206 words
+Analyzing transcript for emoji moments (206 words, 44s)...
+
+────────────────────────────────────────────────────────────
+Emoji plan (4 overlays):
+  1. ⏰  3.4–4.9s  (top-left)  Reinforces the core benefit of saving time mentioned at the start of the marketing discussion.
+  2. ⚡  11.6–13.1s  (top-right)  Visual metaphor for 'pains and gains' which are central concepts in business strategy.
+  3. 💻  15.5–17.0s  (top-left)  Matches the speaker's shift to observing business websites and their marketing approach.
+  4. 🤖  23.4–24.9s  (top-right)  Emphasizes the 'AI driven' feature that the speaker uses as a primary example of feature-driven marketing.
+────────────────────────────────────────────────────────────
+
+  Generated: ⏰ → emoji_0.png
+  Generated: ⚡ → emoji_1.png
+  Generated: 💻 → emoji_2.png
+  Generated: 🤖 → emoji_3.png
+Overlaying 4 emojis...
+✅ Output: /Users/apple/Documents/code/marky/marky-app/video-editor/projects/JosiahCoad/editing/videos/260210-textbook-interview/outputs/with_emojis/segment_07.mp4
+🔧 DEBUG [deepgram]: Starting transcription for: /Users/apple/Documents/code/marky/marky-app/video-editor/projects/JosiahCoad/editing/videos/260210-textbook-interview/outputs/segment_07/03_jumpcut.mp4
+🔧 DEBUG [deepgram]: Extracting audio to: /var/folders/3m/wbb812l55fv7xc2q79ttxl680000gn/T/tmpwetgokr2.mp3
+🔧 DEBUG [deepgram]: Audio extraction completed (0.31s)
+🔧 DEBUG [deepgram]: Initializing Deepgram client...
+🔧 DEBUG [deepgram]: Deepgram client initialized (0.26s)
+🔧 DEBUG [deepgram]: Reading audio file...
+🔧 DEBUG [deepgram]: Read 0.09MB audio (0.00s)
+🔧 DEBUG [deepgram]: Calling Deepgram API (this may take 5-30 seconds)...
+🔧 DEBUG [deepgram]: Deepgram API call completed (1.38s)
+Adding emojis to 7 video(s) -> /Users/apple/Documents/code/marky/marky-app/video-editor/projects/JosiahCoad/editing/videos/260210-textbook-interview/outputs/with_emojis
+  segment_01/11_eye_contact.mp4 -> segment_01.mp4
+  segment_02/11_eye-contact.mp4 -> segment_02.mp4
+  segment_03/10_final.mp4 -> segment_03.mp4
+  segment_04/03_jumpcut.mp4 -> segment_04.mp4
+  segment_05/03_jumpcut.mp4 -> segment_05.mp4
+  segment_06/03_jumpcut.mp4 -> segment_06.mp4
+  segment_07/03_jumpcut.mp4 -> segment_07.mp4
+
+Done. 7 videos with emojis in /Users/apple/Documents/code/marky/marky-app/video-editor/projects/JosiahCoad/editing/videos/260210-textbook-interview/outputs/with_emojis

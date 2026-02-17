@@ -1,0 +1,56 @@
+{
+    "id": "260210-textbook-interview",
+    "description": "37-min interview about trust in business, two speakers. Contains 6 extractable segments covering trust gap, AI marketing, producer mindset, Copernican shift, human-in-the-loop philosophy, and benefit-driven marketing. Originally the LLM proposed 2 poor segments; these 6 were manually curated by reviewing the transcript with verified sentence boundaries.",
+    "transcript_path": "projects/JosiahCoad/editing/videos/260210-textbook-interview/inputs/IMG_3333-words.json",
+    "video_duration_s": 2250,
+    "params": {
+        "target_duration": 60,
+        "tolerance": 20,
+        "max_segments": null,
+        "custom_prompt": null
+    },
+    "ground_truth": [
+        {
+            "segment": 1,
+            "summary": "The Trust Gap - closing the trust deficit in business relationships",
+            "cuts": "751.31:756.17,592.93:617.36,630.25:653.33,658.82:666.57",
+            "has_cold_open": true,
+            "rationale": "Cold open from ~12:31 (trust gap soundbite), then chronological body covering how trust is built through consistent content. ~60s raw."
+        },
+        {
+            "segment": 2,
+            "summary": "AI Marketing - efficiency vs brand trust tradeoff",
+            "cuts": "1004.72:1011.59,915.57:952.18,969.62:981.43",
+            "has_cold_open": true,
+            "rationale": "Cold open teaser from ~16:44, then discussion of AI's role in marketing and why it can undermine trust. ~55s raw."
+        },
+        {
+            "segment": 3,
+            "summary": "Stop consuming and start thinking like a producer",
+            "cuts": "2064.87:2070.29,1959.02:2012.20",
+            "has_cold_open": true,
+            "rationale": "Cold open with strong opinion from ~34:24, then producer mindset discussion. ~59s raw."
+        },
+        {
+            "segment": 4,
+            "summary": "Jobs To Be Done / Copernican Shift - the user's problem is the sun",
+            "cuts": "454.40:471.50,422.60:454.00",
+            "has_cold_open": true,
+            "rationale": "Cold open with Copernican metaphor ('earth revolves around the sun = the user's problem'), then body covering the jobs-to-be-done framework and the shift from feature-first to problem-first marketing. All cuts verified at sentence boundaries. ~49s raw."
+        },
+        {
+            "segment": 5,
+            "summary": "Human in the loop / Anti-AI-slop philosophy",
+            "cuts": "1526.17:1543.52,1459.00:1483.20,1488.00:1519.95",
+            "has_cold_open": true,
+            "rationale": "Cold open with 'humans have inherent value' statement, then body covering why Marky keeps humans in the loop and rejects full AI automation. Discusses the vision problem of AI-generated content and why the tool should amplify, not replace. All cuts verified at sentence boundaries. ~73s raw."
+        },
+        {
+            "segment": 6,
+            "summary": "Benefit-driven marketing - lead with the outcome, not the feature",
+            "cuts": "1932.00:1955.00,1880.50:1931.50",
+            "has_cold_open": true,
+            "rationale": "Cold open with concrete example of flipping 'AI content creator' to 'save time with...', then body covering the principle of benefit-driven marketing and why features don't sell. All cuts verified at sentence boundaries. ~74s raw."
+        }
+    ]
+}
