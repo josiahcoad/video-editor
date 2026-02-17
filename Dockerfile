@@ -16,7 +16,8 @@ RUN uv pip install --system \
     pydantic \
     httpx
 
-# Copy only the source files needed for the CLI
-COPY src/propose_cuts.py src/get_transcript.py ./
+# Copy the edit package so we can run propose_cuts as a module
+COPY src/ ./src/
+ENV PYTHONPATH=/app
 
-ENTRYPOINT ["python", "propose_cuts.py"]
+ENTRYPOINT ["python", "-m", "src.edit.propose_cuts"]

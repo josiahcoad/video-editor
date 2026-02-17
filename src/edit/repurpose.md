@@ -51,7 +51,6 @@ src/
   locate/                 # Stage 2: Topic research & idea generation
     idea_generator.py     # Demand-driven topic pipeline (ATP API + LLM)
   edit/                   # Stage 3+: Video editing & post-production
-    process_video.py      # Main editing orchestrator
     get_transcript.py     # Transcription (Deepgram)
     propose_cuts.py       # LLM-powered segment planning
     apply_cuts.py         # Cut segments from source
@@ -801,18 +800,7 @@ Create a **shorter cut** of each segment’s final infographic video for platfor
 - **Input:** `09_infographic.mp4` (and optionally `07_music-words.json` or the infographic video’s word transcript).
 - **Output:** e.g. `09_infographic_35s.mp4` (or keep a single convention like `09_infographic_short.mp4`).
 
-```bash
-# One segment (from repo root). Script auto-transcribes if --transcript omitted.
-dotenvx run -f .env -f .env.dev -- uv run python -m src.edit.trim_smart \
-  "<outputs_dir>/segment_XX/09_infographic.mp4" \
-  "<outputs_dir>/segment_XX/09_infographic_35s.mp4" \
-  --duration 35 --tolerance 10
-```
-
-- **Target:** 35 seconds. **Tolerance:** ±10s → range 25–45s.
-- trim_smart uses the LLM to pick sections (hook, body, **closer/CTA**, no repeated idea). Pass `--transcript <segment>-words.json` if you have a word-level transcript that matches the video; otherwise the script transcribes the input.
-- **Include the infographic:** add_infographic writes a plan sidecar `09_infographic.plan.json` (start_time, end_time) next to each output. When creating the short version, pass `--include-range START END` so the trim is forced to include that range and the short still shows the infographic. The batch script `trim_short_versions_all_segments.sh` auto-reads the plan and passes `--include-range` when present. If you have old segments without a plan file, re-run add_infographic for those segments so the plan is written, then re-run the short-version trim.
-- Re-run for every segment that should have a short version; use a loop or `scripts/trim_short_versions_all_segments.sh` (see below).
+- **Short versions:** The former `trim_smart` and `scripts/trim_short_versions_all_segments.sh` have been removed. To create a short cut of a segment (e.g. 35s ±10s), use **propose_cuts** with a word-level transcript for that segment and target_duration/tolerance, then **apply_cuts** (or `scripts/apply_cuts_from_json.py`) to render. For infographic segments, ensure the chosen cuts include the infographic range (add_infographic writes `09_infographic.plan.json` with start_time/end_time).
 
 ---
 

@@ -1,9 +1,8 @@
-.PHONY: help fix-rotation ui
+.PHONY: help fix-rotation
 
 # Default target
 help:
 	@echo "Video Editor Commands:"
-	@echo "  make ui                    - Run Streamlit UI (dotenvx + uv)"
 	@echo "  make fix-rotation INPUT=video.MOV [OUTPUT=video-fixed.mp4] [TRANSPOSE=1] [METADATA_ONLY=1]"
 	@echo "  make fix-rotation ARGS='video.MOV [video-fixed.mp4]' [TRANSPOSE=1] [METADATA_ONLY=1]"
 	@echo "  (omit OUTPUT → writes <input_stem>_fixed.mp4)"
@@ -43,6 +42,3 @@ fix-rotation:
 		echo "Fixing rotation (transpose=$$TRANSPOSE_VAL, requires re-encoding) for $$INPUT_VAL -> $$OUTPUT_VAL..."; \
 		ffmpeg -y -hwaccel videotoolbox -i "$$INPUT_VAL" -vf "transpose=$$TRANSPOSE_VAL" -map_metadata -1 -c:v h264_videotoolbox -b:v 12M -c:a copy -stats_period 1 "$$OUTPUT_VAL" 2>&1; \
 	fi
-
-ui:
-	dotenvx run -- uv run streamlit run src/ui.py

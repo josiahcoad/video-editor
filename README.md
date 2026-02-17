@@ -39,10 +39,10 @@ Analyzes a video transcript and proposes how to cut it into short-form segments.
 
 ```bash
 # From a video file (auto-transcribes via Deepgram):
-dotenvx run -f .env -- uv run python src/propose_cuts.py --video <video.mp4>
+dotenvx run -f .env -- uv run python -m src.edit.propose_cuts --video <video.mp4>
 
 # From an existing word-level transcript:
-dotenvx run -f .env -- uv run python src/propose_cuts.py --transcript <words.json>
+dotenvx run -f .env -- uv run python -m src.edit.propose_cuts --transcript <words.json>
 ```
 
 #### Options
@@ -87,14 +87,14 @@ The `cuts` field contains comma-separated `start:end` timestamp ranges (in secon
 
 ```bash
 # Punchy 40-second shorts:
-uv run python src/propose_cuts.py --video talk.mp4 --duration 40 --tolerance 15
+uv run python -m src.edit.propose_cuts --video talk.mp4 --duration 40 --tolerance 15
 
 # Use a stronger model for better editorial decisions:
-uv run python src/propose_cuts.py --transcript talk-words.json --model anthropic/claude-opus-4
+uv run python -m src.edit.propose_cuts --transcript talk-words.json --model anthropic/claude-opus-4
 
 # Export EDL files for use in Premiere/Resolve:
-uv run python src/propose_cuts.py --video talk.mp4 --edl edl_output/
+uv run python -m src.edit.propose_cuts --video talk.mp4 --edl edl_output/
 
 # Custom edit direction:
-uv run python src/propose_cuts.py --video talk.mp4 --prompt "Focus on actionable advice, skip anecdotes"
+uv run python -m src.edit.propose_cuts --video talk.mp4 --prompt "Focus on actionable advice, skip anecdotes"
 ```

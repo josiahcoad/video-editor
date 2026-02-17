@@ -26,7 +26,7 @@ export interface ContactDetail extends ContactOption {
   status: string
   next_step: string | null
   notes: string | null
-  research: string | null
+  research?: string | null
   open_hesitations: Hesitation[]
   conversations: ConversationSummary[]
 }

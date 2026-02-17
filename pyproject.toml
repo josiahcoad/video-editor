@@ -14,7 +14,6 @@ dependencies = [
     "prefect>=3.0.0",
     "google-genai>=0.2.0",
     "pillow>=10.0.0",
-    "streamlit>=1.30.0",
     "opencv-python-headless>=4.8.0",
     "mediapipe>=0.10.0",
     "openai>=1.50.0",

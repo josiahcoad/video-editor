@@ -4,7 +4,6 @@ import type { ContactDetail as ContactDetailType } from "@/types/api"
 import {
   deleteConversation,
   fetchColdCallPrep,
-  fetchContactDetail,
   updateContact,
 } from "@/lib/api"
 import { cn } from "@/lib/utils"
@@ -438,33 +437,29 @@ export function ContactDetail({
               <button
                 type="button"
                 onClick={async () => {
-                  if (savingPrepToNotes || savedPrepToNotes) return
-                  setSavingPrepToNotes(true)
+                  if (savingResearch || savedResearch) return
+                  setSavingResearch(true)
                   try {
-                    const c = await fetchContactDetail(contact.id)
-                    const existing = (c.notes ?? "").trim()
-                    const separator =
-                      existing ? "\n\n--- Cold call prep ---\n\n" : ""
-                    await updateContact(contact.id, {
-                      notes: existing + separator + researchContent,
-                    })
-                    setSavedPrepToNotes(true)
+                    await updateContact(contact.id, { research: researchContent })
+                    setSavedResearch(true)
+                    onStatusChange()
+                    setResearchContent(null)
                   } catch (e) {
                     alert(
-                      e instanceof Error ? e.message : "Failed to save to notes"
+                      e instanceof Error ? e.message : "Failed to save research"
                     )
                   } finally {
-                    setSavingPrepToNotes(false)
+                    setSavingResearch(false)
                   }
                 }}
-                disabled={savingPrepToNotes || savedPrepToNotes}
+                disabled={savingResearch || savedResearch}
                 className="px-3 py-1.5 text-sm font-medium rounded-lg bg-cyan-700 text-white hover:bg-cyan-600 disabled:opacity-50 disabled:bg-slate-700"
               >
-                {savingPrepToNotes
+                {savingResearch
                   ? "Saving…"
-                  : savedPrepToNotes
-                    ? "Saved to notes"
-                    : "Save to notes"}
+                  : savedResearch
+                    ? "Saved"
+                    : "Save"}
               </button>
               <button
                 type="button"

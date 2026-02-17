@@ -570,7 +570,7 @@ async def main() -> None:
         video_duration,
     )
 
-    # Write plan sidecar so short-version trim (trim_smart) can require including the infographic range
+    # Write plan sidecar so downstream steps can require including the infographic range
     plan_path = args.output.with_suffix(".plan.json")
     plan_path.write_text(
         json.dumps(
