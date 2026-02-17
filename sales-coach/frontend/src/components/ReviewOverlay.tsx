@@ -129,6 +129,15 @@ function ReviewContent({ review, esc }: { review: Review; esc: (s: string) => st
         </div>
       </div>
 
+      {review.next_step && (
+        <OverlaySectionCard title="🗓️ Next step" titleClassName="text-cyan-400">
+          <p
+            className="text-[13px] text-cyan-300 rounded-lg bg-cyan-950/30 px-3 py-2 border border-cyan-900/30 font-medium"
+            dangerouslySetInnerHTML={{ __html: esc(review.next_step) }}
+          />
+        </OverlaySectionCard>
+      )}
+
       <OverlaySectionCard title="✅ What went well" titleClassName="text-emerald-400">
         <div className="space-y-2">
           {wentWell.length === 0 && <p className="text-[13px] text-slate-600">None</p>}
@@ -218,15 +227,6 @@ function ReviewContent({ review, esc }: { review: Review; esc: (s: string) => st
           ))}
         </div>
       </OverlaySectionCard>
-
-      {review.next_step && (
-        <OverlaySectionCard title="→ Next step" titleClassName="text-cyan-400">
-          <p
-            className="text-[13px] text-cyan-300 rounded-lg bg-cyan-950/30 px-3 py-2 border border-cyan-900/30 font-medium"
-            dangerouslySetInnerHTML={{ __html: esc(review.next_step) }}
-          />
-        </OverlaySectionCard>
-      )}
 
       {review.next_call_prep && (
         <OverlaySectionCard title="🗓️ Next call prep" titleClassName="text-slate-400">

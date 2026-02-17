@@ -51,6 +51,8 @@ interface SessionViewProps {
   onAskQuestion: (q: string) => void
   onCoachUpToTurn?: (turn: number) => void
   onSubmitTurn?: (text: string) => void
+  /** When false, ask-coach input is disabled (e.g. no active session). */
+  canAskCoach?: boolean
 }
 
 export function SessionView({
@@ -72,6 +74,7 @@ export function SessionView({
   onCoachUpToTurn,
   onSubmitTurn,
   coachingLoading = false,
+  canAskCoach = true,
 }: SessionViewProps) {
   const [question, setQuestion] = useState("")
   const [turnText, setTurnText] = useState("")
@@ -83,6 +86,7 @@ export function SessionView({
         : "bg-red-500"
 
   function handleAsk() {
+    if (!canAskCoach) return
     const q = question.trim()
     if (q) {
       onAskQuestion(q)
@@ -281,16 +285,25 @@ export function SessionView({
           <div className="flex gap-2">
             <input
               type="text"
-              placeholder="Ask your coach a question…"
+              placeholder={
+                canAskCoach
+                  ? "Ask your coach a question…"
+                  : "Start a conversation to ask the coach…"
+              }
               value={question}
               onChange={(e) => setQuestion(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && handleAsk()}
-              className="flex-1 bg-slate-800 border border-slate-700 rounded-lg px-3 py-1.5 text-sm text-slate-200 placeholder-slate-600 focus:outline-none focus:border-emerald-600"
+              disabled={!canAskCoach}
+              className={cn(
+                "flex-1 bg-slate-800 border border-slate-700 rounded-lg px-3 py-1.5 text-sm text-slate-200 placeholder-slate-600 focus:outline-none focus:border-emerald-600",
+                !canAskCoach && "opacity-60 cursor-not-allowed"
+              )}
             />
             <button
               type="button"
               onClick={handleAsk}
-              className="px-3 py-1.5 text-xs rounded-lg bg-slate-700 hover:bg-slate-600 font-medium"
+              disabled={!canAskCoach}
+              className="px-3 py-1.5 text-xs rounded-lg bg-slate-700 hover:bg-slate-600 font-medium disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:bg-slate-700"
             >
               Ask
             </button>

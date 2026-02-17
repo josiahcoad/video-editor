@@ -318,21 +318,21 @@ export function HomeView() {
   }, [load])
 
   const loadQuickActions = useCallback(async () => {
-    if (!data?.sales_rep?.id) return
+    if (!data?.seller?.id) return
     setQuickActionsLoading(true)
     try {
-      const res = await fetchQuickActions(data.sales_rep.id)
+      const res = await fetchQuickActions(data.seller.id)
       setQuickActions(res.actions ?? [])
     } catch {
       setQuickActions([])
     } finally {
       setQuickActionsLoading(false)
     }
-  }, [data?.sales_rep?.id])
+  }, [data?.seller?.id])
 
   useEffect(() => {
-    if (data?.sales_rep?.id && quickActions === null) loadQuickActions()
-  }, [data?.sales_rep?.id, quickActions, loadQuickActions])
+    if (data?.seller?.id && quickActions === null) loadQuickActions()
+  }, [data?.seller?.id, quickActions, loadQuickActions])
 
   const callsPerDay = useMemo(
     () => buildCallsPerDayLocal(data?.conversation_start_times ?? [], 30),
@@ -343,7 +343,7 @@ export function HomeView() {
     if (!data) return
     setGenerating(true)
     try {
-      const review = await generatePerformanceReview(data.sales_rep.id)
+      const review = await generatePerformanceReview(data.seller.id)
       setData((prev) =>
         prev
           ? {
@@ -379,7 +379,7 @@ export function HomeView() {
     <main className="flex-1 min-h-0 max-w-5xl w-full mx-auto p-4 overflow-y-auto space-y-6">
       <div>
         <h2 className="text-xl font-bold text-white">
-          Welcome back, {data.sales_rep.first_name}
+          Welcome back, {data.seller.first_name}
         </h2>
         <p className="text-sm text-slate-500 mt-1">
           {data.total_contacts} contacts · {data.total_conversations} conversations

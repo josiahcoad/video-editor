@@ -29,12 +29,13 @@ import pathlib
 import re
 import time
 from contextlib import asynccontextmanager
+from collections.abc import AsyncGenerator
 from typing import Any
 
 import openai
 import uvicorn
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, StreamingResponse
 from langchain_core.messages import HumanMessage, SystemMessage
 from langchain_openai import ChatOpenAI
 from pydantic import BaseModel, Field
@@ -56,6 +57,7 @@ from db import (
     delete_conversation,
     end_conversation,
     update_conversation_progress,
+    update_conversation_prep_notes,
     save_review,
     get_conversation,
     list_conversation_ids_with_reviews,
@@ -64,11 +66,11 @@ from db import (
     get_hesitations,
     get_contact_hesitations_summary,
     get_home_data,
-    get_all_conversations_for_rep,
-    get_next_steps_for_rep,
-    get_sales_rep,
+    get_all_conversations_for_seller,
+    get_next_steps_for_seller,
+    get_seller,
     save_performance_review,
-    list_sales_reps,
+    list_sellers,
 )
 
 logging.basicConfig(level=logging.INFO)
@@ -90,7 +92,7 @@ app = FastAPI(title="Sales Coach", lifespan=lifespan)
 
 SYSTEM_PROMPT = """\
 You are a sharp, experienced sales coach listening to a live call in real time.
-Your job is to help the sales rep move toward closing — not by being pushy, but by \
+Your job is to help the seller move toward closing — not by being pushy, but by \
 uncovering and resolving objections, building urgency, and advancing commitment.
 
 RANK for each objection: S = minor, not deal-breaking | M = currently blocking but overcomeable | L = hard stop, can't or very unlikely to move forward.
@@ -235,7 +237,7 @@ class PerformanceReview(BaseModel):
     """Structured performance review across all conversations."""
 
     overall_assessment: str = Field(
-        description="2-3 sentence summary of the rep's performance"
+        description="2-3 sentence summary of the seller's performance"
     )
     strengths: list[str] = Field(
         default_factory=list,
@@ -257,7 +259,7 @@ class PerformanceReview(BaseModel):
 
 
 class QuickActions(BaseModel):
-    """Exactly 3 suggested next steps for the sales rep."""
+    """Exactly 3 suggested next steps for the seller."""
 
     actions: list[str] = Field(
         min_length=3,
@@ -470,31 +472,152 @@ async def api_update_contact(contact_id: int, body: dict):
     return {"ok": True}
 
 
+class AskCoachBody(BaseModel):
+    prompt: str = Field(..., min_length=1)
+
+
+def _get_ask_coach_llm() -> ChatOpenAI:
+    """LangChain client for OpenRouter — Gemini 2.5 Flash for ask-coach."""
+    api_key = os.environ.get("OPENROUTER_API_KEY")
+    if not api_key:
+        raise ValueError("OPENROUTER_API_KEY environment variable must be set")
+    return ChatOpenAI(
+        model="google/gemini-2.5-flash",
+        base_url="https://openrouter.ai/api/v1",
+        api_key=api_key,
+        max_tokens=4096,
+        temperature=0.3,
+    )
+
+
+@app.post("/api/contacts/{contact_id}/ask-coach")
+async def api_contact_ask_coach(contact_id: int, body: AskCoachBody):
+    """Ask the coach a question with full context: contact, seller, and all conversations."""
+    contact_detail = await get_contact_detail(contact_id)
+    if not contact_detail:
+        return JSONResponse({"error": "Contact not found"}, status_code=404)
+
+    seller_id = contact_detail.get("seller_id")
+    seller_block = ""
+    if seller_id:
+        seller = await get_seller(seller_id)
+        if seller:
+            seller_block = f"""
+SELLER:
+- Name: {seller.get('first_name', '')} {seller.get('last_name', '')}
+"""
+            review_json = seller.get("performance_review_json")
+            if review_json:
+                try:
+                    review = json.loads(review_json)
+                    seller_block += "- Performance review (summary): " + json.dumps(
+                        review, indent=2
+                    ) + "\n"
+                except Exception:
+                    pass
+
+    contact_block = f"""
+CONTACT:
+- Name: {contact_detail.get('name', '')}
+- Company: {contact_detail.get('company') or '(none)'}
+- Phone: {contact_detail.get('phone') or '(none)'}
+- Status: {contact_detail.get('status', '')}
+- Notes: {contact_detail.get('notes') or '(none)'}
+- Research: {contact_detail.get('research') or '(none)'}
+- Next step (from latest call): {contact_detail.get('next_step') or '(none)'}
+"""
+    if contact_detail.get("open_hesitations"):
+        contact_block += "- Open hesitations:\n"
+        for h in contact_detail["open_hesitations"]:
+            contact_block += f"  - [{h.get('rank', '')}] {h.get('text', '')}"
+            if h.get("resolution_suggestion"):
+                contact_block += f" (suggestion: {h['resolution_suggestion']})"
+            contact_block += "\n"
+
+    conv_blocks = []
+    for conv_summary in contact_detail.get("conversations") or []:
+        conv_id = conv_summary.get("id")
+        if not conv_id:
+            continue
+        conv = await get_conversation(conv_id)
+        if not conv:
+            continue
+        parts = [
+            f"--- Conversation #{conv_id} ({conv.get('started_at', '?')})",
+            f"Close score: {conv.get('final_close_score')}%",
+            f"Steps to close: {conv.get('final_steps_to_close')}",
+        ]
+        transcript = conv.get("transcript") or []
+        for t in transcript:
+            parts.append(f"  Turn {t.get('turn', '?')}: {t.get('text', '')}")
+        coaching = conv.get("coaching") or []
+        if coaching:
+            parts.append("  Coaching given:")
+            for c in coaching:
+                parts.append(
+                    f"    #{c.get('number')} (turn {c.get('turn')}): {c.get('advice', '')}"
+                )
+        review = conv.get("review")
+        if review and isinstance(review, dict):
+            parts.append(f"  Post-call review: {review.get('score')}/10")
+            for item in review.get("went_well", []):
+                parts.append(f"    + {item}")
+            for item in review.get("improve", []):
+                parts.append(f"    - {item}")
+        conv_blocks.append("\n".join(parts))
+
+    context = (
+        "You are a sales coach. Use the following context about the contact, the seller, and their conversations to answer the user's question. Be concise and actionable.\n\n"
+        + seller_block
+        + contact_block
+        + "\nCONVERSATIONS:\n"
+        + ("\n\n".join(conv_blocks) if conv_blocks else "\n(No conversations yet.)")
+    )
+    user_message = context + "\n\n---\n\nUser question: " + body.prompt
+
+    try:
+        llm = _get_ask_coach_llm()
+        messages = [
+            SystemMessage(
+                content="You are a sales coach. Answer the user's question using only the context provided. Be specific and actionable; cite the contact or conversation when relevant."
+            ),
+            HumanMessage(content=user_message),
+        ]
+        response = await llm.invoke(messages)
+        text = response.content if hasattr(response, "content") else str(response)
+        return {"response": text}
+    except Exception as e:
+        logger.exception("Ask coach failed")
+        return JSONResponse(
+            {"error": f"Failed to get coach response: {str(e)}"}, status_code=500
+        )
+
+
 @app.delete("/api/contacts/{contact_id}")
 async def api_delete_contact(contact_id: int):
     await delete_contact(contact_id)
     return {"ok": True}
 
 
-# ── REST API: Home / Sales Reps ──────────────────────────────────
+# ── REST API: Home / Sellers ───────────────────────────────────────
 
 
 @app.get("/api/home")
-async def api_home(sales_rep_id: int = 1):
-    return await get_home_data(sales_rep_id)
+async def api_home(seller_id: int = 1):
+    return await get_home_data(seller_id)
 
 
-@app.get("/api/sales-reps")
-async def api_list_sales_reps():
-    return await list_sales_reps()
+@app.get("/api/sellers")
+async def api_list_sellers():
+    return await list_sellers()
 
 
 PERFORMANCE_REVIEW_PROMPT = """\
-You are an expert sales manager conducting a performance review for a sales rep.
+You are an expert sales manager conducting a performance review for a seller.
 Below is the complete history of their sales conversations, including transcripts, \
 coaching they received during calls, and post-call reviews.
 
-**Tone:** Address the rep directly. Use their first name (e.g. "Josiah") and write \
+**Tone:** Address the seller directly. Use their first name (e.g. "Josiah") and write \
 in second person throughout: "you", "your" (e.g. "You demonstrate strong rapport…" \
 "Your outreach needs refinement."). Do NOT use third person (he/his, she/her, \
 "[Name] demonstrates", "they need to improve").
@@ -518,7 +641,7 @@ Be constructive but honest — the goal is to help them improve.
 - **7–8**: Solid performer. Good discovery and rapport, generally applies coaching, moves deals forward. Minor, fixable patterns. Reliable and effective most of the time.
 - **9–10**: Exceptional. Strong discovery, handles objections well, builds trust, closes effectively. Consistently applies or exceeds coaching. Few or no recurring issues; stands out as a top performer.
 
-Assign the score that best matches the rep's typical performance across the conversations provided. If evidence is mixed, weight the majority of calls and the trend (e.g. improving vs. declining)."""
+Assign the score that best matches the seller's typical performance across the conversations provided. If evidence is mixed, weight the majority of calls and the trend (e.g. improving vs. declining)."""
 
 
 def _get_performance_review_llm() -> ChatOpenAI:
@@ -536,18 +659,18 @@ def _get_performance_review_llm() -> ChatOpenAI:
     return llm.with_structured_output(PerformanceReview)
 
 
-@app.post("/api/sales-reps/{rep_id}/performance-review")
-async def api_generate_performance_review(rep_id: int):
-    """Aggregate all conversations for the rep and generate a performance review."""
-    rep = await get_sales_rep(rep_id)
-    if not rep:
-        return JSONResponse({"error": "Sales rep not found"}, status_code=404)
+@app.post("/api/sellers/{seller_id}/performance-review")
+async def api_generate_performance_review(seller_id: int):
+    """Aggregate all conversations for the seller and generate a performance review."""
+    seller = await get_seller(seller_id)
+    if not seller:
+        return JSONResponse({"error": "Seller not found"}, status_code=404)
 
-    conversations = await get_all_conversations_for_rep(rep_id)
+    conversations = await get_all_conversations_for_seller(seller_id)
     if not conversations:
-        return {"error": "No conversations found for this sales rep"}
+        return {"error": "No conversations found for this seller"}
 
-    first_name = rep.get("first_name") or "there"
+    first_name = seller.get("first_name") or "there"
 
     # Build a big text block with all conversations
     parts: list[str] = []
@@ -591,7 +714,7 @@ async def api_generate_performance_review(rep_id: int):
         structured_llm = _get_performance_review_llm()
         system_content = (
             PERFORMANCE_REVIEW_PROMPT
-            + f"\n\nThe sales rep's first name is **{first_name}**. Address them directly using this name and second person (you/your)."
+            + f"\n\nThe seller's first name is **{first_name}**. Address them directly using this name and second person (you/your)."
         )
         messages = [
             SystemMessage(content=system_content),
@@ -613,13 +736,13 @@ async def api_generate_performance_review(rep_id: int):
             {"error": f"Failed to generate review: {str(e)}"}, status_code=500
         )
 
-    await save_performance_review(rep_id, json.dumps(review_data))
+    await save_performance_review(seller_id, json.dumps(review_data))
     return review_data
 
 
 QUICK_ACTIONS_PROMPT = """\
 You are a sales coach. Given today's date and, for each contact, their current "next step" \
-(from their latest call) and your notes, suggest exactly 3 quick-action next steps for the rep to do. \
+(from their latest call) and your notes, suggest exactly 3 quick-action next steps for the seller to do. \
 Use both next steps and notes to pick the most impactful and time-sensitive. \
 Each action should be one concrete sentence \
 (e.g. "Send Kristine 2-3 ROI case studies before Wednesday's call" or "Follow up with Billy on budget timeline"). \
@@ -640,16 +763,16 @@ def _get_quick_actions_llm() -> ChatOpenAI:
     return llm.with_structured_output(QuickActions)
 
 
-@app.get("/api/sales-reps/{rep_id}/quick-actions")
-async def api_get_quick_actions(rep_id: int):
+@app.get("/api/sellers/{seller_id}/quick-actions")
+async def api_get_quick_actions(seller_id: int):
     """Return 3 suggested next steps based on contacts' next_step and today's date."""
     from datetime import datetime, timezone
 
-    rep = await get_sales_rep(rep_id)
-    if not rep:
-        return JSONResponse({"error": "Sales rep not found"}, status_code=404)
+    seller = await get_seller(seller_id)
+    if not seller:
+        return JSONResponse({"error": "Seller not found"}, status_code=404)
 
-    next_steps = await get_next_steps_for_rep(rep_id)
+    next_steps = await get_next_steps_for_seller(seller_id)
     today = datetime.now(timezone.utc).strftime("%A, %B %d, %Y")
 
     if not next_steps:
@@ -738,15 +861,15 @@ async def api_cold_call_prep(body: ColdCallPrepRequest):
 # ── Help me prepare (pre-call brief) ──────────────────────────────
 
 PREPARE_PROMPT = """\
-You are a sales coach. Given a contact's notes, outstanding hesitations (objections/concerns), past conversations with this contact, the sales rep's name, and the rep's latest performance review, write a short pre-call preparation brief.
+You are a sales coach. Given a contact's notes, outstanding hesitations (objections/concerns), past conversations with this contact, the seller's name, and the seller's latest performance review, write a short pre-call preparation brief.
 
 Include:
 1. Key context from the contact's notes.
 2. Any outstanding hesitations and how to address them.
 3. What happened on past calls (next steps, scores, any pattern).
-4. 2–3 suggested goals or talking points for this call, tailored to this contact and to the rep's coaching recommendations where relevant.
+4. 2–3 suggested goals or talking points for this call, tailored to this contact and to the seller's coaching recommendations where relevant.
 
-Be concise and actionable. Write in second person ("You...") addressing the sales rep. Use bullet points or short paragraphs."""
+Be concise and actionable. Write in second person ("You...") addressing the seller. Use bullet points or short paragraphs."""
 
 
 def _get_prepare_llm() -> ChatOpenAI:
@@ -762,23 +885,12 @@ def _get_prepare_llm() -> ChatOpenAI:
     )
 
 
-async def _generate_prepare_brief(contact_id: int) -> tuple[str, str]:
-    """Return (contact_notes, call_prep) for a contact. On failure returns (notes, '')."""
-    contact = await get_contact_detail(contact_id)
-    if not contact:
-        return ("", "")
+def _build_prepare_user_content(contact: dict, seller: dict) -> tuple[str, str]:
+    """Build the user content and notes_str for prepare. Returns (user_content, notes_str)."""
     notes_str = (contact.get("notes") or "").strip()
-
-    rep_id = contact.get("sales_rep_id")
-    if not rep_id:
-        return (notes_str, "")
-    rep = await get_sales_rep(rep_id)
-    if not rep:
-        return (notes_str, "")
-
     parts = []
     parts.append(
-        f"Sales rep: {rep.get('first_name', '')} {rep.get('last_name', '')}".strip()
+        f"Seller: {seller.get('first_name', '')} {seller.get('last_name', '')}".strip()
     )
     parts.append(
         f"Contact: {contact.get('name', '')} @ {contact.get('company', '') or '(no company)'}".strip()
@@ -832,11 +944,11 @@ async def _generate_prepare_brief(contact_id: int) -> tuple[str, str]:
         parts.append("PAST CONVERSATIONS: (none yet)")
         parts.append("")
 
-    review_json = rep.get("performance_review_json")
+    review_json = seller.get("performance_review_json")
     if review_json:
         try:
             review = json.loads(review_json)
-            parts.append("REP'S LATEST PERFORMANCE REVIEW:")
+            parts.append("SELLER'S LATEST PERFORMANCE REVIEW:")
             if isinstance(review, dict):
                 if review.get("overall_assessment"):
                     parts.append(f"Overall: {review['overall_assessment']}")
@@ -857,9 +969,24 @@ async def _generate_prepare_brief(contact_id: int) -> tuple[str, str]:
         except (json.JSONDecodeError, TypeError):
             parts.append("(review parse error)")
     else:
-        parts.append("REP'S LATEST PERFORMANCE REVIEW: (none)")
+        parts.append("SELLER'S LATEST PERFORMANCE REVIEW: (none)")
 
-    user_content = "\n".join(parts)
+    return ("\n".join(parts), notes_str)
+
+
+async def _generate_prepare_brief(contact_id: int) -> tuple[str, str]:
+    """Return (contact_notes, call_prep) for a contact. On failure returns (notes, '')."""
+    contact = await get_contact_detail(contact_id)
+    if not contact:
+        return ("", "")
+    notes_str = (contact.get("notes") or "").strip()
+    seller_id = contact.get("seller_id")
+    if not seller_id:
+        return (notes_str, "")
+    seller = await get_seller(seller_id)
+    if not seller:
+        return (notes_str, "")
+    user_content, notes_str = _build_prepare_user_content(contact, seller)
     try:
         llm = _get_prepare_llm()
         messages = [
@@ -876,15 +1003,38 @@ async def _generate_prepare_brief(contact_id: int) -> tuple[str, str]:
         return (notes_str, "")
 
 
+async def _stream_prepare_brief(contact_id: int) -> AsyncGenerator[bytes, None]:
+    """Stream LLM tokens for the prepare brief. Yields UTF-8 bytes."""
+    contact = await get_contact_detail(contact_id)
+    if not contact:
+        return
+    seller_id = contact.get("seller_id")
+    if not seller_id:
+        return
+    seller = await get_seller(seller_id)
+    if not seller:
+        return
+    user_content, _ = _build_prepare_user_content(contact, seller)
+    llm = _get_prepare_llm()
+    messages = [
+        SystemMessage(content=PREPARE_PROMPT),
+        HumanMessage(content=user_content),
+    ]
+    async for chunk in llm.astream(messages):
+        content = getattr(chunk, "content", None)
+        if content:
+            yield content.encode("utf-8")
+
+
 @app.get("/api/contacts/{contact_id}/prepare")
 async def api_contact_prepare(contact_id: int):
     """Generate a pre-call preparation brief from contact notes, past conversations, rep, and last performance review."""
     contact = await get_contact_detail(contact_id)
     if not contact:
         return JSONResponse({"error": "Contact not found"}, status_code=404)
-    if not contact.get("sales_rep_id"):
+    if not contact.get("seller_id"):
         return JSONResponse(
-            {"error": "Contact has no assigned sales rep"}, status_code=400
+            {"error": "Contact has no assigned seller"}, status_code=400
         )
     try:
         _, content = await _generate_prepare_brief(contact_id)
@@ -894,12 +1044,48 @@ async def api_contact_prepare(contact_id: int):
         return JSONResponse({"error": f"Prepare failed: {str(e)}"}, status_code=500)
 
 
+@app.get("/api/contacts/{contact_id}/prepare/stream")
+async def api_contact_prepare_stream(contact_id: int):
+    """Stream the pre-call preparation brief (LLM output) as plain text."""
+    contact = await get_contact_detail(contact_id)
+    if not contact:
+        return JSONResponse({"error": "Contact not found"}, status_code=404)
+    if not contact.get("seller_id"):
+        return JSONResponse(
+            {"error": "Contact has no assigned seller"}, status_code=400
+        )
+    return StreamingResponse(
+        _stream_prepare_brief(contact_id),
+        media_type="text/plain; charset=utf-8",
+    )
+
+
 # ── REST API: Conversations ──────────────────────────────────────
 
 
 @app.get("/api/conversations")
 async def api_list_conversations(contact_id: int | None = None, limit: int = 50):
     return await list_conversations(limit=limit, contact_id=contact_id)
+
+
+@app.post("/api/conversations")
+async def api_create_conversation(body: dict):
+    """Create a new conversation (e.g. for live call). Optionally link contact and generate prep."""
+    contact_id = body.get("contact_id")
+    if contact_id is not None:
+        contact_id = int(contact_id)
+    prep_notes = None
+    if contact_id:
+        try:
+            _, prep_notes = await _generate_prepare_brief(contact_id)
+        except Exception as e:
+            logger.warning("Could not generate prep for conversation: %s", e)
+    cid = await create_conversation(
+        contact_id=contact_id,
+        mode="live",
+        prep_notes=prep_notes or None,
+    )
+    return {"id": cid}
 
 
 @app.get("/api/conversations/{conversation_id}")
@@ -913,6 +1099,15 @@ async def api_get_conversation(conversation_id: int):
         if isinstance(c, dict) and c.get("advice"):
             c["advice"] = _sanitize_advice(str(c["advice"]))
     return conv
+
+
+@app.patch("/api/conversations/{conversation_id}")
+async def api_patch_conversation(conversation_id: int, body: dict):
+    """Update conversation fields (e.g. prep_notes)."""
+    prep_notes = body.get("prep_notes")
+    if prep_notes is not None:
+        await update_conversation_prep_notes(conversation_id, prep_notes)
+    return {"ok": True}
 
 
 @app.delete("/api/conversations/{conversation_id}")
@@ -993,7 +1188,7 @@ async def get_coaching(
             "and still provide your standard coaching (advice, scores, objections)."
         )
     else:
-        user_content += "What should the sales rep say next?"
+        user_content += "What should the seller say next?"
 
     structured_llm = _get_coaching_llm()
     messages = [
@@ -1407,12 +1602,22 @@ async def coaching_session(ws: WebSocket):
         else:
             resume_id = None
     if not session.conversation_id:
+        # Generate prepare brief first so we can store it on the conversation
+        if session.contact_id:
+            try:
+                (
+                    session.contact_notes,
+                    session.call_prep,
+                ) = await _generate_prepare_brief(session.contact_id)
+            except Exception as e:
+                logger.warning("Could not load contact notes/prep for coach: %s", e)
         session.conversation_id = await create_conversation(
             contact_id=session.contact_id,
             mode="live",
+            prep_notes=session.call_prep or None,
         )
-    # Load contact notes and generate call prep so the coach can use them
-    if session.contact_id:
+    elif session.contact_id:
+        # Resuming: load contact notes and prep for coach (not stored on conversation)
         try:
             session.contact_notes, session.call_prep = await _generate_prepare_brief(
                 session.contact_id
@@ -1536,12 +1741,12 @@ async def coaching_session(ws: WebSocket):
 
             try:
                 if msg_type == "TurnInfo":
-                    last_speech_at = time.monotonic()
                     if event == "Update" and transcript:
                         await ws.send_json(
                             {"type": "transcript_interim", "text": transcript}
                         )
                     elif event == "EndOfTurn" and transcript and transcript.strip():
+                        last_speech_at = time.monotonic()
                         text = transcript.strip()
                         conversation.append(text)
                         turn_num = len(conversation)
@@ -1725,11 +1930,7 @@ async def test_session(ws: WebSocket):
     else:
         turns_data = parse_conversation_file(conversation_text)
 
-    # Create conversation record (turns_data may be empty for manual-turn mode)
-    session.conversation_id = await create_conversation(
-        contact_id=session.contact_id,
-        mode="test",
-    )
+    # Generate prepare brief first so we can store it on the conversation
     if session.contact_id:
         try:
             session.contact_notes, session.call_prep = await _generate_prepare_brief(
@@ -1737,6 +1938,12 @@ async def test_session(ws: WebSocket):
             )
         except Exception as e:
             logger.warning("Could not load contact notes/prep for test coach: %s", e)
+    # Create conversation record (turns_data may be empty for manual-turn mode)
+    session.conversation_id = await create_conversation(
+        contact_id=session.contact_id,
+        mode="test",
+        prep_notes=session.call_prep if session.contact_id else None,
+    )
     for td in turns_data:
         session.add_turn(td["turn"], td["text"], td["confidence"])
 

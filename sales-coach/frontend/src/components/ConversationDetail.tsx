@@ -119,6 +119,15 @@ function ReviewBlock({ review }: { review: Review }) {
         </span>
       </div>
 
+      {review.next_step && (
+        <ReviewSectionCard title="🗓️ Next step" titleClassName="text-cyan-400">
+          <p
+            className="text-[12px] text-cyan-300 rounded-lg bg-cyan-950/30 border border-cyan-900/40 p-3 font-medium"
+            dangerouslySetInnerHTML={{ __html: esc(review.next_step) }}
+          />
+        </ReviewSectionCard>
+      )}
+
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <ReviewSectionCard title="Went well" titleClassName="text-emerald-500">
           <div className="space-y-2">

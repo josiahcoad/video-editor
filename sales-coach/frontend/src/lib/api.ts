@@ -31,6 +31,22 @@ export async function fetchContactDetail(id: number): Promise<ContactDetail> {
   return data
 }
 
+export async function askCoach(
+  contactId: number,
+  prompt: string
+): Promise<{ response: string }> {
+  const res = await fetch(`${API}/contacts/${contactId}/ask-coach`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ prompt }),
+  })
+  if (!res.ok) {
+    const data = await res.json().catch(() => ({}))
+    throw new Error(data.error ?? "Failed to get coach response")
+  }
+  return res.json()
+}
+
 export async function createContact(body: {
   name: string
   company?: string | null
@@ -63,6 +79,16 @@ export async function deleteContact(id: number): Promise<void> {
   if (!res.ok) throw new Error("Failed to delete contact")
 }
 
+export async function createConversation(contactId?: number): Promise<{ id: number }> {
+  const res = await fetch(`${API}/conversations`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(contactId != null ? { contact_id: contactId } : {}),
+  })
+  if (!res.ok) throw new Error("Failed to create conversation")
+  return res.json()
+}
+
 export async function fetchConversations(
   contactId?: number
 ): Promise<ConversationSummary[]> {
@@ -78,6 +104,18 @@ export async function fetchConversation(id: number): Promise<ConversationDetail>
   const res = await fetch(`${API}/conversations/${id}`)
   if (!res.ok) throw new Error("Failed to fetch conversation")
   return res.json()
+}
+
+export async function updateConversationPrepNotes(
+  conversationId: number,
+  prepNotes: string
+): Promise<void> {
+  const res = await fetch(`${API}/conversations/${conversationId}`, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ prep_notes: prepNotes }),
+  })
+  if (!res.ok) throw new Error("Failed to update conversation prep")
 }
 
 export async function deleteConversation(id: number): Promise<void> {
@@ -100,16 +138,16 @@ export async function fetchStatuses(): Promise<string[]> {
   return data.statuses ?? []
 }
 
-export async function fetchHome(salesRepId: number = 1): Promise<HomeData> {
-  const res = await fetch(`${API}/home?sales_rep_id=${salesRepId}`)
+export async function fetchHome(sellerId: number = 1): Promise<HomeData> {
+  const res = await fetch(`${API}/home?seller_id=${sellerId}`)
   if (!res.ok) throw new Error("Failed to fetch home data")
   return res.json()
 }
 
 export async function fetchQuickActions(
-  salesRepId: number = 1
+  sellerId: number = 1
 ): Promise<{ actions: string[] }> {
-  const res = await fetch(`${API}/sales-reps/${salesRepId}/quick-actions`)
+  const res = await fetch(`${API}/sellers/${sellerId}/quick-actions`)
   if (!res.ok) throw new Error("Failed to fetch quick actions")
   return res.json()
 }
@@ -121,6 +159,18 @@ export async function fetchPrepare(contactId: number): Promise<{ content: string
     throw new Error(data.error || "Failed to generate preparation")
   }
   return res.json()
+}
+
+/** Returns the streaming response body; read with response.body.getReader() and TextDecoder. */
+export async function fetchPrepareStream(
+  contactId: number
+): Promise<Response> {
+  const res = await fetch(`${API}/contacts/${contactId}/prepare/stream`)
+  if (!res.ok) {
+    const data = await res.json().catch(() => ({}))
+    throw new Error(data.error || "Failed to start preparation stream")
+  }
+  return res
 }
 
 export async function fetchColdCallPrep(
@@ -143,9 +193,9 @@ export async function fetchColdCallPrep(
 }
 
 export async function generatePerformanceReview(
-  salesRepId: number = 1
+  sellerId: number = 1
 ): Promise<PerformanceReview> {
-  const res = await fetch(`${API}/sales-reps/${salesRepId}/performance-review`, {
+  const res = await fetch(`${API}/sellers/${sellerId}/performance-review`, {
     method: "POST",
   })
   if (!res.ok) {

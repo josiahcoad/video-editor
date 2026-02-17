@@ -2,7 +2,7 @@
 SQLite persistence for Sales Coach.
 
 Tables:
-  sales_reps     — salespeople using the tool
+  sellers        — people using the tool (sellers)
   contacts       — people you sell to (with pipeline status)
   conversations  — call sessions (transcript + coaching as JSON, next_step)
   hesitations    — objections/concerns tracked across conversations
@@ -30,7 +30,7 @@ CONTACT_STATUSES = [
 ]
 
 SCHEMA = """
-CREATE TABLE IF NOT EXISTS sales_reps (
+CREATE TABLE IF NOT EXISTS sellers (
     id                    INTEGER PRIMARY KEY AUTOINCREMENT,
     first_name            TEXT NOT NULL,
     last_name             TEXT NOT NULL,
@@ -47,7 +47,7 @@ CREATE TABLE IF NOT EXISTS contacts (
     phone      TEXT,
     notes      TEXT,
     status     TEXT DEFAULT 'prospect',
-    sales_rep_id INTEGER REFERENCES sales_reps(id),
+    seller_id   INTEGER REFERENCES sellers(id),
     created_at TEXT DEFAULT (datetime('now')),
     updated_at TEXT DEFAULT (datetime('now'))
 );
@@ -96,6 +96,9 @@ MIGRATIONS = [
     "ALTER TABLE contacts ADD COLUMN sales_rep_id INTEGER REFERENCES sales_reps(id)",
     "ALTER TABLE contacts ADD COLUMN phone TEXT",
     "ALTER TABLE contacts ADD COLUMN research TEXT",
+    "ALTER TABLE conversations ADD COLUMN prep_notes TEXT",
+    "ALTER TABLE sales_reps RENAME TO sellers",
+    "ALTER TABLE contacts RENAME COLUMN sales_rep_id TO seller_id",
 ]
 
 
@@ -156,18 +159,18 @@ async def init_db() -> None:
         # One-time: remove redundant "Phone: ..." line from notes when contact has phone
         await _clean_notes_phone_lines(db)
 
-        # Seed default sales rep if none exists
-        cursor = await db.execute("SELECT COUNT(*) AS cnt FROM sales_reps")
+        # Seed default seller if none exists
+        cursor = await db.execute("SELECT COUNT(*) AS cnt FROM sellers")
         row = await cursor.fetchone()
         if row["cnt"] == 0:
             await db.execute(
-                "INSERT INTO sales_reps (first_name, last_name) VALUES (?, ?)",
+                "INSERT INTO sellers (first_name, last_name) VALUES (?, ?)",
                 ("Josiah", "Coad"),
             )
             await db.commit()
-            # Assign orphan contacts to the first rep
+            # Assign orphan contacts to the first seller
             await db.execute(
-                "UPDATE contacts SET sales_rep_id = 1 WHERE sales_rep_id IS NULL"
+                "UPDATE contacts SET seller_id = 1 WHERE seller_id IS NULL"
             )
             await db.commit()
     finally:
@@ -183,19 +186,19 @@ async def create_contact(
     phone: str | None = None,
     notes: str | None = None,
     status: str = "prospect",
-    sales_rep_id: int | None = None,
+    seller_id: int | None = None,
 ) -> int:
     db = await get_db()
     try:
-        # Default to the first sales rep if none specified
-        if sales_rep_id is None:
-            cur = await db.execute("SELECT id FROM sales_reps ORDER BY id LIMIT 1")
+        # Default to the first seller if none specified
+        if seller_id is None:
+            cur = await db.execute("SELECT id FROM sellers ORDER BY id LIMIT 1")
             row = await cur.fetchone()
             if row:
-                sales_rep_id = row["id"]
+                seller_id = row["id"]
         cursor = await db.execute(
-            "INSERT INTO contacts (name, company, phone, notes, status, sales_rep_id) VALUES (?, ?, ?, ?, ?, ?)",
-            (name, company, phone, notes, status, sales_rep_id),
+            "INSERT INTO contacts (name, company, phone, notes, status, seller_id) VALUES (?, ?, ?, ?, ?, ?)",
+            (name, company, phone, notes, status, seller_id),
         )
         await db.commit()
         return cursor.lastrowid
@@ -225,7 +228,15 @@ async def get_contact(contact_id: int) -> dict | None:
 
 
 async def update_contact(contact_id: int, **fields) -> None:
-    allowed = {"name", "company", "phone", "notes", "research", "status", "sales_rep_id"}
+    allowed = {
+        "name",
+        "company",
+        "phone",
+        "notes",
+        "research",
+        "status",
+        "seller_id",
+    }
     fields = {k: v for k, v in fields.items() if k in allowed}
     if not fields:
         return
@@ -342,12 +353,14 @@ async def list_contacts_with_summary() -> list[dict]:
 async def create_conversation(
     contact_id: int | None = None,
     mode: str = "live",
+    prep_notes: str | None = None,
 ) -> int:
     db = await get_db()
     try:
         cursor = await db.execute(
-            "INSERT INTO conversations (contact_id, mode, started_at) VALUES (?, ?, ?)",
-            (contact_id, mode, _now()),
+            """INSERT INTO conversations (contact_id, mode, started_at, prep_notes)
+               VALUES (?, ?, ?, ?)""",
+            (contact_id, mode, _now(), prep_notes),
         )
         await db.commit()
         return cursor.lastrowid
@@ -387,6 +400,21 @@ async def update_conversation_progress(
         await db.commit()
         if hesitations:
             await save_hesitations(conversation_id, hesitations, contact_id)
+    finally:
+        await db.close()
+
+
+async def update_conversation_prep_notes(
+    conversation_id: int, prep_notes: str | None
+) -> None:
+    """Update prep_notes for an existing conversation."""
+    db = await get_db()
+    try:
+        await db.execute(
+            "UPDATE conversations SET prep_notes = ? WHERE id = ?",
+            (prep_notes or None, conversation_id),
+        )
+        await db.commit()
     finally:
         await db.close()
 
@@ -497,7 +525,7 @@ async def list_conversations(
             rows = await db.execute_fetchall(
                 """SELECT c.id, c.contact_id, c.started_at, c.ended_at,
                           c.final_close_score, c.final_steps_to_close, c.mode,
-                          c.next_step, c.review_generated_at,
+                          c.next_step, c.prep_notes, c.review_generated_at,
                           ct.name AS contact_name, ct.company AS contact_company
                    FROM conversations c
                    LEFT JOIN contacts ct ON c.contact_id = ct.id
@@ -509,7 +537,7 @@ async def list_conversations(
             rows = await db.execute_fetchall(
                 """SELECT c.id, c.contact_id, c.started_at, c.ended_at,
                           c.final_close_score, c.final_steps_to_close, c.mode,
-                          c.next_step, c.review_generated_at,
+                          c.next_step, c.prep_notes, c.review_generated_at,
                           ct.name AS contact_name, ct.company AS contact_company
                    FROM conversations c
                    LEFT JOIN contacts ct ON c.contact_id = ct.id
@@ -635,40 +663,40 @@ async def get_contact_hesitations_summary(contact_id: int) -> dict:
     }
 
 
-# ── Sales Reps ───────────────────────────────────────────────────
+# ── Sellers ───────────────────────────────────────────────────────
 
 
-async def get_sales_rep(rep_id: int) -> dict | None:
+async def get_seller(seller_id: int) -> dict | None:
     db = await get_db()
     try:
-        cursor = await db.execute("SELECT * FROM sales_reps WHERE id = ?", (rep_id,))
+        cursor = await db.execute("SELECT * FROM sellers WHERE id = ?", (seller_id,))
         row = await cursor.fetchone()
         return dict(row) if row else None
     finally:
         await db.close()
 
 
-async def list_sales_reps() -> list[dict]:
+async def list_sellers() -> list[dict]:
     db = await get_db()
     try:
-        rows = await db.execute_fetchall("SELECT * FROM sales_reps ORDER BY id")
+        rows = await db.execute_fetchall("SELECT * FROM sellers ORDER BY id")
         return [dict(r) for r in rows]
     finally:
         await db.close()
 
 
-async def get_pipeline_breakdown(sales_rep_id: int | None = None) -> list[dict]:
-    """Count contacts by status. Optionally filter to a specific rep."""
+async def get_pipeline_breakdown(seller_id: int | None = None) -> list[dict]:
+    """Count contacts by status. Optionally filter to a specific seller."""
     db = await get_db()
     try:
-        if sales_rep_id:
+        if seller_id:
             rows = await db.execute_fetchall(
                 """SELECT status, COUNT(*) AS count
                      FROM contacts
-                    WHERE sales_rep_id = ?
+                    WHERE seller_id = ?
                     GROUP BY status
                     ORDER BY status""",
-                (sales_rep_id,),
+                (seller_id,),
             )
         else:
             rows = await db.execute_fetchall(
@@ -682,8 +710,8 @@ async def get_pipeline_breakdown(sales_rep_id: int | None = None) -> list[dict]:
         await db.close()
 
 
-async def get_next_steps_for_rep(sales_rep_id: int) -> list[dict]:
-    """Contacts with their latest next_step and notes for a sales rep (only those with a next_step)."""
+async def get_next_steps_for_seller(seller_id: int) -> list[dict]:
+    """Contacts with their latest next_step and notes for a seller (only those with a next_step)."""
     db = await get_db()
     try:
         rows = await db.execute_fetchall(
@@ -692,21 +720,21 @@ async def get_next_steps_for_rep(sales_rep_id: int) -> list[dict]:
                        WHERE c.contact_id = ct.id AND c.next_step IS NOT NULL
                        ORDER BY c.started_at DESC LIMIT 1) AS next_step
                  FROM contacts ct
-                WHERE ct.sales_rep_id = ?
+                WHERE ct.seller_id = ?
                   AND EXISTS (
                     SELECT 1 FROM conversations c
                     WHERE c.contact_id = ct.id AND c.next_step IS NOT NULL
                   )
                 ORDER BY ct.updated_at DESC""",
-            (sales_rep_id,),
+            (seller_id,),
         )
         return [dict(r) for r in rows]
     finally:
         await db.close()
 
 
-async def get_all_conversations_for_rep(sales_rep_id: int) -> list[dict]:
-    """Fetch all conversations (with transcript + coaching) for a sales rep's contacts."""
+async def get_all_conversations_for_seller(seller_id: int) -> list[dict]:
+    """Fetch all conversations (with transcript + coaching) for a seller's contacts."""
     db = await get_db()
     try:
         rows = await db.execute_fetchall(
@@ -716,9 +744,9 @@ async def get_all_conversations_for_rep(sales_rep_id: int) -> list[dict]:
                       ct.name AS contact_name, ct.company AS contact_company
                  FROM conversations conv
                  JOIN contacts ct ON conv.contact_id = ct.id
-                WHERE ct.sales_rep_id = ?
+                WHERE ct.seller_id = ?
                 ORDER BY conv.started_at ASC""",
-            (sales_rep_id,),
+            (seller_id,),
         )
         result = []
         for r in rows:
@@ -732,21 +760,21 @@ async def get_all_conversations_for_rep(sales_rep_id: int) -> list[dict]:
         await db.close()
 
 
-async def save_performance_review(sales_rep_id: int, review_json: str) -> None:
+async def save_performance_review(seller_id: int, review_json: str) -> None:
     db = await get_db()
     try:
         await db.execute(
-            """UPDATE sales_reps
+            """UPDATE sellers
                SET performance_review_json = ?, review_generated_at = ?, updated_at = datetime('now')
              WHERE id = ?""",
-            (review_json, _now(), sales_rep_id),
+            (review_json, _now(), seller_id),
         )
         await db.commit()
     finally:
         await db.close()
 
 
-async def get_conversation_start_times(sales_rep_id: int, days: int = 30) -> list[str]:
+async def get_conversation_start_times(seller_id: int, days: int = 30) -> list[str]:
     """Return started_at (ISO) for each conversation in the last `days` days (UTC window).
     Frontend should group by local date so the chart respects browser timezone."""
     db = await get_db()
@@ -755,23 +783,23 @@ async def get_conversation_start_times(sales_rep_id: int, days: int = 30) -> lis
             """SELECT conv.started_at
                  FROM conversations conv
                  JOIN contacts ct ON conv.contact_id = ct.id
-                WHERE ct.sales_rep_id = ? AND conv.started_at >= datetime('now', ?)
+                WHERE ct.seller_id = ? AND conv.started_at >= datetime('now', ?)
                 ORDER BY conv.started_at""",
-            (sales_rep_id, f"-{days} days"),
+            (seller_id, f"-{days} days"),
         )
         return [row["started_at"] or "" for row in rows if row["started_at"]]
     finally:
         await db.close()
 
 
-async def get_home_data(sales_rep_id: int) -> dict:
-    """Aggregate data for the home tab: rep info, pipeline, latest performance review."""
-    rep = await get_sales_rep(sales_rep_id)
-    if not rep:
-        return {"error": "Sales rep not found"}
+async def get_home_data(seller_id: int) -> dict:
+    """Aggregate data for the home tab: seller info, pipeline, latest performance review."""
+    seller = await get_seller(seller_id)
+    if not seller:
+        return {"error": "Seller not found"}
 
-    pipeline = await get_pipeline_breakdown(sales_rep_id)
-    conversation_start_times = await get_conversation_start_times(sales_rep_id, days=30)
+    pipeline = await get_pipeline_breakdown(seller_id)
+    conversation_start_times = await get_conversation_start_times(seller_id, days=30)
 
     # Total conversation count
     db = await get_db()
@@ -779,26 +807,26 @@ async def get_home_data(sales_rep_id: int) -> dict:
         cursor = await db.execute(
             """SELECT COUNT(*) AS cnt FROM conversations conv
                 JOIN contacts ct ON conv.contact_id = ct.id
-               WHERE ct.sales_rep_id = ?""",
-            (sales_rep_id,),
+               WHERE ct.seller_id = ?""",
+            (seller_id,),
         )
         row = await cursor.fetchone()
         total_conversations = row["cnt"] if row else 0
     finally:
         await db.close()
 
-    review = json.loads(rep.get("performance_review_json") or "null")
+    review = json.loads(seller.get("performance_review_json") or "null")
 
     return {
-        "sales_rep": {
-            "id": rep["id"],
-            "first_name": rep["first_name"],
-            "last_name": rep["last_name"],
+        "seller": {
+            "id": seller["id"],
+            "first_name": seller["first_name"],
+            "last_name": seller["last_name"],
         },
         "pipeline": pipeline,
         "total_contacts": sum(s["count"] for s in pipeline),
         "total_conversations": total_conversations,
         "conversation_start_times": conversation_start_times,
         "performance_review": review,
-        "review_generated_at": rep.get("review_generated_at"),
+        "review_generated_at": seller.get("review_generated_at"),
     }

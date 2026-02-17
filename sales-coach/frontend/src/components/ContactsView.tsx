@@ -72,6 +72,7 @@ interface ContactsViewProps {
   error: string | null
   onSelectContact: (id: number) => void
   onContactsReload?: () => void
+  onStartConversation?: (contactId: number) => void
 }
 
 export function ContactsView({
@@ -80,6 +81,7 @@ export function ContactsView({
   error,
   onSelectContact,
   onContactsReload,
+  onStartConversation,
 }: ContactsViewProps) {
   const [showAddForm, setShowAddForm] = useState(false)
   const [addName, setAddName] = useState("")
@@ -369,9 +371,15 @@ export function ContactsView({
                   {c.phone && (
                     <a
                       href={`tel:${c.phone}`}
-                      onClick={(e) => e.stopPropagation()}
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        if (onStartConversation) {
+                          e.preventDefault()
+                          onStartConversation(c.id)
+                        }
+                      }}
                       className="p-1.5 rounded text-slate-500 hover:text-emerald-400 hover:bg-slate-800"
-                      title={`Call ${c.phone}`}
+                      title={`Call ${c.phone} (starts conversation)`}
                       aria-label={`Call ${c.name}`}
                     >
                       <Phone className="w-4 h-4" />

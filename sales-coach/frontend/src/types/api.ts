@@ -40,6 +40,7 @@ export interface Hesitation {
 
 export interface ConversationSummary {
   id: number
+  contact_id: number | null
   started_at: string | null
   mode: string
   next_step: string | null
@@ -47,6 +48,7 @@ export interface ConversationSummary {
   final_steps_to_close: number | null
   review_generated_at: string | null
   context?: string | null
+  prep_notes?: string | null
 }
 
 export interface ConversationDetail extends ConversationSummary {
@@ -110,7 +112,7 @@ export interface CallsPerDay {
 }
 
 export interface HomeData {
-  sales_rep: {
+  seller: {
     id: number
     first_name: string
     last_name: string

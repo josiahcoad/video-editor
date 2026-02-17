@@ -1,7 +1,13 @@
 import { useEffect, useState } from "react"
 import ReactMarkdown from "react-markdown"
 import type { ContactOption } from "@/types/api"
-import { createContact, fetchContactDetail, fetchPrepare } from "@/lib/api"
+import {
+  createContact,
+  fetchContactDetail,
+  fetchConversation,
+  fetchPrepareStream,
+  updateConversationPrepNotes,
+} from "@/lib/api"
 
 const STATUS_OPTIONS = [
   "prospect",
@@ -16,6 +22,8 @@ interface ContextBarProps {
   onContactIdChange: (id: string) => void
   disabled?: boolean
   onContactsReload: () => void
+  /** When on /live/:conversationId, pass so we can load/save prep from the conversation. */
+  conversationId?: string | null
 }
 
 export function ContextBar({
@@ -24,6 +32,7 @@ export function ContextBar({
   onContactIdChange,
   disabled,
   onContactsReload,
+  conversationId,
 }: ContextBarProps) {
   const [showNew, setShowNew] = useState(false)
   const [newName, setNewName] = useState("")
@@ -31,6 +40,7 @@ export function ContextBar({
   const [newStatus, setNewStatus] = useState<string>("prospect")
   const [saving, setSaving] = useState(false)
   const [notes, setNotes] = useState<string | null>(null)
+  const [research, setResearch] = useState<string | null>(null)
   const [notesLoading, setNotesLoading] = useState(false)
   const [prepareContent, setPrepareContent] = useState<string | null>(null)
   const [prepareLoading, setPrepareLoading] = useState(false)
@@ -38,6 +48,7 @@ export function ContextBar({
   useEffect(() => {
     if (!contactId) {
       setNotes(null)
+      setResearch(null)
       setPrepareContent(null)
       return
     }
@@ -45,10 +56,14 @@ export function ContextBar({
     setNotesLoading(true)
     fetchContactDetail(Number(contactId))
       .then((c) => {
-        if (!cancelled) setNotes(c.notes ?? null)
+        if (!cancelled) {
+          setNotes(c.notes ?? null)
+          setResearch(c.research?.trim() ?? null)
+        }
       })
       .catch(() => {
         if (!cancelled) setNotes(null)
+        if (!cancelled) setResearch(null)
       })
       .finally(() => {
         if (!cancelled) setNotesLoading(false)
@@ -57,6 +72,67 @@ export function ContextBar({
       cancelled = true
     }
   }, [contactId])
+
+  // When we have a conversation: load existing prep or auto-run and save
+  useEffect(() => {
+    if (!contactId || !conversationId) return
+    const convId = Number(conversationId)
+    if (Number.isNaN(convId)) return
+
+    let cancelled = false
+
+    async function loadOrGenerate() {
+      try {
+        const conv = await fetchConversation(convId)
+        if (cancelled) return
+        const existing = conv.prep_notes
+        if (existing?.trim()) {
+          setPrepareContent(existing.trim())
+          return
+        }
+        // No prep yet: run stream and save to conversation
+        setPrepareLoading(true)
+        setPrepareContent("")
+        const res = await fetchPrepareStream(Number(contactId))
+        if (cancelled) return
+        const reader = res.body?.getReader()
+        if (!reader) {
+          setPrepareContent("Stream not available")
+          setPrepareLoading(false)
+          return
+        }
+        const decoder = new TextDecoder()
+        let text = ""
+        try {
+          while (true) {
+            const { done, value } = await reader.read()
+            if (done) break
+            if (cancelled) return
+            text += decoder.decode(value, { stream: true })
+            setPrepareContent(text)
+          }
+        } finally {
+          reader.releaseLock()
+        }
+        if (!cancelled && text) {
+          await updateConversationPrepNotes(convId, text)
+        }
+      } catch (e) {
+        if (!cancelled) {
+          setPrepareContent(
+            e instanceof Error ? e.message : "Failed to load or generate preparation"
+          )
+        }
+      } finally {
+        if (!cancelled) setPrepareLoading(false)
+      }
+    }
+
+    loadOrGenerate()
+    return () => {
+      cancelled = true
+    }
+  }, [contactId, conversationId])
 
   async function handleSaveNew() {
     const name = newName.trim()
@@ -156,45 +232,63 @@ export function ContextBar({
               </div>
             )}
           </div>
-          <div className="min-h-16">
+          <div className="min-h-16 space-y-2">
             {!contactId ? (
               <p className="text-sm text-slate-500 italic py-2">
                 Select a contact to see their notes
               </p>
             ) : notesLoading ? (
               <p className="text-sm text-slate-500 italic py-2">Loading notes…</p>
-            ) : notes ? (
-              <div className="text-sm text-slate-300 whitespace-pre-wrap bg-slate-800 border border-slate-700 rounded-lg px-3 py-2">
-                {notes}
-              </div>
             ) : (
-              <p className="text-sm text-slate-500 italic py-2">
-                No notes for this contact
-              </p>
+              <>
+                {notes ? (
+                  <div>
+                    <p className="text-[11px] font-medium text-slate-500 mb-1">
+                      Notes
+                    </p>
+                    <div className="text-sm text-slate-300 whitespace-pre-wrap bg-slate-800 border border-slate-700 rounded-lg px-3 py-2">
+                      {notes}
+                    </div>
+                  </div>
+                ) : (
+                  <p className="text-sm text-slate-500 italic py-2">
+                    No notes for this contact
+                  </p>
+                )}
+                {research && (
+                  <div>
+                    <p className="text-[11px] font-medium text-slate-500 mb-1">
+                      Research
+                    </p>
+                    <div className="text-sm text-slate-300 bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 max-h-48 overflow-y-auto [&_h1]:text-base [&_h1]:font-semibold [&_h1]:text-slate-200 [&_h1]:mt-2 [&_h1]:mb-1 [&_h2]:text-sm [&_h2]:font-semibold [&_h2]:text-slate-200 [&_h2]:mt-2 [&_h2]:mb-1 [&_p]:my-1 [&_ul]:my-1.5 [&_ul]:pl-5 [&_li]:my-0.5 [&_strong]:font-semibold [&_strong]:text-slate-200">
+                      <ReactMarkdown
+                        components={{
+                          a: ({ href, children }) => (
+                            <a
+                              href={href}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-cyan-400 hover:text-cyan-300 hover:underline"
+                            >
+                              {children}
+                            </a>
+                          ),
+                        }}
+                      >
+                        {research}
+                      </ReactMarkdown>
+                    </div>
+                  </div>
+                )}
+              </>
             )}
           </div>
-          {contactId && (
+          {conversationId && (
             <div className="pt-2 space-y-2">
-              <button
-                type="button"
-                onClick={async () => {
-                  setPrepareLoading(true)
-                  setPrepareContent(null)
-                  try {
-                    const res = await fetchPrepare(Number(contactId))
-                    setPrepareContent(res.content)
-                  } catch (e) {
-                    alert(e instanceof Error ? e.message : "Failed to generate preparation")
-                  } finally {
-                    setPrepareLoading(false)
-                  }
-                }}
-                disabled={prepareLoading}
-                className="px-3 py-1.5 text-sm rounded-lg bg-emerald-700 hover:bg-emerald-600 font-medium disabled:opacity-50 text-white"
-              >
-                {prepareLoading ? "Generating…" : "Help me prepare"}
-              </button>
-              {prepareContent !== null && (
+              {prepareLoading && (
+                <p className="text-xs text-slate-500 italic">Generating prep…</p>
+              )}
+              {(prepareContent !== null || prepareLoading) && (
                 <div className="bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 max-h-64 overflow-y-auto text-sm text-slate-300 [&_h1]:text-base [&_h1]:font-semibold [&_h1]:text-slate-200 [&_h1]:mt-2 [&_h1]:mb-1 [&_h2]:text-sm [&_h2]:font-semibold [&_h2]:text-slate-200 [&_h2]:mt-2 [&_h2]:mb-1 [&_p]:my-1 [&_ul]:my-1.5 [&_ul]:pl-5 [&_li]:my-0.5 [&_strong]:font-semibold [&_strong]:text-slate-200">
                   <ReactMarkdown
                     components={{
@@ -210,15 +304,17 @@ export function ContextBar({
                       ),
                     }}
                   >
-                    {prepareContent}
+                    {prepareContent ?? ""}
                   </ReactMarkdown>
-                  <button
-                    type="button"
-                    onClick={() => setPrepareContent(null)}
-                    className="mt-2 text-xs text-slate-500 hover:text-slate-400"
-                  >
-                    Clear
-                  </button>
+                  {!prepareLoading && prepareContent !== null && (
+                    <button
+                      type="button"
+                      onClick={() => setPrepareContent(null)}
+                      className="mt-2 text-xs text-slate-500 hover:text-slate-400"
+                    >
+                      Clear
+                    </button>
+                  )}
                 </div>
               )}
             </div>

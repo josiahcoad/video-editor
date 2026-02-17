@@ -18,7 +18,7 @@ const statusDotClass: Record<LayoutProps["statusColor"], string> = {
 
 const tabConfig = [
   { path: "/home", label: "Home", end: true },
-  { path: "/live", label: "Live", end: true },
+  { path: "/live", label: "Live", end: false },
   { path: "/test", label: "Test", end: true },
   { path: "/contacts", label: "Contacts", end: false },
 ] as const

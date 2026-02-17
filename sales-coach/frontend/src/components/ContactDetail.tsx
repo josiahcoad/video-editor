@@ -1,13 +1,19 @@
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import ReactMarkdown from "react-markdown"
 import type { ContactDetail as ContactDetailType } from "@/types/api"
 import {
+  askCoach,
   deleteConversation,
   fetchColdCallPrep,
   updateContact,
 } from "@/lib/api"
 import { cn } from "@/lib/utils"
-import { Trash2 } from "lucide-react"
+import { Mic, Trash2 } from "lucide-react"
+
+const SpeechRecognitionAPI =
+  typeof window !== "undefined"
+    ? (window.SpeechRecognition ?? (window as unknown as { webkitSpeechRecognition?: typeof SpeechRecognition }).webkitSpeechRecognition)
+    : undefined
 
 const STATUS_OPTIONS = [
   "prospect",
@@ -71,10 +77,87 @@ export function ContactDetail({
   const [researchLoading, setResearchLoading] = useState(false)
   const [savingResearch, setSavingResearch] = useState(false)
   const [savedResearch, setSavedResearch] = useState(false)
+  const [coachPrompt, setCoachPrompt] = useState("")
+  const [coachResponse, setCoachResponse] = useState<string | null>(null)
+  const [coachLoading, setCoachLoading] = useState(false)
+  const [notesListening, setNotesListening] = useState(false)
+  const [notesInterim, setNotesInterim] = useState("")
+  const recognitionRef = useRef<InstanceType<NonNullable<typeof SpeechRecognitionAPI>> | null>(null)
 
   useEffect(() => {
     setNotesValue(contact.notes ?? "")
   }, [contact.id, contact.notes])
+
+  useEffect(() => {
+    if (!SpeechRecognitionAPI) return
+    return () => {
+      if (recognitionRef.current) {
+        try {
+          recognitionRef.current.abort()
+        } catch {
+          // ignore
+        }
+        recognitionRef.current = null
+      }
+      setNotesListening(false)
+      setNotesInterim("")
+    }
+  }, [])
+
+  function startNotesListening() {
+    if (!SpeechRecognitionAPI || notesListening) return
+    const recognition = new SpeechRecognitionAPI()
+    recognition.continuous = true
+    recognition.interimResults = true
+    recognition.lang = "en-US"
+    recognition.onresult = (e: SpeechRecognitionEvent) => {
+      let interim = ""
+      let finalChunk = ""
+      for (let i = e.resultIndex; i < e.results.length; i++) {
+        const result = e.results[i]
+        const text = result[0]?.transcript ?? ""
+        if (result.isFinal) finalChunk += text
+        else interim += text
+      }
+      if (finalChunk) {
+        setNotesValue((prev) => {
+          const sep = prev.trim() ? "\n" : ""
+          return prev + sep + finalChunk
+        })
+      }
+      setNotesInterim(interim)
+    }
+    recognition.onend = () => {
+      setNotesListening(false)
+      setNotesInterim("")
+      recognitionRef.current = null
+    }
+    recognition.onerror = () => {
+      setNotesListening(false)
+      setNotesInterim("")
+      recognitionRef.current = null
+    }
+    try {
+      recognition.start()
+      recognitionRef.current = recognition
+      setNotesListening(true)
+    } catch {
+      setNotesListening(false)
+    }
+  }
+
+  function stopNotesListening() {
+    if (recognitionRef.current) {
+      try {
+        recognitionRef.current.stop()
+      } catch {
+        // ignore
+      }
+      recognitionRef.current = null
+    }
+    setNotesListening(false)
+    setNotesInterim("")
+  }
 
   async function handleStatusChange(value: string) {
     await updateContact(contact.id, { status: value })
@@ -208,15 +291,41 @@ export function ContactDetail({
           </div>
         </div>
         <div className="mt-2">
-          <label className="block text-xs font-medium text-slate-500 mb-1">
-            Notes
-            {notesSaving && (
-              <span className="ml-2 text-slate-600 italic">Saving…</span>
+          <div className="flex items-center gap-2 mb-1">
+            <label className="text-xs font-medium text-slate-500">
+              Notes
+              {notesSaving && (
+                <span className="ml-2 text-slate-600 italic">Saving…</span>
+              )}
+            </label>
+            {SpeechRecognitionAPI && (
+              <button
+                type="button"
+                onClick={notesListening ? stopNotesListening : startNotesListening}
+                title={notesListening ? "Stop voice input" : "Voice input"}
+                className={cn(
+                  "p-1.5 rounded-lg transition",
+                  notesListening
+                    ? "bg-red-900/60 text-red-400 hover:bg-red-900/80"
+                    : "text-slate-500 hover:text-slate-300 hover:bg-slate-800"
+                )}
+                aria-label={notesListening ? "Stop voice input" : "Voice input"}
+              >
+                <Mic className="w-4 h-4" />
+              </button>
             )}
-          </label>
+          </div>
           <textarea
-            value={notesValue}
-            onChange={(e) => setNotesValue(e.target.value)}
+            value={
+              notesListening && notesInterim
+                ? notesValue + (notesValue.trim() ? "\n" : "") + notesInterim
+                : notesValue
+            }
+            onChange={(e) => {
+              const v = e.target.value
+              setNotesValue(v)
+              if (notesListening && notesInterim) setNotesInterim("")
+            }}
             onBlur={handleNotesBlur}
             placeholder="Add notes about this contact…"
             rows={4}
@@ -282,6 +391,68 @@ export function ContactDetail({
           </div>
         </div>
       )}
+
+      <div className="mb-4 bg-slate-900/50 border border-slate-700 rounded-xl p-4">
+        <h3 className="text-sm font-semibold text-slate-300 mb-2">
+          Ask Coach
+        </h3>
+        <p className="text-xs text-slate-500 mb-2">
+          Ask a question using everything we know about this contact, the seller, and their conversations (Gemini 2.5).
+        </p>
+        <textarea
+          value={coachPrompt}
+          onChange={(e) => setCoachPrompt(e.target.value)}
+          placeholder="e.g. What should I focus on in the next call? What objections should I address first?"
+          rows={3}
+          className="w-full px-3 py-2 rounded-lg bg-slate-800 border border-slate-700 text-slate-200 text-sm placeholder:text-slate-500 focus:outline-none focus:ring-1 focus:ring-cyan-500 resize-y min-h-[72px] mb-2"
+        />
+        <button
+          type="button"
+          onClick={async () => {
+            const prompt = coachPrompt.trim()
+            if (!prompt || coachLoading) return
+            setCoachLoading(true)
+            setCoachResponse(null)
+            try {
+              const { response } = await askCoach(contact.id, prompt)
+              setCoachResponse(response)
+            } catch (e) {
+              setCoachResponse(
+                "Error: " + (e instanceof Error ? e.message : "Failed to get response")
+              )
+            } finally {
+              setCoachLoading(false)
+            }
+          }}
+          disabled={coachLoading || !coachPrompt.trim()}
+          className="px-3 py-1.5 text-sm font-medium rounded-lg bg-cyan-700 text-white hover:bg-cyan-600 disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          {coachLoading ? "Asking…" : "Ask Coach"}
+        </button>
+        {coachResponse !== null && (
+          <div className="mt-3 pt-3 border-t border-slate-700">
+            <p className="text-xs font-medium text-slate-500 mb-1">Response</p>
+            <div className="rounded-lg bg-slate-800 border border-slate-700 p-3 text-sm text-slate-300 [&_h1]:text-base [&_h1]:font-semibold [&_h1]:text-slate-200 [&_h1]:mt-2 [&_h1]:mb-1 [&_h2]:text-sm [&_h2]:font-semibold [&_h2]:text-slate-200 [&_h2]:mt-2 [&_h2]:mb-1 [&_p]:my-1 [&_ul]:my-1.5 [&_ul]:pl-5 [&_li]:my-0.5 [&_strong]:font-semibold [&_strong]:text-slate-200">
+              <ReactMarkdown
+                components={{
+                  a: ({ href, children }) => (
+                    <a
+                      href={href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-cyan-400 hover:text-cyan-300 hover:underline"
+                    >
+                      {children}
+                    </a>
+                  ),
+                }}
+              >
+                {coachResponse}
+              </ReactMarkdown>
+            </div>
+          </div>
+        )}
+      </div>
 
       <div className="space-y-3">
         <div className="flex items-center justify-between gap-2">

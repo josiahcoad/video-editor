@@ -9,6 +9,7 @@ import {
 } from "react-router-dom"
 import { Layout } from "@/components/Layout"
 import { ContextBar } from "@/components/ContextBar"
+import { LiveStartView } from "@/components/LiveStartView"
 import { TestBar } from "@/components/TestBar"
 import { SessionView } from "@/components/SessionView"
 import { ReviewOverlay } from "@/components/ReviewOverlay"
@@ -34,6 +35,7 @@ import { useCoachWs } from "@/hooks/useCoachWs"
 export default function App() {
   const navigate = useNavigate()
   const location = useLocation()
+  const { conversationId: urlConversationId } = useParams<"conversationId">()
   const [contactId, setContactId] = useState("")
   const [context, setContext] = useState("")
   const [contacts, setContacts] = useState<ContactOption[]>([])
@@ -65,6 +67,33 @@ export default function App() {
 
   const streamRef = useRef<MediaStream | null>(null)
   const audioCtxRef = useRef<AudioContext | null>(null)
+
+  // After session starts, sync URL to /live/:conversationId (if we ever connect without being on /live/:id)
+  useEffect(() => {
+    if (
+      wsState.sessionId &&
+      location.pathname === "/live" &&
+      !urlConversationId
+    ) {
+      navigate(`/live/${wsState.sessionId}`, { replace: true })
+    }
+  }, [wsState.sessionId, location.pathname, urlConversationId, navigate])
+
+  // When we're on /live/:conversationId, set contactId from the conversation so ContextBar shows the right contact
+  useEffect(() => {
+    if (!urlConversationId) return
+    let cancelled = false
+    fetchConversation(Number(urlConversationId))
+      .then((conv) => {
+        if (!cancelled && conv.contact_id != null) {
+          setContactId(String(conv.contact_id))
+        }
+      })
+      .catch(() => {})
+    return () => {
+      cancelled = true
+    }
+  }, [urlConversationId])
 
   const stopLive = useCallback(
     (opts?: { skipEndMessage?: boolean }) => {
@@ -228,6 +257,7 @@ export default function App() {
               (convId) => {
                 setPausedConversationId(String(convId))
                 stopLive({ skipEndMessage: true })
+                navigate(`/live/${convId}`, { replace: true })
               },
               () => stopLive()
             )
@@ -265,6 +295,7 @@ export default function App() {
       handleMessage,
       wsRef,
       stopLive,
+      navigate,
     ]
   )
 
@@ -361,41 +392,46 @@ export default function App() {
     setReviewOverlayLoading(true)
   }, [sendWs])
 
-  const sessionButton =
-    location.pathname === "/live" ? (
-      <div className="flex items-center gap-2">
-        {running ? (
-          <>
+  const onLiveRoute = location.pathname.startsWith("/live")
+  const onLiveWithConversation = Boolean(urlConversationId)
+  const resumeId = urlConversationId || pausedConversationId
+
+  const sessionButton = onLiveRoute && onLiveWithConversation ? (
+    <div className="flex items-center gap-2">
+      {running ? (
+        <>
+          <button
+            type="button"
+            onClick={() => sendWs({ type: "pause" })}
+            className="px-4 py-1.5 rounded-lg text-sm font-semibold transition active:scale-95 bg-slate-600 hover:bg-slate-500"
+          >
+            Pause
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              setPausedConversationId(null)
+              stopLive()
+              navigate("/live")
+            }}
+            className="px-4 py-1.5 rounded-lg text-sm font-semibold transition active:scale-95 bg-red-600 hover:bg-red-500"
+          >
+            End Conversation
+          </button>
+        </>
+      ) : (
+        <>
+          {resumeId && (
             <button
               type="button"
-              onClick={() => sendWs({ type: "pause" })}
-              className="px-4 py-1.5 rounded-lg text-sm font-semibold transition active:scale-95 bg-slate-600 hover:bg-slate-500"
+              disabled={connecting}
+              onClick={() => connectLive(Number(resumeId))}
+              className="px-4 py-1.5 rounded-lg text-sm font-semibold transition active:scale-95 bg-blue-600 hover:bg-blue-500 disabled:opacity-50"
             >
-              Pause
+              {connecting ? "Connecting…" : "Resume Conversation"}
             </button>
-            <button
-              type="button"
-              onClick={() => {
-                setPausedConversationId(null)
-                stopLive()
-              }}
-              className="px-4 py-1.5 rounded-lg text-sm font-semibold transition active:scale-95 bg-red-600 hover:bg-red-500"
-            >
-              End Conversation
-            </button>
-          </>
-        ) : (
-          <>
-            {pausedConversationId && (
-              <button
-                type="button"
-                disabled={connecting}
-                onClick={() => connectLive(Number(pausedConversationId))}
-                className="px-4 py-1.5 rounded-lg text-sm font-semibold transition active:scale-95 bg-blue-600 hover:bg-blue-500 disabled:opacity-50"
-              >
-                Resume Conversation
-              </button>
-            )}
+          )}
+          {!resumeId && (
             <button
               type="button"
               disabled={connecting}
@@ -407,10 +443,23 @@ export default function App() {
             >
               {connecting ? "Connecting…" : "Start Conversation"}
             </button>
-          </>
-        )}
-      </div>
-    ) : null
+          )}
+          {resumeId && (
+            <button
+              type="button"
+              onClick={() => {
+                setPausedConversationId(null)
+                navigate("/live")
+              }}
+              className="px-3 py-1.5 rounded-lg text-sm font-medium text-slate-400 hover:text-slate-200 hover:bg-slate-700"
+            >
+              Start new
+            </button>
+          )}
+        </>
+      )}
+    </div>
+  ) : null
 
   const handleSelectContact = useCallback(
     (id: number) => navigate(`/contacts/${id}`),
@@ -439,6 +488,19 @@ export default function App() {
         <Route
           path="/live"
           element={
+            <LiveStartView
+              contacts={contacts}
+              onContactsReload={loadContacts}
+              onStart={(conversationId, contactId) => {
+                setContactId(String(contactId))
+                navigate(`/live/${conversationId}`)
+              }}
+            />
+          }
+        />
+        <Route
+          path="/live/:conversationId"
+          element={
             <>
               <ContextBar
                 contacts={contacts}
@@ -448,6 +510,7 @@ export default function App() {
                 onContextChange={setContext}
                 disabled={running}
                 onContactsReload={loadContacts}
+                conversationId={urlConversationId}
               />
               <SessionView
                 turns={wsState.turns}
@@ -466,6 +529,7 @@ export default function App() {
                 coachingLoading={wsState.coachingLoading}
                 onCoachMe={() => sendWs({ type: "coach_me" })}
                 onAskQuestion={(q) => sendWs({ type: "coach_me", question: q })}
+                canAskCoach={running}
               />
             </>
           }
@@ -512,6 +576,7 @@ export default function App() {
                     ? (text) => sendWs({ type: "add_turn", text })
                     : undefined
                 }
+                canAskCoach={running}
               />
             </>
           }
@@ -525,6 +590,10 @@ export default function App() {
               error={contactsError}
               onSelectContact={handleSelectContact}
               onContactsReload={loadContactsSummary}
+              onStartConversation={(id) => {
+                setContactId(String(id))
+                navigate("/live")
+              }}
             />
           }
         />
