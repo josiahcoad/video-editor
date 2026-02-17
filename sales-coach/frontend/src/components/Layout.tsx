@@ -37,7 +37,11 @@ export function Layout({
     <header className="shrink-0 bg-slate-900/80 backdrop-blur border-b border-slate-800 px-6 py-3">
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <span className="text-2xl">🎯</span>
+          <img
+            src="/sales-coach-logo.png"
+            alt=""
+            className="h-9 w-9 object-contain"
+          />
           <div>
             <h1 className="text-lg font-bold leading-tight">Sales Coach</h1>
             <p className="text-xs text-slate-500">

@@ -83,6 +83,9 @@ export function ContactDetail({
   const [notesListening, setNotesListening] = useState(false)
   const [notesInterim, setNotesInterim] = useState("")
   const recognitionRef = useRef<InstanceType<NonNullable<typeof SpeechRecognitionAPI>> | null>(null)
+  const [coachListening, setCoachListening] = useState(false)
+  const [coachInterim, setCoachInterim] = useState("")
+  const coachRecognitionRef = useRef<InstanceType<NonNullable<typeof SpeechRecognitionAPI>> | null>(null)
 
   useEffect(() => {
     setNotesValue(contact.notes ?? "")
@@ -101,6 +104,16 @@ export function ContactDetail({
       }
       setNotesListening(false)
       setNotesInterim("")
+      if (coachRecognitionRef.current) {
+        try {
+          coachRecognitionRef.current.abort()
+        } catch {
+          // ignore
+        }
+        coachRecognitionRef.current = null
+      }
+      setCoachListening(false)
+      setCoachInterim("")
     }
   }, [])
 
@@ -157,6 +170,61 @@ export function ContactDetail({
     }
     setNotesListening(false)
     setNotesInterim("")
+  }
+
+  function startCoachListening() {
+    if (!SpeechRecognitionAPI || coachListening) return
+    const recognition = new SpeechRecognitionAPI()
+    recognition.continuous = true
+    recognition.interimResults = true
+    recognition.lang = "en-US"
+    recognition.onresult = (e: SpeechRecognitionEvent) => {
+      let interim = ""
+      let finalChunk = ""
+      for (let i = e.resultIndex; i < e.results.length; i++) {
+        const result = e.results[i]
+        const text = result[0]?.transcript ?? ""
+        if (result.isFinal) finalChunk += text
+        else interim += text
+      }
+      if (finalChunk) {
+        setCoachPrompt((prev) => {
+          const sep = prev.trim() ? "\n" : ""
+          return prev + sep + finalChunk
+        })
+      }
+      setCoachInterim(interim)
+    }
+    recognition.onend = () => {
+      setCoachListening(false)
+      setCoachInterim("")
+      coachRecognitionRef.current = null
+    }
+    recognition.onerror = () => {
+      setCoachListening(false)
+      setCoachInterim("")
+      coachRecognitionRef.current = null
+    }
+    try {
+      recognition.start()
+      coachRecognitionRef.current = recognition
+      setCoachListening(true)
+    } catch {
+      setCoachListening(false)
+    }
+  }
+
+  function stopCoachListening() {
+    if (coachRecognitionRef.current) {
+      try {
+        coachRecognitionRef.current.stop()
+      } catch {
+        // ignore
+      }
+      coachRecognitionRef.current = null
+    }
+    setCoachListening(false)
+    setCoachInterim("")
   }
 
   async function handleStatusChange(value: string) {
@@ -393,15 +461,41 @@ export function ContactDetail({
       )}
 
       <div className="mb-4 bg-slate-900/50 border border-slate-700 rounded-xl p-4">
-        <h3 className="text-sm font-semibold text-slate-300 mb-2">
-          Ask Coach
-        </h3>
+        <div className="flex items-center gap-2 mb-2">
+          <h3 className="text-sm font-semibold text-slate-300">
+            Ask Coach
+          </h3>
+          {SpeechRecognitionAPI && (
+            <button
+              type="button"
+              onClick={coachListening ? stopCoachListening : startCoachListening}
+              title={coachListening ? "Stop voice input" : "Voice input"}
+              className={cn(
+                "p-1.5 rounded-lg transition",
+                coachListening
+                  ? "bg-red-900/60 text-red-400 hover:bg-red-900/80"
+                  : "text-slate-500 hover:text-slate-300 hover:bg-slate-800"
+              )}
+              aria-label={coachListening ? "Stop voice input" : "Voice input"}
+            >
+              <Mic className="w-4 h-4" />
+            </button>
+          )}
+        </div>
         <p className="text-xs text-slate-500 mb-2">
           Ask a question using everything we know about this contact, the seller, and their conversations (Gemini 2.5).
         </p>
         <textarea
-          value={coachPrompt}
-          onChange={(e) => setCoachPrompt(e.target.value)}
+          value={
+            coachListening && coachInterim
+              ? coachPrompt + (coachPrompt.trim() ? "\n" : "") + coachInterim
+              : coachPrompt
+          }
+          onChange={(e) => {
+            const v = e.target.value
+            setCoachPrompt(v)
+            if (coachListening && coachInterim) setCoachInterim("")
+          }}
           placeholder="e.g. What should I focus on in the next call? What objections should I address first?"
           rows={3}
           className="w-full px-3 py-2 rounded-lg bg-slate-800 border border-slate-700 text-slate-200 text-sm placeholder:text-slate-500 focus:outline-none focus:ring-1 focus:ring-cyan-500 resize-y min-h-[72px] mb-2"

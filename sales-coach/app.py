@@ -90,40 +90,20 @@ async def lifespan(application: FastAPI):
 
 app = FastAPI(title="Sales Coach", lifespan=lifespan)
 
-SYSTEM_PROMPT = """\
-You are a sharp, experienced sales coach listening to a live call in real time.
-Your job is to help the seller move toward closing — not by being pushy, but by \
-uncovering and resolving objections, building urgency, and advancing commitment.
+# Minimal system prompt for advice-only (low latency). No scores, no objections.
+ADVICE_ONLY_SYSTEM_PROMPT = """\
+You are a sharp sales coach. The seller is on a live call. Give ONE line only: \
+a question to ask (e.g. "What's your timeline?") or a 3–7 word hint (e.g. "Probe budget."). \
+Like a slip of paper. No sentences, no bullets, no explanation. Be specific to the conversation.
+"""
 
-RANK for each objection: S = minor, not deal-breaking | M = currently blocking but overcomeable | L = hard stop, can't or very unlikely to move forward.
-
-RULES FOR ADVICE:
-- MAX 2 sentences. They need to read this instantly while on the call.
-- Reference actual words from the conversation — never be generic.
-- Always think: "What is standing between us and a signed deal right now?"
-- If the prospect is in rapport/storytelling mode, don't interrupt — coach silence or a deepening question.
-- If an objection surfaces (stated or implied), flag it and suggest how to probe it.
-- If a stall appears ("let me think about it", "I need to check with X", "let's revisit Friday"), \
-treat it as an unresolved objection. Coach the rep to probe: what specifically needs to happen?
-- If buying signals appear, suggest a trial close or commitment step.
-- If all objections are resolved and the prospect is warm, suggest asking for the close.
-
-RULES FOR SCORES:
-- close_score: 0 = ice cold, 100 = ready to sign right now. Base this on: \
-verbal commitment level, objections resolved vs open, urgency, and buying signals.
-- steps_to_close: estimated remaining steps (1 = just needs signature, 10 = long way to go). \
-Steps include: uncover needs, present solution, handle objections, get verbal commitment, \
-discuss terms, sign contract.
-
-RULES FOR OBJECTIONS:
-- Track ALL objections surfaced during the call (explicit or implied).
-- For each objection set "rank": S (minor, not deal-breaking), M (currently blocking but overcomeable), or L (hard stop, can't or very unlikely to move forward).
-- For each open objection include "resolution_suggestion": one short, specific suggestion for \
-what the rep could say or do to resolve it (e.g. "Ask: What would need to be true for you to move forward?").
-- Include previously identified objections with updated status. Resolved ones can have empty resolution_suggestion.
-- Mark "resolved" only when the prospect has explicitly acknowledged the concern is addressed.
-- Common hidden objections: price sensitivity, risk aversion, need for approval from others, \
-timing ("not right now"), trust/proof ("show me examples"), scope uncertainty.
+# System prompt for scores + objections only (run on-demand when user clicks refresh).
+SCORES_SYSTEM_PROMPT = """\
+You are a sales coach. Based on the conversation so far, provide:
+1. close_score: 0 = ice cold, 100 = ready to sign. Base on verbal commitment, objections resolved, urgency, buying signals.
+2. steps_to_close: 1–10 (1 = just needs signature, 10 = long way to go).
+3. objections: List all objections/hesitations surfaced (explicit or implied). For each: text, status (open/resolved), rank (S/M/L), resolution_suggestion for open ones.
+Rank: S = minor | M = blocking but overcomeable | L = hard stop. Include previously identified objections with updated status.
 """
 
 
@@ -136,58 +116,21 @@ class CoachingObjection(BaseModel):
     resolution_suggestion: str | None = Field(default=None)
 
 
-class CoachingResponse(BaseModel):
-    """Structured coaching reply — use with LLM structured output."""
+class CoachingAdviceOnly(BaseModel):
+    """Advice only — for low-latency in-call coaching."""
 
     advice: str = Field(
-        description="1-2 sentences. What should the rep say or do next. No JSON, no markdown."
+        description="ONE line only: a short question to ask or 3–7 word hint. Like a slip of paper. No JSON, no markdown."
     )
+
+
+class CoachingScoresResponse(BaseModel):
+    """Scores and objections only — for on-demand refresh."""
+
     close_score: int = Field(description="0=ice cold, 100=ready to sign")
     steps_to_close: int = Field(description="Estimated remaining steps to close (1-10)")
     objections: list[CoachingObjection] = Field(default_factory=list)
 
-
-# Actor: suggest multiple candidate next steps (for critique mode)
-ACTOR_CANDIDATES_PROMPT = """\
-You are a sharp sales coach. Given the conversation so far, suggest 3–5 DISTINCT potential \
-next steps the rep could take. Include variety: e.g. one that pushes toward close, one that \
-probes a specific hesitation, one that builds rapport or deepens the relationship. The path \
-to close is not monotonic — sometimes stepping back or addressing trust matters more than \
-pushing for commitment.
-
-RESPOND IN VALID JSON only:
-{
-  "candidates": [
-    { "action": "1-2 sentences of what to say or do next.", "one_liner": "Short label e.g. Probe price concern" },
-    ...
-  ],
-  "objections": [
-    {"text": "short description", "status": "open", "rank": "S|M|L", "resolution_suggestion": "one short sentence: what rep could say/do to resolve"},
-    {"text": "resolved one", "status": "resolved", "rank": "", "resolution_suggestion": ""}
-  ]
-}
-Rank: S = minor | M = blocking but overcomeable | L = hard stop.
-"""
-
-# Critic: score each candidate on probability of eventually closing
-CRITIC_PROMPT = """\
-You are a sales coach evaluating potential next steps. Given the current state of the call \
-and a list of candidate actions, score each action on how likely it is to lead to a close \
-(eventually). Consider: trajectory (if rep does this, how might the prospect respond? what \
-happens next?), relationship risk (e.g. pushing too hard can lose the client), and whether \
-this step clears a blocking hesitation or advances commitment.
-
-The path to close is NOT always "push harder now" — sometimes probing an objection, \
-building trust, or locking a small commitment is the best move. Score 0–100.
-
-RESPOND IN VALID JSON only:
-{
-  "evaluations": [
-    { "index": 0, "close_probability": 0-100, "trajectory_notes": "1-2 sentences: what likely happens if rep does this" },
-    ...
-  ]
-}
-"""
 
 REVIEW_PROMPT = """\
 You are a senior sales coach reviewing a completed sales call. Analyze the full \
@@ -510,9 +453,11 @@ SELLER:
             if review_json:
                 try:
                     review = json.loads(review_json)
-                    seller_block += "- Performance review (summary): " + json.dumps(
-                        review, indent=2
-                    ) + "\n"
+                    seller_block += (
+                        "- Performance review (summary): "
+                        + json.dumps(review, indent=2)
+                        + "\n"
+                    )
                 except Exception:
                     pass
 
@@ -583,7 +528,7 @@ CONTACT:
             ),
             HumanMessage(content=user_message),
         ]
-        response = await llm.invoke(messages)
+        response = await llm.ainvoke(messages)
         text = response.content if hasattr(response, "content") else str(response)
         return {"response": text}
     except Exception as e:
@@ -1092,7 +1037,7 @@ async def api_create_conversation(body: dict):
 async def api_get_conversation(conversation_id: int):
     conv = await get_conversation(conversation_id)
     if not conv:
-        return {"error": "not found"}
+        return JSONResponse({"error": "not found"}, status_code=404)
     conv["hesitations"] = await get_hesitations(conversation_id=conversation_id)
     # Normalize legacy coaching: advice may be stored as raw JSON + markdown
     for c in conv.get("coaching") or []:
@@ -1151,192 +1096,91 @@ async def api_contact_hesitations(contact_id: int):
     return await get_contact_hesitations_summary(contact_id)
 
 
-# ── Coaching LLM call ────────────────────────────────────────────
+# ── Coaching LLM calls ────────────────────────────────────────────
 
 
-async def get_coaching(
-    llm: openai.AsyncOpenAI,
+def _coaching_advice_user_content(
     conversation: list[str],
-    objections: list[dict],
-    turn_num: int,
-    custom_question: str | None = None,
-    contact_notes: str = "",
-    call_prep: str = "",
-) -> dict:
-    """Call the LLM for coaching advice. Returns dict with advice, close_score, steps_to_close, objections."""
-    recent = conversation[-15:]
-    conv_text = "\n".join(f"Turn {i + 1}: {t}" for i, t in enumerate(recent))
-
-    user_content = ""
-    if contact_notes or call_prep:
-        if contact_notes:
-            user_content += f"CONTACT NOTES:\n{contact_notes}\n\n"
-        if call_prep:
-            user_content += f"PRE-CALL PREPARATION (use this context when advising):\n{call_prep}\n\n"
-    if objections:
-        obj_summary = "\n".join(
-            f"- [{o['status'].upper()}] {o['text']}" for o in objections
-        )
-        user_content += f"HESITATIONS TRACKED SO FAR:\n{obj_summary}\n\n"
-
-    user_content += f"TRANSCRIPT (most recent turns):\n{conv_text}\n\n"
-
-    if custom_question:
-        user_content += (
-            f"THE SALES REP IS ASKING YOU SPECIFICALLY:\n{custom_question}\n\n"
-            "Answer their question with context from the conversation, "
-            "and still provide your standard coaching (advice, scores, objections)."
-        )
-    else:
-        user_content += "What should the seller say next?"
-
-    structured_llm = _get_coaching_llm()
-    messages = [
-        SystemMessage(content=SYSTEM_PROMPT),
-        HumanMessage(content=user_content),
-    ]
-    response: CoachingResponse = await structured_llm.ainvoke(messages)
-    out = response.model_dump()
-    return out
-
-
-def _coaching_user_content(
-    conversation: list[str],
-    objections: list[dict],
     custom_question: str | None,
     contact_notes: str = "",
     call_prep: str = "",
 ) -> str:
-    """Build user message for both single and actor/critic coaching."""
+    """Build user message for advice-only prompt."""
     recent = conversation[-15:]
     conv_text = "\n".join(f"Turn {i + 1}: {t}" for i, t in enumerate(recent))
     out = ""
-    if contact_notes or call_prep:
-        if contact_notes:
-            out += f"CONTACT NOTES:\n{contact_notes}\n\n"
-        if call_prep:
-            out += f"PRE-CALL PREPARATION (use this context when advising):\n{call_prep}\n\n"
-    if objections:
-        obj_summary = "\n".join(
-            f"- [{o['status'].upper()}] {o['text']}" for o in objections
-        )
-        out += f"HESITATIONS TRACKED SO FAR:\n{obj_summary}\n\n"
-    out += f"TRANSCRIPT (most recent turns):\n{conv_text}\n\n"
+    if contact_notes:
+        out += f"CONTACT NOTES:\n{contact_notes}\n\n"
+    if call_prep:
+        out += f"PRE-CALL PREP:\n{call_prep}\n\n"
+    out += f"TRANSCRIPT (recent):\n{conv_text}\n\n"
     if custom_question:
-        out += f"THE SALES REP IS ASKING:\n{custom_question}\n\n"
+        out += f"REP ASKS:\n{custom_question}\n\n"
+    out += "One short line only: question to ask or 3–7 word hint (slip of paper)."
     return out
 
 
-async def get_coaching_with_critique(
-    llm: openai.AsyncOpenAI,
+async def get_coaching_advice_only(
     conversation: list[str],
-    objections: list[dict],
-    turn_num: int,
     custom_question: str | None = None,
     contact_notes: str = "",
     call_prep: str = "",
 ) -> dict:
-    """Actor: suggest 3–5 candidate next steps. Critic: score each for P(close). Return best + full list."""
-    user_content = _coaching_user_content(
-        conversation, objections, custom_question, contact_notes, call_prep
+    """Low-latency: return only advice (one line). No scores or objections."""
+    user_content = _coaching_advice_user_content(
+        conversation, custom_question, contact_notes, call_prep
     )
-    user_content += "Suggest 3–5 distinct candidate next steps (JSON with candidates and objections)."
+    structured_llm = _get_coaching_advice_llm()
+    messages = [
+        SystemMessage(content=ADVICE_ONLY_SYSTEM_PROMPT),
+        HumanMessage(content=user_content),
+    ]
+    response: CoachingAdviceOnly = await structured_llm.ainvoke(messages)
+    return {"advice": response.advice}
 
-    # Actor: get candidates
-    response = await llm.chat.completions.create(
-        model="anthropic/claude-haiku-4-5",
-        messages=[
-            {"role": "system", "content": ACTOR_CANDIDATES_PROMPT},
-            {"role": "user", "content": user_content},
-        ],
-    )
-    raw_actor = response.choices[0].message.content.strip()
-    try:
-        actor_data = json.loads(_strip_json_fences(raw_actor))
-    except json.JSONDecodeError:
-        return {
-            "advice": raw_actor[:200],
-            "close_score": -1,
-            "steps_to_close": -1,
-            "objections": [],
-        }
-    candidates = actor_data.get("candidates") or []
-    new_objections = actor_data.get("objections") or objections
-    if not candidates:
-        return {
-            "advice": "No candidates generated.",
-            "close_score": -1,
-            "steps_to_close": -1,
-            "objections": new_objections,
-        }
 
-    # Critic: score each candidate
-    state_summary = user_content[:2000]
-    list_actions = "\n".join(
-        f"{i}. {c.get('action', c.get('one_liner', ''))}"
-        for i, c in enumerate(candidates)
-    )
-    critic_user = f"CURRENT STATE:\n{state_summary}\n\nCANDIDATE ACTIONS:\n{list_actions}\n\nScore each action 0–100 for probability of eventually closing (JSON evaluations)."
-    response = await llm.chat.completions.create(
-        model="anthropic/claude-haiku-4-5",
-        messages=[
-            {"role": "system", "content": CRITIC_PROMPT},
-            {"role": "user", "content": critic_user},
-        ],
-    )
-    raw_critic = response.choices[0].message.content.strip()
-    try:
-        critic_data = json.loads(_strip_json_fences(raw_critic))
-    except json.JSONDecodeError:
-        best = candidates[0]
-        return {
-            "advice": best.get("action", ""),
-            "close_score": -1,
-            "steps_to_close": -1,
-            "objections": new_objections,
-            "candidates": [
-                {
-                    "action": c.get("action", ""),
-                    "close_probability": -1,
-                    "trajectory_notes": "",
-                    "one_liner": c.get("one_liner", ""),
-                }
-                for c in candidates
-            ],
-        }
-    evaluations = critic_data.get("evaluations") or []
-    by_index = {
-        e["index"]: e for e in evaluations if "index" in e and "close_probability" in e
-    }
-    scored = []
-    for i, c in enumerate(candidates):
-        e = by_index.get(i, {})
-        prob = e.get("close_probability", -1)
-        if not isinstance(prob, (int, float)):
-            prob = -1
-        scored.append(
-            {
-                "action": c.get("action", ""),
-                "one_liner": c.get("one_liner", ""),
-                "close_probability": int(prob) if prob >= 0 else -1,
-                "trajectory_notes": e.get("trajectory_notes", "") or "",
-            }
+def _scores_user_content(
+    conversation: list[str],
+    objections: list[dict],
+    contact_notes: str = "",
+    call_prep: str = "",
+) -> str:
+    """Build user message for scores/objections prompt."""
+    recent = conversation[-15:]
+    conv_text = "\n".join(f"Turn {i + 1}: {t}" for i, t in enumerate(recent))
+    out = ""
+    if contact_notes:
+        out += f"CONTACT NOTES:\n{contact_notes}\n\n"
+    if call_prep:
+        out += f"PRE-CALL PREP:\n{call_prep}\n\n"
+    if objections:
+        obj_summary = "\n".join(
+            f"- [{o.get('status', 'open').upper()}] {o.get('text', '')}"
+            for o in objections
         )
-    scored.sort(key=lambda x: x["close_probability"], reverse=True)
-    best = (
-        scored[0]
-        if scored
-        else {"action": candidates[0].get("action", ""), "close_probability": -1}
+        out += f"CURRENT OBJECTIONS:\n{obj_summary}\n\n"
+    out += f"TRANSCRIPT (recent):\n{conv_text}\n\n"
+    out += "Provide close_score (0-100), steps_to_close (1-10), and updated objections list."
+    return out
+
+
+async def get_coaching_scores_and_objections(
+    conversation: list[str],
+    objections: list[dict],
+    contact_notes: str = "",
+    call_prep: str = "",
+) -> dict:
+    """On-demand: return close_score, steps_to_close, objections. No advice."""
+    user_content = _scores_user_content(
+        conversation, objections, contact_notes, call_prep
     )
-    return {
-        "advice": best["action"],
-        "close_score": best["close_probability"]
-        if best["close_probability"] >= 0
-        else -1,
-        "steps_to_close": -1,
-        "objections": new_objections,
-        "candidates": scored,
-    }
+    structured_llm = _get_coaching_scores_llm()
+    messages = [
+        SystemMessage(content=SCORES_SYSTEM_PROMPT),
+        HumanMessage(content=user_content),
+    ]
+    response: CoachingScoresResponse = await structured_llm.ainvoke(messages)
+    return response.model_dump()
 
 
 # ── Post-call review generation ──────────────────────────────────
@@ -1356,8 +1200,8 @@ def _get_review_llm() -> ChatOpenAI:
     return llm.with_structured_output(PostCallReview)
 
 
-def _get_coaching_llm() -> ChatOpenAI:
-    """LangChain client for OpenRouter used with structured coaching output."""
+def _get_coaching_advice_llm() -> ChatOpenAI:
+    """LangChain client for advice-only (low latency)."""
     api_key = os.environ.get("OPENROUTER_API_KEY")
     if not api_key:
         raise ValueError("OPENROUTER_API_KEY environment variable must be set")
@@ -1365,9 +1209,23 @@ def _get_coaching_llm() -> ChatOpenAI:
         model="anthropic/claude-haiku-4-5",
         base_url="https://openrouter.ai/api/v1",
         api_key=api_key,
-        max_tokens=4096,
+        max_tokens=256,
     )
-    return llm.with_structured_output(CoachingResponse)
+    return llm.with_structured_output(CoachingAdviceOnly)
+
+
+def _get_coaching_scores_llm() -> ChatOpenAI:
+    """LangChain client for scores + objections (on-demand)."""
+    api_key = os.environ.get("OPENROUTER_API_KEY")
+    if not api_key:
+        raise ValueError("OPENROUTER_API_KEY environment variable must be set")
+    llm = ChatOpenAI(
+        model="anthropic/claude-haiku-4-5",
+        base_url="https://openrouter.ai/api/v1",
+        api_key=api_key,
+        max_tokens=2048,
+    )
+    return llm.with_structured_output(CoachingScoresResponse)
 
 
 async def generate_review(
@@ -1546,21 +1404,18 @@ class SessionData:
 async def coaching_session(ws: WebSocket):
     await ws.accept()
 
-    llm = _get_llm()
     session = SessionData()
 
     # First message: config (or resume with conversation_id)
     try:
         init_msg = await ws.receive_json()
         auto_coach = init_msg.get("auto_coach", True)
-        critique_mode = init_msg.get("critique_mode", False)
         contact_id = init_msg.get("contact_id")
         if contact_id:
             session.contact_id = int(contact_id)
         resume_id = init_msg.get("conversation_id")
     except Exception:
         auto_coach = True
-        critique_mode = False
         resume_id = None
 
     conversation: list[str] = []
@@ -1630,83 +1485,60 @@ async def coaching_session(ws: WebSocket):
     msg_queue: asyncio.Queue[Any] = asyncio.Queue()
     cmd_queue: asyncio.Queue[dict] = asyncio.Queue()
     running = True
-    last_speech_at: float = 0.0
-    SILENCE_AUTO_END_SEC = 20.0
     pause_requested = False
-    auto_end_requested = False
 
     def on_dg_message(message: Any) -> None:
         if running:
             msg_queue.put_nowait(message)
 
-    async def silence_checker() -> None:
-        nonlocal auto_end_requested
-        while running:
-            await asyncio.sleep(2.0)
-            if not running:
-                return
-            if (
-                last_speech_at > 0
-                and (time.monotonic() - last_speech_at) >= SILENCE_AUTO_END_SEC
-            ):
-                auto_end_requested = True
-                try:
-                    await ws.send_json({"type": "auto_end", "reason": "silence"})
-                except Exception:
-                    pass
-                return
-
     async def do_coaching(turn_num: int, custom_question: str | None = None) -> None:
-        nonlocal coaching_count, objections
+        nonlocal coaching_count
         try:
             await ws.send_json({"type": "coaching_started"})
-            if critique_mode:
-                result = await get_coaching_with_critique(
-                    llm,
-                    conversation,
-                    objections,
-                    turn_num,
-                    custom_question,
-                    session.contact_notes,
-                    session.call_prep,
-                )
-            else:
-                result = await get_coaching(
-                    llm,
-                    conversation,
-                    objections,
-                    turn_num,
-                    custom_question,
-                    session.contact_notes,
-                    session.call_prep,
-                )
-            new_objs = result.get("objections", [])
-            if new_objs:
-                objections = new_objs
-                session.objections = new_objs
-
+            result = await get_coaching_advice_only(
+                conversation,
+                custom_question,
+                session.contact_notes,
+                session.call_prep,
+            )
             coaching_count += 1
             advice = _sanitize_advice(result.get("advice", "") or "")
-            cs = result.get("close_score", -1)
-            sts = result.get("steps_to_close", -1)
 
             session.add_coaching(
-                coaching_count, turn_num, advice, cs, sts, custom_question is not None
+                coaching_count, turn_num, advice, -1, -1, custom_question is not None
             )
 
             payload = {
                 "type": "coaching",
                 "advice": advice,
-                "close_score": cs,
-                "steps_to_close": sts,
-                "objections": objections,
                 "number": coaching_count,
                 "turn": turn_num,
                 "is_custom": custom_question is not None,
             }
-            if result.get("candidates"):
-                payload["candidates"] = result["candidates"]
             await ws.send_json(payload)
+        except Exception as e:
+            await ws.send_json({"type": "error", "message": str(e)})
+
+    async def do_refresh_scores() -> None:
+        nonlocal objections
+        try:
+            result = await get_coaching_scores_and_objections(
+                conversation,
+                objections,
+                session.contact_notes,
+                session.call_prep,
+            )
+            objections = result.get("objections", [])
+            if objections:
+                session.objections = objections
+            await ws.send_json(
+                {
+                    "type": "scores",
+                    "close_score": result.get("close_score", -1),
+                    "steps_to_close": result.get("steps_to_close", -1),
+                    "objections": objections,
+                }
+            )
         except Exception as e:
             await ws.send_json({"type": "error", "message": str(e)})
 
@@ -1720,15 +1552,13 @@ async def coaching_session(ws: WebSocket):
             if cmd_type == "coach_me":
                 turn_num = len(conversation)
                 asyncio.create_task(do_coaching(turn_num, cmd.get("question")))
+            elif cmd_type == "refresh_scores":
+                asyncio.create_task(do_refresh_scores())
             elif cmd_type == "set_auto_coach":
                 nonlocal auto_coach
                 auto_coach = cmd.get("value", True)
-            elif cmd_type == "set_critique_mode":
-                nonlocal critique_mode
-                critique_mode = cmd.get("value", False)
 
     async def process_messages() -> None:
-        nonlocal last_speech_at
         while running:
             try:
                 message = await asyncio.wait_for(msg_queue.get(), timeout=1.0)
@@ -1746,7 +1576,6 @@ async def coaching_session(ws: WebSocket):
                             {"type": "transcript_interim", "text": transcript}
                         )
                     elif event == "EndOfTurn" and transcript and transcript.strip():
-                        last_speech_at = time.monotonic()
                         text = transcript.strip()
                         conversation.append(text)
                         turn_num = len(conversation)
@@ -1789,7 +1618,6 @@ async def coaching_session(ws: WebSocket):
             listen_task = asyncio.create_task(dg_conn.start_listening())
             process_task = asyncio.create_task(process_messages())
             cmd_task = asyncio.create_task(process_commands())
-            silence_task = asyncio.create_task(silence_checker())
 
             await ws.send_json({"type": "status", "message": "Ready — start talking!"})
 
@@ -1798,8 +1626,6 @@ async def coaching_session(ws: WebSocket):
                     try:
                         msg = await asyncio.wait_for(ws.receive(), timeout=1.0)
                     except asyncio.TimeoutError:
-                        if auto_end_requested:
-                            break
                         continue
                     if msg["type"] == "websocket.receive":
                         if "bytes" in msg and msg["bytes"]:
@@ -1839,11 +1665,6 @@ async def coaching_session(ws: WebSocket):
                 listen_task.cancel()
                 process_task.cancel()
                 cmd_task.cancel()
-                silence_task.cancel()
-                try:
-                    await silence_task
-                except asyncio.CancelledError:
-                    pass
 
     except Exception as e:
         try:
@@ -1883,7 +1704,6 @@ async def test_session(ws: WebSocket):
     """Replay a conversation (by id from DB or from pasted file) for testing coaching prompts."""
     await ws.accept()
 
-    llm = _get_llm()
     session = SessionData()
 
     # First message: config — either conversation_id (load from DB) or conversation (raw text)
@@ -1892,7 +1712,6 @@ async def test_session(ws: WebSocket):
         conversation_text = init_msg.get("conversation", "")
         conversation_id_load = init_msg.get("conversation_id")
         contact_id = init_msg.get("contact_id")
-        critique_mode = init_msg.get("critique_mode", False)
         if contact_id:
             session.contact_id = int(contact_id)
     except Exception:
@@ -1978,55 +1797,53 @@ async def test_session(ws: WebSocket):
                 conversation = [t["text"] for t in turns_data[:up_to]]
                 await ws.send_json({"type": "coaching_started"})
                 try:
-                    if critique_mode:
-                        result = await get_coaching_with_critique(
-                            llm,
-                            conversation,
-                            objections,
-                            up_to,
-                            custom_question,
-                            session.contact_notes,
-                            session.call_prep,
-                        )
-                    else:
-                        result = await get_coaching(
-                            llm,
-                            conversation,
-                            objections,
-                            up_to,
-                            custom_question,
-                            session.contact_notes,
-                            session.call_prep,
-                        )
-                    new_objs = result.get("objections", [])
-                    if new_objs:
-                        objections = new_objs
-                        session.objections = new_objs
+                    result = await get_coaching_advice_only(
+                        conversation,
+                        custom_question,
+                        session.contact_notes,
+                        session.call_prep,
+                    )
                     coaching_count += 1
                     advice = _sanitize_advice(result.get("advice", "") or "")
-                    cs = result.get("close_score", -1)
-                    sts = result.get("steps_to_close", -1)
                     session.add_coaching(
                         coaching_count,
                         up_to,
                         advice,
-                        cs,
-                        sts,
+                        -1,
+                        -1,
                         custom_question is not None,
                     )
                     payload = {
                         "type": "coaching",
                         "advice": advice,
-                        "close_score": cs,
-                        "steps_to_close": sts,
-                        "objections": objections,
                         "number": coaching_count,
                         "turn": up_to,
                         "is_custom": custom_question is not None,
                     }
-                    if result.get("candidates"):
-                        payload["candidates"] = result["candidates"]
                     await ws.send_json(payload)
+                except Exception as e:
+                    await ws.send_json({"type": "error", "message": str(e)})
+
+            elif cmd_type == "refresh_scores":
+                try:
+                    conversation = [t["text"] for t in turns_data]
+                    result = await get_coaching_scores_and_objections(
+                        conversation,
+                        objections,
+                        session.contact_notes,
+                        session.call_prep,
+                    )
+                    objections = result.get("objections", [])
+                    if objections:
+                        session.objections = objections
+                    await ws.send_json(
+                        {
+                            "type": "scores",
+                            "close_score": result.get("close_score", -1),
+                            "steps_to_close": result.get("steps_to_close", -1),
+                            "objections": objections,
+                        }
+                    )
                 except Exception as e:
                     await ws.send_json({"type": "error", "message": str(e)})
 
@@ -2046,58 +1863,30 @@ async def test_session(ws: WebSocket):
                             "confidence": 1.0,
                         }
                     )
-                    # Auto-coach on the new turn
+                    # Auto-coach on the new turn (advice only)
                     await ws.send_json({"type": "coaching_started"})
                     try:
-                        if critique_mode:
-                            result = await get_coaching_with_critique(
-                                llm,
-                                conversation,
-                                objections,
-                                turn_num,
-                                None,
-                                session.contact_notes,
-                                session.call_prep,
-                            )
-                        else:
-                            result = await get_coaching(
-                                llm,
-                                conversation,
-                                objections,
-                                turn_num,
-                                None,
-                                session.contact_notes,
-                                session.call_prep,
-                            )
-                        new_objs = result.get("objections", [])
-                        if new_objs:
-                            objections = new_objs
-                            session.objections = new_objs
+                        result = await get_coaching_advice_only(
+                            conversation,
+                            None,
+                            session.contact_notes,
+                            session.call_prep,
+                        )
                         coaching_count += 1
                         advice = _sanitize_advice(result.get("advice", "") or "")
-                        cs = result.get("close_score", -1)
-                        sts = result.get("steps_to_close", -1)
                         session.add_coaching(
-                            coaching_count, turn_num, advice, cs, sts, False
+                            coaching_count, turn_num, advice, -1, -1, False
                         )
                         payload = {
                             "type": "coaching",
                             "advice": advice,
-                            "close_score": cs,
-                            "steps_to_close": sts,
-                            "objections": objections,
                             "number": coaching_count,
                             "turn": turn_num,
                             "is_custom": False,
                         }
-                        if result.get("candidates"):
-                            payload["candidates"] = result["candidates"]
                         await ws.send_json(payload)
                     except Exception as e:
                         await ws.send_json({"type": "error", "message": str(e)})
-
-            elif cmd_type == "set_critique_mode":
-                critique_mode = cmd.get("value", False)
 
             elif cmd_type == "generate_review":
                 try:

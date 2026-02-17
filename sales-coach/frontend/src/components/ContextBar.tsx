@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
 import ReactMarkdown from "react-markdown"
+import { Phone } from "lucide-react"
 import type { ContactOption } from "@/types/api"
 import {
   createContact,
@@ -24,6 +25,8 @@ interface ContextBarProps {
   onContactsReload: () => void
   /** When on /live/:conversationId, pass so we can load/save prep from the conversation. */
   conversationId?: string | null
+  conversationContactLoading?: boolean
+  conversationHasNoContact?: boolean
 }
 
 export function ContextBar({
@@ -33,6 +36,8 @@ export function ContextBar({
   disabled,
   onContactsReload,
   conversationId,
+  conversationContactLoading,
+  conversationHasNoContact,
 }: ContextBarProps) {
   const [showNew, setShowNew] = useState(false)
   const [newName, setNewName] = useState("")
@@ -73,7 +78,7 @@ export function ContextBar({
     }
   }, [contactId])
 
-  // When we have a conversation: load existing prep or auto-run and save
+  // When we're on a conversation page (/live/:id): load existing prep or stream and save. Requires both contactId and conversationId.
   useEffect(() => {
     if (!contactId || !conversationId) return
     const convId = Number(conversationId)
@@ -90,7 +95,6 @@ export function ContextBar({
           setPrepareContent(existing.trim())
           return
         }
-        // No prep yet: run stream and save to conversation
         setPrepareLoading(true)
         setPrepareContent("")
         const res = await fetchPrepareStream(Number(contactId))
@@ -156,14 +160,38 @@ export function ContextBar({
     }
   }
 
+  const selectedContact = contactId
+    ? contacts.find((c) => String(c.id) === contactId)
+    : null
+  const contactPhone = selectedContact?.phone?.trim() ?? null
+
   return (
     <div className="shrink-0 max-w-7xl w-full mx-auto px-4 pt-3 pb-0">
       <details open className="bg-slate-900 rounded-xl border border-slate-800">
-        <summary className="px-4 py-2 cursor-pointer text-sm font-semibold text-slate-400 select-none">
-          📋 Pre-Call Context
-          <span className="text-xs font-normal text-slate-600 ml-2">
-            contact notes
+        <summary className="px-4 py-2 cursor-pointer text-sm font-semibold text-slate-400 select-none flex items-center gap-2">
+          📋 Contact Details
+          <span className="text-xs font-normal text-slate-600">
+            notes · research · prep
           </span>
+          {contactPhone ? (
+            <a
+              href={`tel:${contactPhone}`}
+              onClick={(e) => e.stopPropagation()}
+              className="ml-auto p-1.5 rounded-lg text-slate-400 hover:text-emerald-400 hover:bg-slate-800"
+              title={`Call ${contactPhone}`}
+              aria-label={`Call ${contactPhone}`}
+            >
+              <Phone className="w-4 h-4" />
+            </a>
+          ) : contactId ? (
+            <span
+              className="ml-auto p-1.5 rounded-lg text-slate-600 cursor-default"
+              title="No phone number"
+              aria-label="No phone number"
+            >
+              <Phone className="w-4 h-4" />
+            </span>
+          ) : null}
         </summary>
         <div className="px-4 pb-3 space-y-2">
           <div className="flex items-center gap-2 flex-wrap">
@@ -232,93 +260,98 @@ export function ContextBar({
               </div>
             )}
           </div>
-          <div className="min-h-16 space-y-2">
-            {!contactId ? (
-              <p className="text-sm text-slate-500 italic py-2">
-                Select a contact to see their notes
-              </p>
-            ) : notesLoading ? (
-              <p className="text-sm text-slate-500 italic py-2">Loading notes…</p>
-            ) : (
-              <>
-                {notes ? (
-                  <div>
-                    <p className="text-[11px] font-medium text-slate-500 mb-1">
-                      Notes
-                    </p>
-                    <div className="text-sm text-slate-300 whitespace-pre-wrap bg-slate-800 border border-slate-700 rounded-lg px-3 py-2">
-                      {notes}
+          <div className="min-h-16 grid grid-cols-1 md:grid-cols-2 gap-4">
+            {/* Left column: Notes + Research */}
+            <div className="space-y-2">
+              {!contactId ? (
+                <p className="text-sm text-slate-500 italic py-2">
+                  {conversationContactLoading
+                    ? "Loading contact…"
+                    : conversationHasNoContact
+                      ? "This conversation has no contact linked."
+                      : "Select a contact to see their notes"}
+                </p>
+              ) : notesLoading ? (
+                <p className="text-sm text-slate-500 italic py-2">Loading notes…</p>
+              ) : (
+                <>
+                  {notes ? (
+                    <div>
+                      <p className="text-[11px] font-medium text-slate-500 mb-1">
+                        Notes
+                      </p>
+                      <div className="text-sm text-slate-300 whitespace-pre-wrap bg-slate-800 border border-slate-700 rounded-lg px-3 py-2">
+                        {notes}
+                      </div>
                     </div>
-                  </div>
-                ) : (
-                  <p className="text-sm text-slate-500 italic py-2">
-                    No notes for this contact
-                  </p>
-                )}
-                {research && (
-                  <div>
-                    <p className="text-[11px] font-medium text-slate-500 mb-1">
-                      Research
+                  ) : (
+                    <p className="text-sm text-slate-500 italic py-2">
+                      No notes for this contact
                     </p>
-                    <div className="text-sm text-slate-300 bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 max-h-48 overflow-y-auto [&_h1]:text-base [&_h1]:font-semibold [&_h1]:text-slate-200 [&_h1]:mt-2 [&_h1]:mb-1 [&_h2]:text-sm [&_h2]:font-semibold [&_h2]:text-slate-200 [&_h2]:mt-2 [&_h2]:mb-1 [&_p]:my-1 [&_ul]:my-1.5 [&_ul]:pl-5 [&_li]:my-0.5 [&_strong]:font-semibold [&_strong]:text-slate-200">
-                      <ReactMarkdown
-                        components={{
-                          a: ({ href, children }) => (
-                            <a
-                              href={href}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="text-cyan-400 hover:text-cyan-300 hover:underline"
-                            >
-                              {children}
-                            </a>
-                          ),
-                        }}
-                      >
-                        {research}
-                      </ReactMarkdown>
-                    </div>
-                  </div>
-                )}
-              </>
-            )}
-          </div>
-          {conversationId && (
-            <div className="pt-2 space-y-2">
-              {prepareLoading && (
-                <p className="text-xs text-slate-500 italic">Generating prep…</p>
-              )}
-              {(prepareContent !== null || prepareLoading) && (
-                <div className="bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 max-h-64 overflow-y-auto text-sm text-slate-300 [&_h1]:text-base [&_h1]:font-semibold [&_h1]:text-slate-200 [&_h1]:mt-2 [&_h1]:mb-1 [&_h2]:text-sm [&_h2]:font-semibold [&_h2]:text-slate-200 [&_h2]:mt-2 [&_h2]:mb-1 [&_p]:my-1 [&_ul]:my-1.5 [&_ul]:pl-5 [&_li]:my-0.5 [&_strong]:font-semibold [&_strong]:text-slate-200">
-                  <ReactMarkdown
-                    components={{
-                      a: ({ href, children }) => (
-                        <a
-                          href={href}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-cyan-400 hover:text-cyan-300 hover:underline"
-                        >
-                          {children}
-                        </a>
-                      ),
-                    }}
-                  >
-                    {prepareContent ?? ""}
-                  </ReactMarkdown>
-                  {!prepareLoading && prepareContent !== null && (
-                    <button
-                      type="button"
-                      onClick={() => setPrepareContent(null)}
-                      className="mt-2 text-xs text-slate-500 hover:text-slate-400"
-                    >
-                      Clear
-                    </button>
                   )}
-                </div>
+                  {research && (
+                    <div>
+                      <p className="text-[11px] font-medium text-slate-500 mb-1">
+                        Research
+                      </p>
+                      <div className="text-sm text-slate-300 bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 max-h-64 overflow-y-auto [&_h1]:text-base [&_h1]:font-semibold [&_h1]:text-slate-200 [&_h1]:mt-2 [&_h1]:mb-1 [&_h2]:text-sm [&_h2]:font-semibold [&_h2]:text-slate-200 [&_h2]:mt-2 [&_h2]:mb-1 [&_p]:my-1 [&_ul]:my-1.5 [&_ul]:pl-5 [&_li]:my-0.5 [&_strong]:font-semibold [&_strong]:text-slate-200">
+                        <ReactMarkdown
+                          components={{
+                            a: ({ href, children }) => (
+                              <a
+                                href={href}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-cyan-400 hover:text-cyan-300 hover:underline"
+                              >
+                                {children}
+                              </a>
+                            ),
+                          }}
+                        >
+                          {research}
+                        </ReactMarkdown>
+                      </div>
+                    </div>
+                  )}
+                </>
               )}
             </div>
-          )}
+            {/* Right column: Prep (always show so layout is two columns) */}
+            <div className="space-y-2">
+              <p className="text-[11px] font-medium text-slate-500 mb-1">
+                Prep
+              </p>
+              <div className="bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 min-h-32 max-h-64 overflow-y-auto text-sm text-slate-300 [&_h1]:text-base [&_h1]:font-semibold [&_h1]:text-slate-200 [&_h1]:mt-2 [&_h1]:mb-1 [&_h2]:text-sm [&_h2]:font-semibold [&_h2]:text-slate-200 [&_h2]:mt-2 [&_h2]:mb-1 [&_p]:my-1 [&_ul]:my-1.5 [&_ul]:pl-5 [&_li]:my-0.5 [&_strong]:font-semibold [&_strong]:text-slate-200">
+                {prepareContent != null && prepareContent !== "" ? (
+                  <>
+                    <ReactMarkdown
+                      components={{
+                        a: ({ href, children }) => (
+                          <a
+                            href={href}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-cyan-400 hover:text-cyan-300 hover:underline"
+                          >
+                            {children}
+                          </a>
+                        ),
+                      }}
+                    >
+                      {prepareContent}
+                    </ReactMarkdown>
+                  </>
+                ) : (
+                  <p className="text-slate-500 italic">
+                    {conversationId
+                      ? "Writing sales prep…"
+                      : "Start or open a conversation to generate prep."}
+                  </p>
+                )}
+              </div>
+            </div>
+          </div>
         </div>
       </details>
     </div>

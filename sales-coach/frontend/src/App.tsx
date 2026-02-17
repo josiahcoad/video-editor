@@ -18,6 +18,7 @@ import { ContactDetail } from "@/components/ContactDetail"
 import { ConversationDetail } from "@/components/ConversationDetail"
 import { HomeView } from "@/components/HomeView"
 import {
+  createConversation,
   fetchContacts,
   fetchContactsWithSummary,
   fetchContactDetail,
@@ -35,7 +36,13 @@ import { useCoachWs } from "@/hooks/useCoachWs"
 export default function App() {
   const navigate = useNavigate()
   const location = useLocation()
-  const { conversationId: urlConversationId } = useParams<"conversationId">()
+  const params = useParams<"conversationId">()
+  const urlConversationId =
+    params.conversationId ??
+    (() => {
+      const m = location.pathname.match(/^\/live\/(\d+)$/)
+      return m ? m[1] : undefined
+    })()
   const [contactId, setContactId] = useState("")
   const [context, setContext] = useState("")
   const [contacts, setContacts] = useState<ContactOption[]>([])
@@ -46,7 +53,6 @@ export default function App() {
   const [reviewOverlayLoading, setReviewOverlayLoading] = useState(false)
   const [review, setReview] = useState<Review | null>(null)
   const [autoCoach, setAutoCoach] = useState(true)
-  const [critiqueMode, setCritiqueMode] = useState(false)
   const [running, setRunning] = useState(false)
   const [connecting, setConnecting] = useState(false)
   const [pausedConversationId, setPausedConversationId] = useState<string | null>(
@@ -80,16 +86,36 @@ export default function App() {
   }, [wsState.sessionId, location.pathname, urlConversationId, navigate])
 
   // When we're on /live/:conversationId, set contactId from the conversation so ContextBar shows the right contact
+  const [conversationContactLoading, setConversationContactLoading] = useState(false)
+  const [conversationHasNoContact, setConversationHasNoContact] = useState(false)
   useEffect(() => {
-    if (!urlConversationId) return
+    if (!urlConversationId) {
+      setConversationHasNoContact(false)
+      return
+    }
     let cancelled = false
+    setConversationContactLoading(true)
+    setConversationHasNoContact(false)
     fetchConversation(Number(urlConversationId))
       .then((conv) => {
-        if (!cancelled && conv.contact_id != null) {
+        if (cancelled) return
+        if (conv.contact_id != null && conv.contact_id !== undefined) {
           setContactId(String(conv.contact_id))
+          setConversationHasNoContact(false)
+        } else {
+          setContactId("")
+          setConversationHasNoContact(true)
         }
       })
-      .catch(() => {})
+      .catch((e) => {
+        if (!cancelled) {
+          console.error("Failed to load conversation for contact:", e)
+          setConversationHasNoContact(false)
+        }
+      })
+      .finally(() => {
+        if (!cancelled) setConversationContactLoading(false)
+      })
     return () => {
       cancelled = true
     }
@@ -226,7 +252,6 @@ export default function App() {
           ws.send(
             JSON.stringify({
               auto_coach: autoCoach,
-              critique_mode: critiqueMode,
               contact_id: contactId || null,
               ...(resumeId != null && { conversation_id: resumeId }),
             })
@@ -286,7 +311,6 @@ export default function App() {
       context,
       contactId,
       autoCoach,
-      critiqueMode,
       running,
       resetPanels,
       setWsState,
@@ -345,20 +369,18 @@ export default function App() {
     (conversationId: number) => {
       connectTestWs({
         conversation_id: conversationId,
-        critique_mode: critiqueMode,
         contact_id: contactId || null,
       })
     },
-    [contactId, critiqueMode, connectTestWs]
+    [contactId, connectTestWs]
   )
 
   const connectTestFresh = useCallback(() => {
     connectTestWs({
       conversation: "",
-      critique_mode: critiqueMode,
       contact_id: contactId || null,
     })
-  }, [contactId, critiqueMode, connectTestWs])
+  }, [contactId, connectTestWs])
 
   const sendWs = useCallback(
     (payload: object) => {
@@ -376,14 +398,6 @@ export default function App() {
       sendWs({ type: "set_auto_coach", value: v })
     },
     [sendWs, setWsState]
-  )
-
-  const onCritiqueChange = useCallback(
-    (v: boolean) => {
-      setCritiqueMode(v)
-      sendWs({ type: "set_critique_mode", value: v })
-    },
-    [sendWs]
   )
 
   const onGenerateReview = useCallback(() => {
@@ -511,6 +525,8 @@ export default function App() {
                 disabled={running}
                 onContactsReload={loadContacts}
                 conversationId={urlConversationId}
+                conversationContactLoading={conversationContactLoading}
+                conversationHasNoContact={conversationHasNoContact}
               />
               <SessionView
                 turns={wsState.turns}
@@ -523,12 +539,11 @@ export default function App() {
                 scoreBarColor={wsState.scoreBarColor}
                 stepsToClose={wsState.stepsToClose}
                 autoCoach={autoCoach}
-                critiqueMode={critiqueMode}
                 onAutoCoachChange={onAutoCoachChange}
-                onCritiqueChange={onCritiqueChange}
                 coachingLoading={wsState.coachingLoading}
                 onCoachMe={() => sendWs({ type: "coach_me" })}
                 onAskQuestion={(q) => sendWs({ type: "coach_me", question: q })}
+                onRefreshScores={() => sendWs({ type: "refresh_scores" })}
                 canAskCoach={running}
               />
             </>
@@ -562,12 +577,11 @@ export default function App() {
                 scoreBarColor={wsState.scoreBarColor}
                 stepsToClose={wsState.stepsToClose}
                 autoCoach={autoCoach}
-                critiqueMode={critiqueMode}
                 onAutoCoachChange={onAutoCoachChange}
-                onCritiqueChange={onCritiqueChange}
                 coachingLoading={wsState.coachingLoading}
                 onCoachMe={() => sendWs({ type: "coach_me" })}
                 onAskQuestion={(q) => sendWs({ type: "coach_me", question: q })}
+                onRefreshScores={() => sendWs({ type: "refresh_scores" })}
                 onCoachUpToTurn={(turn) =>
                   sendWs({ type: "coach_me", up_to_turn: turn })
                 }
@@ -590,9 +604,14 @@ export default function App() {
               error={contactsError}
               onSelectContact={handleSelectContact}
               onContactsReload={loadContactsSummary}
-              onStartConversation={(id) => {
-                setContactId(String(id))
-                navigate("/live")
+              onStartConversation={async (id) => {
+                try {
+                  const { id: convId } = await createConversation(id)
+                  setContactId(String(id))
+                  navigate(`/live/${convId}`)
+                } catch (e) {
+                  console.error("Failed to create conversation:", e)
+                }
               }}
             />
           }
@@ -602,9 +621,14 @@ export default function App() {
           element={
             <ContactDetailRoute
               onSelectConversation={handleSelectConversation}
-              onStartConversation={(contactId) => {
-                setContactId(String(contactId))
-                navigate("/live")
+              onStartConversation={async (contactId) => {
+                try {
+                  const { id: convId } = await createConversation(contactId)
+                  setContactId(String(contactId))
+                  navigate(`/live/${convId}`)
+                } catch (e) {
+                  console.error("Failed to create conversation:", e)
+                }
               }}
             />
           }

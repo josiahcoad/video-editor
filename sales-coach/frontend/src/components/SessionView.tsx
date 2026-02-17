@@ -1,4 +1,5 @@
 import { useState } from "react"
+import { RefreshCw } from "lucide-react"
 import type { Hesitation } from "@/types/api"
 import type { TurnEntry, TipEntry } from "@/hooks/useCoachWs"
 import { cn, extractAdviceDisplay, stripCodeFences } from "@/lib/utils"
@@ -43,16 +44,16 @@ interface SessionViewProps {
   scoreBarColor: "emerald" | "amber" | "red"
   stepsToClose: number | null
   autoCoach: boolean
-  critiqueMode: boolean
   coachingLoading?: boolean
   onAutoCoachChange: (v: boolean) => void
-  onCritiqueChange: (v: boolean) => void
   onCoachMe: () => void
   onAskQuestion: (q: string) => void
   onCoachUpToTurn?: (turn: number) => void
   onSubmitTurn?: (text: string) => void
   /** When false, ask-coach input is disabled (e.g. no active session). */
   canAskCoach?: boolean
+  /** Refresh close score, steps to close, and objections (on-demand). */
+  onRefreshScores?: () => void
 }
 
 export function SessionView({
@@ -66,15 +67,14 @@ export function SessionView({
   scoreBarColor,
   stepsToClose,
   autoCoach,
-  critiqueMode,
   onAutoCoachChange,
-  onCritiqueChange,
   onCoachMe,
   onAskQuestion,
   onCoachUpToTurn,
   onSubmitTurn,
   coachingLoading = false,
   canAskCoach = true,
+  onRefreshScores,
 }: SessionViewProps) {
   const [question, setQuestion] = useState("")
   const [turnText, setTurnText] = useState("")
@@ -209,18 +209,6 @@ export function SessionView({
               />
               <span className="text-[11px] text-slate-500">Auto</span>
             </label>
-            <label
-              className="flex items-center gap-1.5 cursor-pointer"
-              title="Actor suggests several next steps; critic scores each for P(close). Slower."
-            >
-              <input
-                type="checkbox"
-                checked={critiqueMode}
-                onChange={(e) => onCritiqueChange(e.target.checked)}
-                className="w-3.5 h-3.5 rounded accent-purple-500"
-              />
-              <span className="text-[11px] text-slate-500">Critique</span>
-            </label>
           </div>
           <div className="flex items-center gap-2">
             <span className="text-xs text-slate-600">
@@ -260,8 +248,21 @@ export function SessionView({
           <div className="shrink-0 px-4 py-2 border-t border-slate-800">
             <div className="flex items-center justify-between text-[11px] mb-1">
               <span className="text-slate-500">Close probability</span>
-              <span className="font-bold text-emerald-400">
-                {closeScore != null ? `${closeScore}%` : "—"}
+              <span className="flex items-center gap-1.5">
+                <span className="font-bold text-emerald-400">
+                  {closeScore != null ? `${closeScore}%` : "—"}
+                </span>
+                {onRefreshScores && (
+                  <button
+                    type="button"
+                    onClick={onRefreshScores}
+                    title="Refresh score and objections"
+                    className="p-0.5 rounded text-slate-500 hover:text-slate-300 hover:bg-slate-800"
+                    aria-label="Refresh score and objections"
+                  >
+                    <RefreshCw className="w-3.5 h-3.5" />
+                  </button>
+                )}
               </span>
             </div>
             <div className="w-full bg-slate-800 rounded-full h-1.5">
@@ -313,8 +314,19 @@ export function SessionView({
 
       {/* Hesitations */}
       <section className="md:col-span-3 flex flex-col min-h-0 bg-slate-900 rounded-xl border border-slate-800 overflow-hidden">
-        <div className="shrink-0 px-4 py-2 border-b border-slate-800">
+        <div className="shrink-0 px-4 py-2 border-b border-slate-800 flex items-center justify-between">
           <h2 className="text-sm font-semibold text-amber-400">⚠️ Hesitations</h2>
+          {onRefreshScores && (
+            <button
+              type="button"
+              onClick={onRefreshScores}
+              title="Refresh score and objections"
+              className="p-1 rounded text-slate-500 hover:text-slate-300 hover:bg-slate-800"
+              aria-label="Refresh score and objections"
+            >
+              <RefreshCw className="w-3.5 h-3.5" />
+            </button>
+          )}
         </div>
         <div className="flex-1 min-h-0 overflow-y-auto p-3 space-y-1.5">
           {objections.length === 0 ? (

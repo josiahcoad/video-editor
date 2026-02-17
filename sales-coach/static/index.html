@@ -273,18 +273,6 @@
               />
               <span class="text-[11px] text-slate-500">Auto</span>
             </label>
-            <label
-              class="flex items-center gap-1.5 cursor-pointer"
-              title="Actor suggests several next steps; critic scores each for P(close). Slower."
-            >
-              <input
-                type="checkbox"
-                id="critiqueToggle"
-                onchange="onCritiqueToggle()"
-                class="w-3.5 h-3.5 rounded accent-purple-500"
-              />
-              <span class="text-[11px] text-slate-500">Critique</span>
-            </label>
           </div>
           <div class="flex items-center gap-2">
             <span id="coachCounter" class="text-xs text-slate-600">0 tips</span>
@@ -524,23 +512,12 @@
         clearInterval(timerInterval);
       }
 
-      // ── Auto / Critique toggles ──
+      // ── Auto toggle ──
       function onAutoToggle() {
         const auto = $("autoToggle").checked;
         $("coachMeBtn").classList.toggle("hidden", auto);
         if (ws && ws.readyState === WebSocket.OPEN) {
           ws.send(JSON.stringify({ type: "set_auto_coach", value: auto }));
-        }
-      }
-
-      function onCritiqueToggle() {
-        if (ws && ws.readyState === WebSocket.OPEN) {
-          ws.send(
-            JSON.stringify({
-              type: "set_critique_mode",
-              value: $("critiqueToggle").checked,
-            })
-          );
         }
       }
 
@@ -600,7 +577,6 @@
             ws.send(
               JSON.stringify({
                 auto_coach: $("autoToggle").checked,
-                critique_mode: $("critiqueToggle").checked,
                 contact_id: contactId,
               })
             );
@@ -682,7 +658,6 @@
           ws.send(
             JSON.stringify({
               conversation: text,
-              critique_mode: $("critiqueToggle")?.checked ?? false,
               contact_id: contactId,
             })
           );

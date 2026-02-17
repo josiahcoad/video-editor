@@ -160,12 +160,6 @@ export function useCoachWs() {
             isCustom: msg.is_custom,
             candidates: msg.candidates,
           }
-          let scoreColor: SessionState["scoreBarColor"] = "emerald"
-          if (msg.close_score != null && msg.close_score >= 0) {
-            if (msg.close_score >= 70) scoreColor = "emerald"
-            else if (msg.close_score >= 40) scoreColor = "amber"
-            else scoreColor = "red"
-          }
           setState((s) => ({
             ...s,
             tips: [tip, ...s.tips],
@@ -178,12 +172,34 @@ export function useCoachWs() {
               msg.steps_to_close != null && msg.steps_to_close >= 0
                 ? msg.steps_to_close
                 : s.stepsToClose,
-            scoreBarColor: scoreColor,
+            scoreBarColor:
+              msg.close_score != null && msg.close_score >= 0
+                ? msg.close_score >= 70
+                  ? "emerald"
+                  : msg.close_score >= 40
+                    ? "amber"
+                    : "red"
+                : s.scoreBarColor,
             showScoreBar: true,
             objections:
               "objections" in msg && Array.isArray(msg.objections)
                 ? msg.objections
                 : s.objections,
+          }))
+          break
+        }
+        case "scores": {
+          const score = msg.close_score
+          const scoreColor: SessionState["scoreBarColor"] =
+            score >= 70 ? "emerald" : score >= 40 ? "amber" : "red"
+          setState((s) => ({
+            ...s,
+            closeScore: score >= 0 ? score : s.closeScore,
+            stepsToClose:
+              msg.steps_to_close >= 0 ? msg.steps_to_close : s.stepsToClose,
+            scoreBarColor: score >= 0 ? scoreColor : s.scoreBarColor,
+            showScoreBar: true,
+            objections: msg.objections,
           }))
           break
         }

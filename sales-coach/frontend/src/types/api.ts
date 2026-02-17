@@ -150,6 +150,12 @@ export type WsMessage =
         close_probability?: number
       }>
     }
+  | {
+      type: "scores"
+      close_score: number
+      steps_to_close: number
+      objections: Hesitation[]
+    }
   | { type: "review"; review: Review }
   | { type: "connected" | "status"; message: string }
   | { type: "error"; message: string }
