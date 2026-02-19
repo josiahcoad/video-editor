@@ -68,7 +68,7 @@ uv run python -m src.edit.add_subtitles "$OUT/$seg/05_titled.mp4" \
   --height 12 --style outline --font-size 16 --caps --delay 6
 
 # 3. Enhance, music, emojis, infographic (same as rerun_06_to_09)
-uv run python -m src.edit.enhance_voice "$OUT/$seg/06_captioned.mp4" "$OUT/$seg/06_enhanced.mp4"
+uv run python -m src.edit.voice_enhancement "$OUT/$seg/06_captioned.mp4" "$OUT/$seg/06_enhanced.mp4"
 uv run python -m src.edit.add_background_music "$OUT/$seg/06_enhanced.mp4" "$MUSIC_DIR" "$OUT/$seg/07_music.mp4" --segment "$SEG_NUM"
 if [ -f "$OUT/$seg/07_music-words.json" ]; then
   TRANSCRIPT="$OUT/$seg/07_music-words.json"

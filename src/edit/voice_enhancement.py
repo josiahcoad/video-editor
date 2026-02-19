@@ -7,7 +7,7 @@ dynamic compression, and loudness normalization. Makes iPhone/webcam
 recordings sound closer to a professional microphone.
 
 Usage:
-  python enhance_voice.py <video_file> [output_file]
+  python voice_enhancement.py <video_file> [output_file]
 """
 
 import subprocess
@@ -70,7 +70,7 @@ def enhance_voice(video_path: Path, output_path: Path) -> None:
 def main() -> None:
     """Main entry point."""
     if len(sys.argv) < 2:
-        print("Usage: python enhance_voice.py <video_file> [output_file]")
+        print("Usage: python voice_enhancement.py <video_file> [output_file]")
         sys.exit(1)
 
     video_path = Path(sys.argv[1])

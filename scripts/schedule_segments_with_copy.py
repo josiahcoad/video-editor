@@ -2,7 +2,7 @@
 """
 Schedule each segment's 06_music_whiteboard.mp4 using title and caption from with_copy.
 
-Assumes with_copy/segment_01.json ... segment_10.json exist (from generate_copy_for_segments).
+Assumes with_copy/segment_01.json ... segment_NN.json exist (e.g. from apply_batch + write_copy).
 Uses src.edit.schedule_post so business_id is read from project editing/settings.json
 when video is under projects/<Client>/editing/videos/....
 

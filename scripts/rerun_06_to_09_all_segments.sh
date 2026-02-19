@@ -19,7 +19,7 @@ MUSIC_DIR="$ROOT/projects/HunterZier/editing/music"
 for n in 1 2 3 4 5 6 7 8 9 10; do
   seg=$(printf "segment_%02d" "$n")
   echo "========== $seg =========="
-  uv run python -m src.edit.enhance_voice "$OUT/$seg/06_captioned.mp4" "$OUT/$seg/06_enhanced.mp4"
+  uv run python -m src.edit.voice_enhancement "$OUT/$seg/06_captioned.mp4" "$OUT/$seg/06_enhanced.mp4"
   uv run python -m src.edit.add_background_music "$OUT/$seg/06_enhanced.mp4" "$MUSIC_DIR" "$OUT/$seg/07_music.mp4" --segment "$n"
   # Prefer 07_music-words.json if present (same duration); else 06_captioned-words.json
   if [ -f "$OUT/$seg/07_music-words.json" ]; then

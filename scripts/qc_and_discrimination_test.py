@@ -2,7 +2,7 @@
 """
 QC and discrimination test for AI-generated social copy (e.g. write_copy output).
 
-Use this after generating captions with write_copy or generate_copy_for_segments
+Use this after generating captions with write_copy or apply_batch + write_copy
 using a client voice file. It (1) rates how well the copy matches the voice, and
 (2) tests whether other LLMs can tell the AI captions from real ones.
 

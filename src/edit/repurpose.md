@@ -62,7 +62,7 @@ src/
     add_infographic.py   # LLM-planned infographic overlay (Pillow templates)
     add_whiteboard_overlay.py  # Whiteboard graphic + hand-doodle animation + face bubble (see Phase 7b)
     add_broll.py         # Pexels b-roll inserts (LLM + transcript → 3 clips × 3s)
-    enhance_voice.py      # Podcast-style audio processing
+    voice_enhancement.py      # Podcast-style audio processing
     voice_isolation.py    # ElevenLabs noise removal
     write_copy.py         # Platform-specific copy generation
     schedule_post.py      # Supabase scheduling
@@ -527,7 +527,7 @@ ffmpeg -y \
 **Always run this step.** Applies a podcast-style audio chain that makes iPhone/webcam recordings sound closer to a professional mic: bass warmth, harshness reduction, dynamic compression, and loudness normalization. Free and instant (ffmpeg only, no API).
 
 ```bash
-python src/edit/enhance_voice.py <segment.mp4> <segment-enhanced.mp4>
+python src/edit/voice_enhancement.py <segment.mp4> <segment-enhanced.mp4>
 ```
 
 - Boosts bass at 120Hz/220Hz for warmth and fullness
@@ -806,11 +806,11 @@ Create a **shorter cut** of each segment’s final infographic video for platfor
 
 **Skip this step by default.** Only add background music if the user explicitly asks for it.
 
-**Enhance voice again before adding music.** Run `enhance_voice` on the captioned clip so the voice cuts through the music better. This produces `06_enhanced.mp4`; then add music from that file.
+**Enhance voice again before adding music.** Run `voice_enhancement` on the captioned clip so the voice cuts through the music better. This produces `06_enhanced.mp4`; then add music from that file.
 
 ```bash
 # Per segment: enhance captioned clip, then add music
-python -m src.edit.enhance_voice <segment_XX/06_captioned.mp4> <segment_XX/06_enhanced.mp4>
+python -m src.edit.voice_enhancement <segment_XX/06_captioned.mp4> <segment_XX/06_enhanced.mp4>
 python -m src.edit.add_background_music <segment_XX/06_enhanced.mp4> ... <segment_XX/07_music.mp4>
 ```
 
@@ -826,7 +826,7 @@ python -m src.edit.add_background_music <06_enhanced.mp4> <client>/editing/music
 
 ```bash
 # One segment (e.g. segment 4):
-python -m src.edit.enhance_voice <segment_04/06_captioned.mp4> <segment_04/06_enhanced.mp4>
+python -m src.edit.voice_enhancement <segment_04/06_captioned.mp4> <segment_04/06_enhanced.mp4>
 python -m src.edit.add_background_music <segment_04/06_enhanced.mp4> <client>/editing/music/ <segment_04/07_music.mp4> --segment 4
 
 # All segments: enhance then add music (from repo root)
@@ -834,7 +834,7 @@ OUT=projects/<ClientName>/editing/videos/<session>/outputs
 MUSIC_DIR=projects/<ClientName>/editing/music
 for seg in 01 02 03 04 05 06 07 08 09 10; do
   n=${seg#0}
-  dotenvx run -f .env -f ../fast-backend/.env -- uv run python -m src.edit.enhance_voice "$OUT/segment_$seg/06_captioned.mp4" "$OUT/segment_$seg/06_enhanced.mp4"
+  dotenvx run -f .env -f ../fast-backend/.env -- uv run python -m src.edit.voice_enhancement "$OUT/segment_$seg/06_captioned.mp4" "$OUT/segment_$seg/06_enhanced.mp4"
   dotenvx run -f .env -f ../fast-backend/.env -- uv run python -m src.edit.add_background_music "$OUT/segment_$seg/06_enhanced.mp4" "$MUSIC_DIR" "$OUT/segment_$seg/07_music.mp4" --segment "$n"
 done
 ```
@@ -1174,7 +1174,7 @@ PRODUCTION (per recording session — scripts in src/edit/):
   4d. Propose hooks         propose_hooks.py → user records → cut → speedup → trim → compose (OPTIONAL)
   5.  Crop to 9:16         ffmpeg crop (if targeting TikTok/Reels/Shorts — BEFORE overlays)
   6.  Check placement      suggest_onscreen_text_placement.py (on the CROPPED version — DO NOT SKIP)
-  7.  Voice enhancement    enhance_voice.py (ALWAYS — podcast-style warmth + compression)
+  7.  Voice enhancement    voice_enhancement.py (ALWAYS — podcast-style warmth + compression)
   7b. Voice isolation      voice_isolation.py (OPTIONAL — only if audio is noisy)
   8.  Add title            add_title.py --duration N --height N --anchor X (flags from settings.json)
   8b. Re-transcribe        get_transcript.py <titled.mp4> (MUST — jump cuts shifted timestamps)
@@ -1182,7 +1182,7 @@ PRODUCTION (per recording session — scripts in src/edit/):
   9b. Emoji overlays       add_emojis.py --transcript --dry-run first (OPTIONAL — talking heads / explainers)
   9c. Infographic overlay  add_infographic.py --transcript --dry-run first (OPTIONAL — abstract concepts)
   9d. Final transcript QC  get_transcript.py <final-video> → read full transcript; verify pristine & coherent (MANDATORY — see "Final transcript QC" below)
-  10. Add music            enhance_voice 06_captioned → 06_enhanced; then add_background_music 06_enhanced → 07_music (use <client>/editing/music/ with --segment N for round-robin)
+  10. Add music            voice_enhancement 06_captioned → 06_enhanced; then add_background_music 06_enhanced → 07_music (use <client>/editing/music/ with --segment N for round-robin)
   10b. Whiteboard overlay  add_whiteboard_overlay 06_music.mp4 → 06_music_whiteboard.mp4 (optional; when a diagram reinforces the message)
   11. Generate copy        write_copy.py --platform short/twitter/linkedin (one per platform)
   12. Schedule shorts      schedule_post.py --video --caption --title --override twitter/linkedIn

@@ -20,7 +20,7 @@ from pathlib import Path
 import httpx
 
 # Reuse schedule_post helpers
-from schedule_post import (
+from src.edit.schedule_post import (
     SUPABASE_KEY,
     SUPABASE_URL,
     _headers,

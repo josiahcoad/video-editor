@@ -3,79 +3,52 @@
 Generate a title and caption for a video segment.
 
 Reads a transcript and voice guidelines, then produces copy tailored
-to a specific platform.
+to a specific platform. When --search-context is not provided, queries
+AnswerThePublic from the transcript to get real search queries and
+weaves them into the copy for discoverability.
 
 Usage:
-  # Single platform:
+  # Single platform (ATP search runs automatically from transcript):
   write_copy.py --transcript <words.json> --voice <voice.md>
   write_copy.py --transcript <words.json> --voice <voice.md> --platform linkedin
-  write_copy.py --transcript <words.json> --voice <voice.md> --platform twitter --count 5
 
-  # Multiple platforms with per-platform voice files (batch mode):
+  # Skip ATP and pass search context from a file (e.g. suggest_video_title --save):
+  write_copy.py --transcript <words.json> --voice <voice.md> --search-context atp.json
+
+  # Multiple platforms (batch mode):
   write_copy.py --transcript <words.json> \
-    --platforms short:<client>/editing/voices/marky_video.md twitter:<client>/editing/voices/marky_twitter.md linkedin:<client>/editing/voices/marky_linkedin.md
-
-  Batch mode outputs a keyed JSON object: {"short": {...}, "twitter": {...}, "linkedin": {...}}
+    --platforms short:<client>/editing/voices/marky_video.md linkedin:<client>/editing/voices/marky_linkedin.md
 
 Requires:
-  OPENROUTER_API_KEY env var
+  OPENROUTER_API_KEY. For automatic ATP search: RAPID_API_KEY.
 """
 
 import argparse
+import asyncio
 import json
 import os
-import re
 import sys
 from pathlib import Path
+
+# Repo root on path so we can import suggest_video_title (ATP helpers)
+_REPO_ROOT = Path(__file__).resolve().parents[2]
+if str(_REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(_REPO_ROOT))
 
 from langchain_core.messages import HumanMessage, SystemMessage
 from langchain_openai import ChatOpenAI
 from pydantic import BaseModel, Field
 
+from suggest_video_title import extract_seed_keywords, get_atp_queries
 
-# Phrases that indicate generic AI/corporate writing.
-# Checked case-insensitively after generation; triggers a retry.
-BANNED_PHRASES = [
-    "crystal clear",
-    "crystal-clear",
-    "game-changer",
-    "game changer",
-    "full potential",
-    "with purpose and power",
-    "powerful execution",
-    "across the board",
-    "right from the start",
-    "it's amazing how",
-    "imagine the collective",
-    "working smarter not harder",
-    "what's your take",
-    "what do you think",
-    "here's the secret",
-    "let's dive in",
-    "let me break it down",
-    "here's the thing",
-    "ever wonder why",
-    "pretty smart right",
-    "rowing in the same direction",
-    "non-negotiable",
-    "stifling potential",
-]
 
-# Verb-stem patterns that catch all conjugations (unlock, unlocks, unlocked, unlocking)
-_BANNED_VERB_PATTERNS = [
-    r"\bunlock\w*\b",
-    r"\bunleash\w*\b",
-    r"\bempower\w*\b",
-    r"\btransform\w*\b",
-]
-
-# Compile into a single regex for fast checking
-_phrase_patterns = [re.escape(p) for p in BANNED_PHRASES]
-_all_patterns = _phrase_patterns + _BANNED_VERB_PATTERNS
-_BANNED_RE = re.compile(
-    "|".join(_all_patterns),
-    re.IGNORECASE,
-)
+async def _fetch_atp_context(transcript: str) -> list[str]:
+    """Query AnswerThePublic from transcript; return list of search query strings."""
+    keywords = await extract_seed_keywords(transcript)
+    if not keywords:
+        return []
+    queries = await get_atp_queries(keywords)
+    return [q["keyword"] for q in queries]
 
 
 class CopyOutput(BaseModel):
@@ -173,29 +146,12 @@ def load_transcript(path: Path) -> str:
         return text
 
 
-def _normalize_quotes(text: str) -> str:
-    """Normalize curly/smart quotes to straight quotes for matching."""
-    return (
-        text.replace("\u2018", "'")
-        .replace("\u2019", "'")
-        .replace("\u201c", '"')
-        .replace("\u201d", '"')
-    )
-
-
-def _find_banned(text: str) -> list[str]:
-    """Return list of banned phrases found in text."""
-    normalized = _normalize_quotes(text)
-    return list(set(m.group() for m in _BANNED_RE.finditer(normalized)))
-
-
 def generate_copy(
     transcript: str,
     voice_guidelines: str,
     platform: str,
     count: int,
     model: str = "anthropic/claude-opus-4.6",
-    max_retries: int = 3,
     search_context: list[str] | None = None,
     video_title: str | None = None,
 ) -> list[CopyOutput]:
@@ -207,8 +163,6 @@ def generate_copy(
         video_title: Optional pre-determined video title. When set, the LLM
             uses it as the post title (or a light adaptation) instead of
             generating one from scratch.
-
-    Retries up to max_retries times if banned phrases are detected in output.
     """
     openrouter_api_key = os.getenv("OPENROUTER_API_KEY")
     if not openrouter_api_key:
@@ -317,42 +271,8 @@ def generate_copy(
         HumanMessage(content=human_prompt),
     ]
 
-    for attempt in range(1, max_retries + 2):
-        response = llm.invoke(messages)
-        options = response.options[:count]
-
-        # Check all options for banned phrases
-        all_text = " ".join(f"{o.title} {o.caption}" for o in options)
-        found = _find_banned(all_text)
-
-        if not found:
-            return options
-
-        if attempt <= max_retries:
-            print(
-                f"  [retry {attempt}/{max_retries}] Banned phrases detected: "
-                f"{found} — regenerating...",
-                file=sys.stderr,
-            )
-            # Add feedback as a follow-up message for the retry
-            messages.append(
-                HumanMessage(
-                    content=(
-                        f"Your output contained banned corporate phrases: {found}. "
-                        "Rewrite ALL options. Replace each flagged phrase with a specific "
-                        "detail, a concrete number, or just delete it. Do NOT use any "
-                        "variation of these phrases."
-                    )
-                )
-            )
-        else:
-            print(
-                f"  [warning] Banned phrases still present after {max_retries} "
-                f"retries: {found}. Returning best effort.",
-                file=sys.stderr,
-            )
-
-    return options
+    response = llm.invoke(messages)
+    return response.options[:count]
 
 
 def _parse_platform_voice(spec: str) -> tuple[str, Path]:
@@ -426,7 +346,7 @@ def main() -> None:
         "--search-context",
         type=Path,
         default=None,
-        help="JSON file: list of search phrases, or output of suggest_video_title.py --save (ATP-backed)",
+        help="JSON file with search phrases (or suggest_video_title.py --save output). If omitted, ATP is queried from the transcript (requires RAPID_API_KEY).",
     )
     parser.add_argument(
         "--video-title",
@@ -446,7 +366,7 @@ def main() -> None:
         print("Error: Transcript is empty", file=sys.stderr)
         sys.exit(1)
 
-    # Load optional search context (from ATP script or manual list)
+    # Search context: from file, or fetch from ATP using transcript
     search_ctx: list[str] | None = None
     if args.search_context and args.search_context.exists():
         raw = json.loads(args.search_context.read_text())
@@ -462,6 +382,13 @@ def main() -> None:
                     search_ctx.append(item["keyword"])
                 elif isinstance(item, dict) and "inspired_by" in item:
                     search_ctx.extend(item["inspired_by"])
+    if search_ctx is None:
+        print("Querying AnswerThePublic for search context...", file=sys.stderr)
+        search_ctx = asyncio.run(_fetch_atp_context(transcript))
+        if search_ctx:
+            print(f"  Got {len(search_ctx)} search queries", file=sys.stderr)
+        else:
+            print("  No ATP results; generating copy without search context.", file=sys.stderr)
 
     video_title = args.video_title
 
