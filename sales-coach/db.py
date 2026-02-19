@@ -34,6 +34,7 @@ CREATE TABLE IF NOT EXISTS sellers (
     id                    INTEGER PRIMARY KEY AUTOINCREMENT,
     first_name            TEXT NOT NULL,
     last_name             TEXT NOT NULL,
+    company_info          TEXT,
     performance_review_json TEXT,
     review_generated_at   TEXT,
     created_at            TEXT DEFAULT (datetime('now')),
@@ -45,6 +46,7 @@ CREATE TABLE IF NOT EXISTS contacts (
     name       TEXT NOT NULL,
     company    TEXT,
     phone      TEXT,
+    email      TEXT,
     notes      TEXT,
     status     TEXT DEFAULT 'prospect',
     seller_id   INTEGER REFERENCES sellers(id),
@@ -64,6 +66,7 @@ CREATE TABLE IF NOT EXISTS conversations (
     final_steps_to_close  INTEGER,
     mode                  TEXT DEFAULT 'live',
     next_step             TEXT,
+    review_score          INTEGER,
     review_json           TEXT,
     review_generated_at   TEXT
 );
@@ -81,10 +84,20 @@ CREATE TABLE IF NOT EXISTS hesitations (
     created_at            TEXT DEFAULT (datetime('now'))
 );
 
+CREATE TABLE IF NOT EXISTS todos (
+    id          INTEGER PRIMARY KEY AUTOINCREMENT,
+    seller_id   INTEGER NOT NULL REFERENCES sellers(id),
+    type        TEXT NOT NULL CHECK(type IN ('email', 'call', 'other')),
+    title       TEXT NOT NULL,
+    contact_id  INTEGER REFERENCES contacts(id),
+    created_at  TEXT DEFAULT (datetime('now'))
+);
+
 CREATE INDEX IF NOT EXISTS idx_hesitations_conversation ON hesitations(conversation_id);
 CREATE INDEX IF NOT EXISTS idx_hesitations_contact      ON hesitations(contact_id);
 CREATE INDEX IF NOT EXISTS idx_hesitations_status        ON hesitations(status);
 CREATE INDEX IF NOT EXISTS idx_conversations_contact     ON conversations(contact_id);
+CREATE INDEX IF NOT EXISTS idx_todos_seller              ON todos(seller_id);
 """
 
 # Migrations for existing DBs (idempotent ALTER TABLE statements)
@@ -99,6 +112,19 @@ MIGRATIONS = [
     "ALTER TABLE conversations ADD COLUMN prep_notes TEXT",
     "ALTER TABLE sales_reps RENAME TO sellers",
     "ALTER TABLE contacts RENAME COLUMN sales_rep_id TO seller_id",
+    """CREATE TABLE IF NOT EXISTS todos (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        seller_id INTEGER NOT NULL REFERENCES sellers(id),
+        type TEXT NOT NULL CHECK(type IN ('email', 'call', 'other')),
+        title TEXT NOT NULL,
+        contact_id INTEGER REFERENCES contacts(id),
+        created_at TEXT DEFAULT (datetime('now'))
+    )""",
+    "CREATE INDEX IF NOT EXISTS idx_todos_seller ON todos(seller_id)",
+    "ALTER TABLE contacts ADD COLUMN email TEXT",
+    "ALTER TABLE conversations ADD COLUMN review_score INTEGER",
+    "ALTER TABLE conversations ADD COLUMN next_step_todo_id INTEGER REFERENCES todos(id)",
+    "ALTER TABLE sellers ADD COLUMN company_info TEXT",
 ]
 
 
@@ -117,6 +143,31 @@ def _strip_phone_line_from_notes(notes: str | None) -> str:
     if idx >= 0:
         return text[idx + 1 :].strip()
     return ""
+
+
+async def _extract_email_from_notes(db: aiosqlite.Connection) -> None:
+    """One-time: move 'Email: ...' from notes into the email column."""
+    import re
+
+    cursor = await db.execute(
+        """SELECT id, email, notes FROM contacts
+            WHERE notes IS NOT NULL AND trim(notes) != ''
+              AND (email IS NULL OR trim(email) = '')"""
+    )
+    rows = await cursor.fetchall()
+    email_re = re.compile(r"(?i)^email:\s*(\S+@\S+)", re.MULTILINE)
+    for row in rows:
+        notes = row["notes"] or ""
+        m = email_re.search(notes)
+        if m:
+            email = m.group(1).strip().rstrip(",;")
+            # Remove the "Email: ..." line from notes
+            cleaned = email_re.sub("", notes, count=1).strip()
+            await db.execute(
+                "UPDATE contacts SET email = ?, notes = ?, updated_at = datetime('now') WHERE id = ?",
+                (email, cleaned or None, row["id"]),
+            )
+    await db.commit()
 
 
 async def _clean_notes_phone_lines(db: aiosqlite.Connection) -> None:
@@ -158,6 +209,8 @@ async def init_db() -> None:
                 pass
         # One-time: remove redundant "Phone: ..." line from notes when contact has phone
         await _clean_notes_phone_lines(db)
+        # One-time: extract "Email: ..." from notes into the email column
+        await _extract_email_from_notes(db)
 
         # Seed default seller if none exists
         cursor = await db.execute("SELECT COUNT(*) AS cnt FROM sellers")
@@ -173,8 +226,24 @@ async def init_db() -> None:
                 "UPDATE contacts SET seller_id = 1 WHERE seller_id IS NULL"
             )
             await db.commit()
+        # One-time: set company_info for the first seller if still null
+        await _backfill_first_seller_company_info(db)
     finally:
         await db.close()
+
+
+DEFAULT_COMPANY_INFO = """Marky is a social media concierge service that specializes in thought leadership content to establish trust. We handle premier end-to-end social media management (recording, editing, publishing and community engagement). We are new. We don't have any clients yet but we're hungry and we're going to totally kill it. We will beat any price out there. We spent three years building out proprietary AI technology to help you establish yourself as an expert in the field and optimize your efforts."""
+
+
+async def _backfill_first_seller_company_info(db: aiosqlite.Connection) -> None:
+    """Set company_info for the first seller if column exists and value is null."""
+    await db.execute(
+        """UPDATE sellers SET company_info = ?
+           WHERE id = (SELECT id FROM sellers ORDER BY id LIMIT 1)
+             AND (company_info IS NULL OR trim(company_info) = '')""",
+        (DEFAULT_COMPANY_INFO,),
+    )
+    await db.commit()
 
 
 # ── Contacts ─────────────────────────────────────────────────────
@@ -184,6 +253,7 @@ async def create_contact(
     name: str,
     company: str | None = None,
     phone: str | None = None,
+    email: str | None = None,
     notes: str | None = None,
     status: str = "prospect",
     seller_id: int | None = None,
@@ -197,8 +267,8 @@ async def create_contact(
             if row:
                 seller_id = row["id"]
         cursor = await db.execute(
-            "INSERT INTO contacts (name, company, phone, notes, status, seller_id) VALUES (?, ?, ?, ?, ?, ?)",
-            (name, company, phone, notes, status, seller_id),
+            "INSERT INTO contacts (name, company, phone, email, notes, status, seller_id) VALUES (?, ?, ?, ?, ?, ?, ?)",
+            (name, company, phone, email, notes, status, seller_id),
         )
         await db.commit()
         return cursor.lastrowid
@@ -232,6 +302,7 @@ async def update_contact(contact_id: int, **fields) -> None:
         "name",
         "company",
         "phone",
+        "email",
         "notes",
         "research",
         "status",
@@ -449,15 +520,47 @@ async def end_conversation(
 
 
 async def save_review(conversation_id: int, review: dict) -> None:
-    """Save review and extract next_step into its own column."""
-    next_step = review.get("next_step", "")
+    """Save review, extract next_step into its own column, and link to a todo when present."""
+    next_step = (review.get("next_step") or "").strip()
+    review_score = review.get("score")
+    if isinstance(review_score, str):
+        try:
+            review_score = int(review_score)
+        except (TypeError, ValueError):
+            review_score = None
+    elif not isinstance(review_score, int):
+        review_score = None
+
+    conv = await get_conversation_row(conversation_id)
+    next_step_todo_id = conv.get("next_step_todo_id") if conv else None
+    if next_step:
+        if next_step_todo_id:
+            await update_todo_title(next_step_todo_id, next_step)
+        elif conv and conv.get("contact_id"):
+            contact = await get_contact(conv["contact_id"])
+            if contact and contact.get("seller_id"):
+                next_step_todo_id = await create_todo(
+                    contact["seller_id"],
+                    "other",
+                    next_step,
+                    contact_id=conv["contact_id"],
+                )
+
     db = await get_db()
     try:
         await db.execute(
             """UPDATE conversations
-               SET review_json = ?, review_generated_at = ?, next_step = ?
+               SET review_json = ?, review_generated_at = ?, next_step = ?,
+                   next_step_todo_id = ?, review_score = ?
              WHERE id = ?""",
-            (json.dumps(review), _now(), next_step, conversation_id),
+            (
+                json.dumps(review),
+                _now(),
+                next_step or None,
+                next_step_todo_id,
+                review_score,
+                conversation_id,
+            ),
         )
         # If the review suggests a status change, update the contact
         suggested_status = review.get("suggested_status")
@@ -473,6 +576,20 @@ async def save_review(conversation_id: int, review: dict) -> None:
                     (suggested_status, row["contact_id"]),
                 )
         await db.commit()
+    finally:
+        await db.close()
+
+
+async def get_conversation_row(conversation_id: int) -> dict | None:
+    """Lightweight fetch: id, contact_id, next_step_todo_id (for save_review)."""
+    db = await get_db()
+    try:
+        cursor = await db.execute(
+            "SELECT id, contact_id, next_step_todo_id FROM conversations WHERE id = ?",
+            (conversation_id,),
+        )
+        row = await cursor.fetchone()
+        return dict(row) if row else None
     finally:
         await db.close()
 
@@ -715,7 +832,7 @@ async def get_next_steps_for_seller(seller_id: int) -> list[dict]:
     db = await get_db()
     try:
         rows = await db.execute_fetchall(
-            """SELECT ct.name, ct.company, ct.notes,
+            """SELECT ct.id, ct.name, ct.company, ct.notes,
                       (SELECT c.next_step FROM conversations c
                        WHERE c.contact_id = ct.id AND c.next_step IS NOT NULL
                        ORDER BY c.started_at DESC LIMIT 1) AS next_step
@@ -729,6 +846,73 @@ async def get_next_steps_for_seller(seller_id: int) -> list[dict]:
             (seller_id,),
         )
         return [dict(r) for r in rows]
+    finally:
+        await db.close()
+
+
+# ── Todos ─────────────────────────────────────────────────────────
+
+
+async def list_todos(seller_id: int) -> list[dict]:
+    """List todos for a seller, newest first. Includes contact_name if linked."""
+    db = await get_db()
+    try:
+        rows = await db.execute_fetchall(
+            """SELECT t.id, t.seller_id, t.type, t.title, t.contact_id, t.created_at,
+                      ct.name AS contact_name
+               FROM todos t
+               LEFT JOIN contacts ct ON t.contact_id = ct.id
+              WHERE t.seller_id = ?
+              ORDER BY t.created_at DESC""",
+            (seller_id,),
+        )
+        return [dict(r) for r in rows]
+    finally:
+        await db.close()
+
+
+async def create_todo(
+    seller_id: int,
+    type: str,
+    title: str,
+    contact_id: int | None = None,
+) -> int:
+    """Create a todo. type must be 'email', 'call', or 'other'. Returns new id."""
+    if type not in ("email", "call", "other"):
+        raise ValueError("type must be 'email', 'call', or 'other'")
+    db = await get_db()
+    try:
+        cursor = await db.execute(
+            """INSERT INTO todos (seller_id, type, title, contact_id)
+               VALUES (?, ?, ?, ?)""",
+            (seller_id, type, title.strip(), contact_id),
+        )
+        await db.commit()
+        return cursor.lastrowid
+    finally:
+        await db.close()
+
+
+async def update_todo_title(todo_id: int, title: str) -> bool:
+    """Update a todo's title. Returns True if updated."""
+    db = await get_db()
+    try:
+        cursor = await db.execute(
+            "UPDATE todos SET title = ? WHERE id = ?", (title.strip(), todo_id)
+        )
+        await db.commit()
+        return cursor.rowcount > 0
+    finally:
+        await db.close()
+
+
+async def delete_todo(todo_id: int) -> bool:
+    """Delete a todo. Returns True if deleted."""
+    db = await get_db()
+    try:
+        cursor = await db.execute("DELETE FROM todos WHERE id = ?", (todo_id,))
+        await db.commit()
+        return cursor.rowcount > 0
     finally:
         await db.close()
 
@@ -822,6 +1006,7 @@ async def get_home_data(seller_id: int) -> dict:
             "id": seller["id"],
             "first_name": seller["first_name"],
             "last_name": seller["last_name"],
+            "company_info": seller.get("company_info"),
         },
         "pipeline": pipeline,
         "total_contacts": sum(s["count"] for s in pipeline),

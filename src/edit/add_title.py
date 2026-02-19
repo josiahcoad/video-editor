@@ -497,7 +497,8 @@ async def main() -> None:
     settings = load_settings(video_path)
     title_cfg = settings.get("title") or {}
     duration = float(title_cfg.get("duration", 20.0))
-    height_percent = int(title_cfg.get("height_percent", 10))
+    # Default 95 for anchor=top: title at top; 10 = legacy (near bottom)
+    height_percent = int(title_cfg.get("height_percent", 95))
     anchor = (title_cfg.get("anchor") or "top").lower()
     if anchor not in ("top", "bottom", "center"):
         anchor = "top"

@@ -8,10 +8,10 @@ import {
   XAxis,
   YAxis,
 } from "recharts"
-import type { HomeData, PerformanceReview, CallsPerDay } from "@/types/api"
-import { fetchHome, fetchQuickActions, generatePerformanceReview } from "@/lib/api"
+import type { HomeData, PerformanceReview, CallsPerDay, TodoItem, TodoType } from "@/types/api"
+import { fetchHome, fetchTodos, createTodo, deleteTodo, suggestTodos, generatePerformanceReview } from "@/lib/api"
 import { cn } from "@/lib/utils"
-import { RefreshCw } from "lucide-react"
+import { RefreshCw, Trash2, Sparkles } from "lucide-react"
 
 const STATUS_LABELS: Record<string, string> = {
   prospect: "Prospect",
@@ -298,8 +298,12 @@ export function HomeView() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [generating, setGenerating] = useState(false)
-  const [quickActions, setQuickActions] = useState<string[] | null>(null)
-  const [quickActionsLoading, setQuickActionsLoading] = useState(false)
+  const [todos, setTodos] = useState<TodoItem[] | null>(null)
+  const [todosLoading, setTodosLoading] = useState(false)
+  const [newTodoType, setNewTodoType] = useState<TodoType>("call")
+  const [newTodoTitle, setNewTodoTitle] = useState("")
+  const [addingTodo, setAddingTodo] = useState(false)
+  const [suggesting, setSuggesting] = useState(false)
 
   const load = useCallback(async () => {
     setLoading(true)
@@ -317,22 +321,62 @@ export function HomeView() {
     load()
   }, [load])
 
-  const loadQuickActions = useCallback(async () => {
+  const loadTodos = useCallback(async () => {
     if (!data?.seller?.id) return
-    setQuickActionsLoading(true)
+    setTodosLoading(true)
     try {
-      const res = await fetchQuickActions(data.seller.id)
-      setQuickActions(res.actions ?? [])
+      const res = await fetchTodos(data.seller.id)
+      setTodos(res.todos ?? [])
     } catch {
-      setQuickActions([])
+      setTodos([])
     } finally {
-      setQuickActionsLoading(false)
+      setTodosLoading(false)
     }
   }, [data?.seller?.id])
 
   useEffect(() => {
-    if (data?.seller?.id && quickActions === null) loadQuickActions()
-  }, [data?.seller?.id, quickActions, loadQuickActions])
+    if (data?.seller?.id && todos === null) loadTodos()
+  }, [data?.seller?.id, todos, loadTodos])
+
+  const handleAddTodo = async () => {
+    if (!data?.seller?.id || !newTodoTitle.trim() || addingTodo) return
+    setAddingTodo(true)
+    try {
+      await createTodo(data.seller.id, {
+        type: newTodoType,
+        title: newTodoTitle.trim(),
+      })
+      setNewTodoTitle("")
+      setTodos(null)
+      await loadTodos()
+    } catch (e) {
+      alert(e instanceof Error ? e.message : "Failed to add todo")
+    } finally {
+      setAddingTodo(false)
+    }
+  }
+
+  const handleDeleteTodo = async (id: number) => {
+    try {
+      await deleteTodo(id)
+      setTodos((prev) => (prev ?? []).filter((t) => t.id !== id))
+    } catch (e) {
+      alert(e instanceof Error ? e.message : "Failed to delete")
+    }
+  }
+
+  const handleSuggestTodos = async () => {
+    if (!data?.seller?.id || suggesting) return
+    setSuggesting(true)
+    try {
+      const res = await suggestTodos(data.seller.id)
+      setTodos(res.todos)
+    } catch (e) {
+      alert(e instanceof Error ? e.message : "Failed to suggest tasks")
+    } finally {
+      setSuggesting(false)
+    }
+  }
 
   const callsPerDay = useMemo(
     () => buildCallsPerDayLocal(data?.conversation_start_times ?? [], 30),
@@ -391,30 +435,98 @@ export function HomeView() {
           <h3 className="text-base font-semibold text-slate-200">
             Quick actions
           </h3>
-          <button
-            type="button"
-            onClick={loadQuickActions}
-            disabled={quickActionsLoading}
-            className="inline-flex items-center gap-1.5 text-sm text-slate-400 hover:text-slate-200 disabled:opacity-50"
-          >
-            <RefreshCw
-              className={cn("size-4", quickActionsLoading && "animate-spin")}
-            />
-            Refresh
-          </button>
+          <div className="flex items-center gap-3">
+            <button
+              type="button"
+              onClick={handleSuggestTodos}
+              disabled={suggesting}
+              className="inline-flex items-center gap-1.5 text-sm text-amber-400 hover:text-amber-300 disabled:opacity-50"
+              aria-label="AI suggest tasks"
+            >
+              <Sparkles className={cn("size-4", suggesting && "animate-pulse")} />
+              {suggesting ? "Thinking…" : "Suggest"}
+            </button>
+            <button
+              type="button"
+              onClick={() => { setTodos(null); loadTodos() }}
+              disabled={todosLoading}
+              className="inline-flex items-center gap-1.5 text-sm text-slate-400 hover:text-slate-200 disabled:opacity-50"
+              aria-label="Refresh todos"
+            >
+              <RefreshCw className={cn("size-4", todosLoading && "animate-spin")} />
+            </button>
+          </div>
         </div>
-        {quickActionsLoading && quickActions === null ? (
-          <p className="text-sm text-slate-500 italic">Loading suggested next steps…</p>
-        ) : quickActions?.length ? (
-          <ul className="list-disc list-inside space-y-1 text-sm text-slate-300">
-            {quickActions.map((action, i) => (
-              <li key={i}>{action}</li>
-            ))}
-          </ul>
+        {todosLoading && todos === null ? (
+          <p className="text-sm text-slate-500 italic">Loading…</p>
         ) : (
-          <p className="text-sm text-slate-500 italic">
-            No suggested next steps. Add next steps on contacts to get suggestions.
-          </p>
+          <>
+            <ul className="list-none space-y-2 text-sm text-slate-300">
+              {(todos ?? []).map((todo) => (
+                <li
+                  key={todo.id}
+                  className="flex items-center gap-2 group rounded-lg bg-slate-800/60 px-3 py-2"
+                >
+                  <span
+                    className={cn(
+                      "shrink-0 text-[10px] font-semibold uppercase px-1.5 py-0.5 rounded",
+                      todo.type === "email" && "bg-blue-900/50 text-blue-300",
+                      todo.type === "call" && "bg-emerald-900/50 text-emerald-300",
+                      todo.type === "other" && "bg-slate-600 text-slate-300"
+                    )}
+                  >
+                    {todo.type}
+                  </span>
+                  <span className="flex-1 min-w-0">
+                    {todo.contact_name && (
+                      <span className="text-slate-500 text-xs mr-1.5">{todo.contact_name} ·</span>
+                    )}
+                    {todo.title}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => handleDeleteTodo(todo.id)}
+                    className="shrink-0 p-1 rounded text-slate-500 hover:text-red-400 hover:bg-slate-700 opacity-0 group-hover:opacity-100 transition"
+                    aria-label="Delete todo"
+                  >
+                    <Trash2 className="size-3.5" />
+                  </button>
+                </li>
+              ))}
+            </ul>
+            <div className="flex flex-wrap items-center gap-2 pt-2 border-t border-slate-800">
+              <select
+                value={newTodoType}
+                onChange={(e) => setNewTodoType(e.target.value as TodoType)}
+                className="bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-1.5 text-sm text-slate-200 focus:outline-none focus:ring-1 focus:ring-cyan-500"
+              >
+                <option value="email">Email</option>
+                <option value="call">Call</option>
+                <option value="other">Other</option>
+              </select>
+              <input
+                type="text"
+                placeholder="Add a task…"
+                value={newTodoTitle}
+                onChange={(e) => setNewTodoTitle(e.target.value)}
+                onKeyDown={(e) => e.key === "Enter" && handleAddTodo()}
+                className="flex-1 min-w-[140px] bg-slate-800 border border-slate-700 rounded-lg px-3 py-1.5 text-sm text-slate-200 placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-cyan-500"
+              />
+              <button
+                type="button"
+                onClick={handleAddTodo}
+                disabled={!newTodoTitle.trim() || addingTodo}
+                className="px-3 py-1.5 text-sm font-medium rounded-lg bg-cyan-700 text-white hover:bg-cyan-600 disabled:opacity-50 disabled:pointer-events-none"
+              >
+                {addingTodo ? "Adding…" : "Add"}
+              </button>
+            </div>
+            {(todos ?? []).length === 0 && (
+              <p className="text-sm text-slate-500 italic">
+                Add tasks above (email, call, or other).
+              </p>
+            )}
+          </>
         )}
       </div>
 

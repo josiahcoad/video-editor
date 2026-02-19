@@ -71,6 +71,9 @@ from db import (
     get_seller,
     save_performance_review,
     list_sellers,
+    list_todos,
+    create_todo,
+    delete_todo,
 )
 
 logging.basicConfig(level=logging.INFO)
@@ -201,13 +204,24 @@ class PerformanceReview(BaseModel):
     score: int = Field(description="1-10 overall effectiveness rating")
 
 
-class QuickActions(BaseModel):
-    """Exactly 3 suggested next steps for the seller."""
+class SuggestedTodo(BaseModel):
+    """A single AI-suggested task."""
 
-    actions: list[str] = Field(
-        min_length=3,
-        max_length=3,
-        description="Exactly 3 concrete, actionable next steps (strings).",
+    type: str = Field(description="One of: email, call, other")
+    title: str = Field(description="Concise actionable task (one sentence)")
+    contact_id: int | None = Field(
+        default=None,
+        description="The contact ID this task relates to (from the list provided), or null if general",
+    )
+
+
+class SuggestedTodos(BaseModel):
+    """Up to 5 suggested tasks for the seller."""
+
+    items: list[SuggestedTodo] = Field(
+        min_length=1,
+        max_length=5,
+        description="1-5 concrete, actionable tasks for the seller.",
     )
 
 
@@ -403,6 +417,7 @@ async def api_create_contact(body: dict):
         name=body["name"],
         company=body.get("company"),
         phone=body.get("phone"),
+        email=body.get("email"),
         notes=body.get("notes"),
         status=body.get("status", "prospect"),
     )
@@ -449,6 +464,9 @@ async def api_contact_ask_coach(contact_id: int, body: AskCoachBody):
 SELLER:
 - Name: {seller.get('first_name', '')} {seller.get('last_name', '')}
 """
+            company_info = (seller.get("company_info") or "").strip()
+            if company_info:
+                seller_block += f"- Company / what we offer: {company_info}\n"
             review_json = seller.get("performance_review_json")
             if review_json:
                 try:
@@ -616,6 +634,7 @@ async def api_generate_performance_review(seller_id: int):
         return {"error": "No conversations found for this seller"}
 
     first_name = seller.get("first_name") or "there"
+    company_info = (seller.get("company_info") or "").strip()
 
     # Build a big text block with all conversations
     parts: list[str] = []
@@ -661,6 +680,8 @@ async def api_generate_performance_review(seller_id: int):
             PERFORMANCE_REVIEW_PROMPT
             + f"\n\nThe seller's first name is **{first_name}**. Address them directly using this name and second person (you/your)."
         )
+        if company_info:
+            system_content += f"\n\nContext: The seller represents a company that does the following: {company_info}"
         messages = [
             SystemMessage(content=system_content),
             HumanMessage(content=f"SALES CONVERSATION HISTORY:\n\n{all_data}"),
@@ -685,16 +706,24 @@ async def api_generate_performance_review(seller_id: int):
     return review_data
 
 
-QUICK_ACTIONS_PROMPT = """\
-You are a sales coach. Given today's date and, for each contact, their current "next step" \
-(from their latest call) and your notes, suggest exactly 3 quick-action next steps for the seller to do. \
-Use both next steps and notes to pick the most impactful and time-sensitive. \
-Each action should be one concrete sentence \
-(e.g. "Send Kristine 2-3 ROI case studies before Wednesday's call" or "Follow up with Billy on budget timeline"). \
-Output exactly 3 strings, no more, no less. Prioritize by urgency and deal momentum."""
+SUGGEST_TODOS_PROMPT = """\
+You are a sales coach. Given today's date and, for each contact, their ID, current "next step" \
+(from their latest call), and notes, suggest 3-5 actionable tasks for the seller.
+
+For each task, decide the type:
+- "email" if the task is to send/reply to an email
+- "call" if the task is to make a phone call
+- "other" for anything else (research, prep, follow-up, etc.)
+
+Set contact_id to the contact's ID when the task is about a specific contact. \
+Leave contact_id null only if the task is general (e.g. "Review your pipeline").
+
+Each title should be one concrete sentence \
+(e.g. "Send Kristine 2-3 ROI case studies before Wednesday's call"). \
+Prioritize by urgency and deal momentum."""
 
 
-def _get_quick_actions_llm() -> ChatOpenAI:
+def _get_suggest_todos_llm() -> ChatOpenAI:
     api_key = os.environ.get("OPENROUTER_API_KEY")
     if not api_key:
         raise ValueError("OPENROUTER_API_KEY environment variable must be set")
@@ -702,15 +731,15 @@ def _get_quick_actions_llm() -> ChatOpenAI:
         model="google/gemini-2.5-flash",
         base_url="https://openrouter.ai/api/v1",
         api_key=api_key,
-        max_tokens=512,
+        max_tokens=1024,
         temperature=0.4,
     )
-    return llm.with_structured_output(QuickActions)
+    return llm.with_structured_output(SuggestedTodos)
 
 
-@app.get("/api/sellers/{seller_id}/quick-actions")
-async def api_get_quick_actions(seller_id: int):
-    """Return 3 suggested next steps based on contacts' next_step and today's date."""
+@app.post("/api/sellers/{seller_id}/suggest-todos")
+async def api_suggest_todos(seller_id: int):
+    """Use AI to suggest tasks and save them as todos."""
     from datetime import datetime, timezone
 
     seller = await get_seller(seller_id)
@@ -721,42 +750,110 @@ async def api_get_quick_actions(seller_id: int):
     today = datetime.now(timezone.utc).strftime("%A, %B %d, %Y")
 
     if not next_steps:
-        return {"actions": []}
+        return {"created": 0, "todos": []}
 
+    # Build context with contact IDs and optional seller company context
+    user_parts = [f"Today's date: {today}"]
+    company_info = (seller.get("company_info") or "").strip()
+    if company_info:
+        user_parts.append("")
+        user_parts.append("What the seller's company offers:")
+        user_parts.append(company_info)
+    user_parts.append("")
+    user_parts.append("Contacts (id, next_step, notes):")
     lines = []
+    valid_contact_ids = set()
     for s in next_steps:
+        valid_contact_ids.add(s["id"])
         line = (
-            f"- {s['name']}"
+            f"- [id={s['id']}] {s['name']}"
             + (f" (@ {s['company']})" if s.get("company") else "")
             + f": next_step = {s['next_step']}"
         )
         if s.get("notes") and (notes := (s["notes"] or "").strip()):
             line += f"; notes = {notes}"
         lines.append(line)
-    user_content = (
-        f"Today's date: {today}\n\nContacts (next_step and notes):\n" + "\n".join(lines)
-    )
+    user_parts.append("\n".join(lines))
+    user_content = "\n".join(user_parts)
 
     try:
-        structured_llm = _get_quick_actions_llm()
+        structured_llm = _get_suggest_todos_llm()
         messages = [
-            SystemMessage(content=QUICK_ACTIONS_PROMPT),
+            SystemMessage(content=SUGGEST_TODOS_PROMPT),
             HumanMessage(content=user_content),
         ]
-        result: QuickActions = await structured_llm.ainvoke(messages)
-        actions = result.actions[:3]
+        result: SuggestedTodos = await structured_llm.ainvoke(messages)
     except Exception as e:
-        logger.exception("Quick actions generation failed")
+        logger.exception("Suggest todos failed")
         return JSONResponse(
-            {"error": f"Failed to generate quick actions: {str(e)}"}, status_code=500
+            {"error": f"Failed to generate suggestions: {str(e)}"}, status_code=500
         )
 
-    return {"actions": actions}
+    # Save each suggestion as a todo
+    created_ids = []
+    for item in result.items[:5]:
+        todo_type = item.type if item.type in ("email", "call", "other") else "other"
+        # Validate contact_id — only allow IDs that were in the context
+        cid = item.contact_id if item.contact_id in valid_contact_ids else None
+        todo_id = await create_todo(seller_id, todo_type, item.title.strip(), cid)
+        created_ids.append(todo_id)
+
+    # Return the refreshed list
+    todos = await list_todos(seller_id)
+    return {"created": len(created_ids), "todos": todos}
+
+
+# ── Todos ─────────────────────────────────────────────────────────
+
+
+class CreateTodoBody(BaseModel):
+    type: str  # 'email' | 'call' | 'other'
+    title: str
+    contact_id: int | None = None
+
+
+@app.get("/api/sellers/{seller_id}/todos")
+async def api_list_todos(seller_id: int):
+    """List todos for the seller."""
+    seller = await get_seller(seller_id)
+    if not seller:
+        return JSONResponse({"error": "Seller not found"}, status_code=404)
+    todos = await list_todos(seller_id)
+    return {"todos": todos}
+
+
+@app.post("/api/sellers/{seller_id}/todos")
+async def api_create_todo(seller_id: int, body: CreateTodoBody):
+    """Create a todo. type must be email, call, or other."""
+    seller = await get_seller(seller_id)
+    if not seller:
+        return JSONResponse({"error": "Seller not found"}, status_code=404)
+    if body.type not in ("email", "call", "other"):
+        return JSONResponse(
+            {"error": "type must be 'email', 'call', or 'other'"}, status_code=400
+        )
+    try:
+        todo_id = await create_todo(
+            seller_id, body.type, body.title.strip(), body.contact_id
+        )
+        return {"id": todo_id}
+    except ValueError as e:
+        return JSONResponse({"error": str(e)}, status_code=400)
+
+
+@app.delete("/api/todos/{todo_id}")
+async def api_delete_todo(todo_id: int):
+    """Delete a todo."""
+    deleted = await delete_todo(todo_id)
+    if not deleted:
+        return JSONResponse({"error": "Todo not found"}, status_code=404)
+    return {"ok": True}
 
 
 class ColdCallPrepRequest(BaseModel):
     contact_name: str
     company: str | None = None
+    seller_id: int | None = None
 
 
 def _get_cold_call_prep_llm() -> ChatOpenAI:
@@ -774,8 +871,9 @@ def _get_cold_call_prep_llm() -> ChatOpenAI:
 
 
 COLD_CALL_PREP_PROMPT = """\
-Tell me just enough information for me to know to pick up a phone and cold call this business and offer social media services. \
-Be concise: a few bullet points or short paragraphs. Include what the business does, any relevant recent news or context, and why they might care about social media. \
+Tell me just enough information to cold call this business and offer our services. \
+Use the seller's company description (what we offer) below to tailor your answer. \
+Be concise: a few bullet points or short paragraphs. Include what the business does, any relevant recent news or context, and why they might care about what we offer. \
 Cite sources using markdown links if the model provided them."""
 
 
@@ -784,7 +882,19 @@ async def api_cold_call_prep(body: ColdCallPrepRequest):
     """Web-search-backed cold call prep for a contact's business. Uses OpenRouter :online."""
     if not body.contact_name.strip():
         return JSONResponse({"error": "contact_name is required"}, status_code=400)
-    user_content = f"Contact name: {body.contact_name.strip()}\nBusiness: {(body.company or '').strip() or '(not specified)'}"
+    user_parts = []
+    if body.seller_id:
+        seller = await get_seller(body.seller_id)
+        if seller and (seller.get("company_info") or "").strip():
+            user_parts.append(
+                "What we offer (seller's company):\n"
+                + (seller["company_info"] or "").strip()
+            )
+            user_parts.append("")
+    user_parts.append(
+        f"Contact name: {body.contact_name.strip()}\nBusiness: {(body.company or '').strip() or '(not specified)'}"
+    )
+    user_content = "\n".join(user_parts)
     try:
         llm = _get_cold_call_prep_llm()
         messages = [
@@ -837,6 +947,11 @@ def _build_prepare_user_content(contact: dict, seller: dict) -> tuple[str, str]:
     parts.append(
         f"Seller: {seller.get('first_name', '')} {seller.get('last_name', '')}".strip()
     )
+    company_info = (seller.get("company_info") or "").strip()
+    if company_info:
+        parts.append("WHAT WE OFFER (seller's company):")
+        parts.append(company_info)
+        parts.append("")
     parts.append(
         f"Contact: {contact.get('name', '')} @ {contact.get('company', '') or '(no company)'}".strip()
     )
@@ -1067,9 +1182,18 @@ async def api_generate_review(conversation_id: int):
     conv = await get_conversation(conversation_id)
     if not conv:
         return {"error": "not found"}
+    company_info = None
+    contact_id = conv.get("contact_id")
+    if contact_id:
+        contact = await get_contact(contact_id)
+        if contact and contact.get("seller_id"):
+            seller = await get_seller(contact["seller_id"])
+            if seller:
+                company_info = (seller.get("company_info") or "").strip() or None
     review = await generate_review(
         transcript=conv["transcript"],
         coaching=conv["coaching"],
+        company_info=company_info,
     )
     await save_review(conversation_id, review)
     return review
@@ -1231,6 +1355,7 @@ def _get_coaching_scores_llm() -> ChatOpenAI:
 async def generate_review(
     transcript: list[dict],
     coaching: list[dict],
+    company_info: str | None = None,
 ) -> dict:
     conv_text = "\n".join(
         f"Turn {t.get('turn', i+1)}: {t.get('text', '')}"
@@ -1241,7 +1366,12 @@ async def generate_review(
         for i, c in enumerate(coaching)
     )
 
-    user_content = f"FULL TRANSCRIPT:\n{conv_text}\n\n"
+    user_content = ""
+    if (company_info or "").strip():
+        user_content += (
+            f"CONTEXT (what the seller's company offers):\n{company_info.strip()}\n\n"
+        )
+    user_content += f"FULL TRANSCRIPT:\n{conv_text}\n\n"
     if coach_text:
         user_content += f"COACHING PROVIDED DURING CALL:\n{coach_text}\n\n"
     user_content += "Provide your post-call review."
@@ -1352,6 +1482,9 @@ class SessionData:
         self.objections: list[dict] = []
         self.last_close_score: int | None = None
         self.last_steps_to_close: int | None = None
+        self.last_turn_end_at: float | None = (
+            None  # perf_counter() when turn ended (for latency_ms)
+        )
 
     def add_turn(self, turn_num: int, text: str, confidence: float):
         self.turns.append({"turn": turn_num, "text": text, "confidence": confidence})
@@ -1364,6 +1497,8 @@ class SessionData:
         close_score: int,
         steps_to_close: int,
         is_custom: bool,
+        *,
+        latency_ms: int | None = None,
     ):
         self.coaching_log.append(
             {
@@ -1373,6 +1508,7 @@ class SessionData:
                 "close_score": close_score,
                 "steps_to_close": steps_to_close,
                 "is_custom": is_custom,
+                "latency_ms": latency_ms,
             }
         )
         if close_score >= 0:
@@ -1493,6 +1629,11 @@ async def coaching_session(ws: WebSocket):
 
     async def do_coaching(turn_num: int, custom_question: str | None = None) -> None:
         nonlocal coaching_count
+        t0 = (
+            session.last_turn_end_at
+            if session.last_turn_end_at is not None
+            else time.perf_counter()
+        )
         try:
             await ws.send_json({"type": "coaching_started"})
             result = await get_coaching_advice_only(
@@ -1503,9 +1644,16 @@ async def coaching_session(ws: WebSocket):
             )
             coaching_count += 1
             advice = _sanitize_advice(result.get("advice", "") or "")
+            latency_ms = round((time.perf_counter() - t0) * 1000)
 
             session.add_coaching(
-                coaching_count, turn_num, advice, -1, -1, custom_question is not None
+                coaching_count,
+                turn_num,
+                advice,
+                -1,
+                -1,
+                custom_question is not None,
+                latency_ms=latency_ms,
             )
 
             payload = {
@@ -1514,8 +1662,15 @@ async def coaching_session(ws: WebSocket):
                 "number": coaching_count,
                 "turn": turn_num,
                 "is_custom": custom_question is not None,
+                "latency_ms": latency_ms,
             }
             await ws.send_json(payload)
+            logger.info(
+                "coaching_latency conversation_id=%s turn=%s latency_ms=%s",
+                session.conversation_id,
+                turn_num,
+                latency_ms,
+            )
         except Exception as e:
             await ws.send_json({"type": "error", "message": str(e)})
 
@@ -1581,6 +1736,7 @@ async def coaching_session(ws: WebSocket):
                         turn_num = len(conversation)
                         confidence = getattr(message, "end_of_turn_confidence", 0)
                         session.add_turn(turn_num, text, round(confidence, 2))
+                        session.last_turn_end_at = time.perf_counter()
                         await ws.send_json(
                             {
                                 "type": "turn_end",
@@ -1679,10 +1835,20 @@ async def coaching_session(ws: WebSocket):
         cid = await session.save()
         if cid and session.turns:
             logger.info("Conversation %d saved (%d turns)", cid, len(session.turns))
+            company_info = None
+            if session.contact_id:
+                contact = await get_contact(session.contact_id)
+                if contact and contact.get("seller_id"):
+                    seller = await get_seller(contact["seller_id"])
+                    if seller:
+                        company_info = (
+                            seller.get("company_info") or ""
+                        ).strip() or None
             try:
                 review = await generate_review(
                     transcript=session.turns,
                     coaching=session.coaching_log,
+                    company_info=company_info,
                 )
                 await save_review(cid, review)
                 logger.info("Review generated for conversation %d", cid)
@@ -1795,6 +1961,7 @@ async def test_session(ws: WebSocket):
                 up_to = cmd.get("up_to_turn", len(turns_data))
                 custom_question = cmd.get("question")
                 conversation = [t["text"] for t in turns_data[:up_to]]
+                t0_coach = time.perf_counter()
                 await ws.send_json({"type": "coaching_started"})
                 try:
                     result = await get_coaching_advice_only(
@@ -1805,6 +1972,7 @@ async def test_session(ws: WebSocket):
                     )
                     coaching_count += 1
                     advice = _sanitize_advice(result.get("advice", "") or "")
+                    latency_ms = round((time.perf_counter() - t0_coach) * 1000)
                     session.add_coaching(
                         coaching_count,
                         up_to,
@@ -1812,6 +1980,7 @@ async def test_session(ws: WebSocket):
                         -1,
                         -1,
                         custom_question is not None,
+                        latency_ms=latency_ms,
                     )
                     payload = {
                         "type": "coaching",
@@ -1819,8 +1988,15 @@ async def test_session(ws: WebSocket):
                         "number": coaching_count,
                         "turn": up_to,
                         "is_custom": custom_question is not None,
+                        "latency_ms": latency_ms,
                     }
                     await ws.send_json(payload)
+                    logger.info(
+                        "coaching_latency conversation_id=%s turn=%s latency_ms=%s",
+                        session.conversation_id,
+                        up_to,
+                        latency_ms,
+                    )
                 except Exception as e:
                     await ws.send_json({"type": "error", "message": str(e)})
 
@@ -1855,6 +2031,7 @@ async def test_session(ws: WebSocket):
                     turns_data.append(td_new)
                     session.add_turn(turn_num, text, 1.0)
                     conversation = [t["text"] for t in turns_data]
+                    session.last_turn_end_at = time.perf_counter()
                     await ws.send_json(
                         {
                             "type": "turn_end",
@@ -1864,6 +2041,7 @@ async def test_session(ws: WebSocket):
                         }
                     )
                     # Auto-coach on the new turn (advice only)
+                    t0_coach = session.last_turn_end_at
                     await ws.send_json({"type": "coaching_started"})
                     try:
                         result = await get_coaching_advice_only(
@@ -1874,8 +2052,15 @@ async def test_session(ws: WebSocket):
                         )
                         coaching_count += 1
                         advice = _sanitize_advice(result.get("advice", "") or "")
+                        latency_ms = round((time.perf_counter() - t0_coach) * 1000)
                         session.add_coaching(
-                            coaching_count, turn_num, advice, -1, -1, False
+                            coaching_count,
+                            turn_num,
+                            advice,
+                            -1,
+                            -1,
+                            False,
+                            latency_ms=latency_ms,
                         )
                         payload = {
                             "type": "coaching",
@@ -1883,17 +2068,33 @@ async def test_session(ws: WebSocket):
                             "number": coaching_count,
                             "turn": turn_num,
                             "is_custom": False,
+                            "latency_ms": latency_ms,
                         }
                         await ws.send_json(payload)
+                        logger.info(
+                            "coaching_latency conversation_id=%s turn=%s latency_ms=%s",
+                            session.conversation_id,
+                            turn_num,
+                            latency_ms,
+                        )
                     except Exception as e:
                         await ws.send_json({"type": "error", "message": str(e)})
 
             elif cmd_type == "generate_review":
                 try:
-                    conversation = [t["text"] for t in turns_data]
+                    company_info = None
+                    if session.contact_id:
+                        contact = await get_contact(session.contact_id)
+                        if contact and contact.get("seller_id"):
+                            seller = await get_seller(contact["seller_id"])
+                            if seller:
+                                company_info = (
+                                    seller.get("company_info") or ""
+                                ).strip() or None
                     review = await generate_review(
                         transcript=session.turns,
                         coaching=session.coaching_log,
+                        company_info=company_info,
                     )
                     await save_review(session.conversation_id, review)
                     await ws.send_json(

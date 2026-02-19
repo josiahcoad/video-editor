@@ -7,6 +7,8 @@ import type {
   HomeData,
   PerformanceReview,
   Review,
+  TodoItem,
+  TodoType,
 } from "@/types/api"
 
 const API = "/api"
@@ -51,6 +53,7 @@ export async function createContact(body: {
   name: string
   company?: string | null
   phone?: string | null
+  email?: string | null
   status: string
 }): Promise<ContactOption & { id: number }> {
   const res = await fetch(`${API}/contacts`, {
@@ -152,6 +155,48 @@ export async function fetchQuickActions(
   return res.json()
 }
 
+export async function fetchTodos(
+  sellerId: number
+): Promise<{ todos: TodoItem[] }> {
+  const res = await fetch(`${API}/sellers/${sellerId}/todos`)
+  if (!res.ok) throw new Error("Failed to fetch todos")
+  return res.json()
+}
+
+export async function createTodo(
+  sellerId: number,
+  body: { type: TodoType; title: string; contact_id?: number | null }
+): Promise<{ id: number }> {
+  const res = await fetch(`${API}/sellers/${sellerId}/todos`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  })
+  if (!res.ok) {
+    const data = await res.json().catch(() => ({}))
+    throw new Error(data.error || "Failed to create todo")
+  }
+  return res.json()
+}
+
+export async function deleteTodo(todoId: number): Promise<void> {
+  const res = await fetch(`${API}/todos/${todoId}`, { method: "DELETE" })
+  if (!res.ok) throw new Error("Failed to delete todo")
+}
+
+export async function suggestTodos(
+  sellerId: number
+): Promise<{ created: number; todos: TodoItem[] }> {
+  const res = await fetch(`${API}/sellers/${sellerId}/suggest-todos`, {
+    method: "POST",
+  })
+  if (!res.ok) {
+    const data = await res.json().catch(() => ({}))
+    throw new Error(data.error || "Failed to suggest todos")
+  }
+  return res.json()
+}
+
 export async function fetchPrepare(contactId: number): Promise<{ content: string }> {
   const res = await fetch(`${API}/contacts/${contactId}/prepare`)
   if (!res.ok) {
@@ -175,15 +220,18 @@ export async function fetchPrepareStream(
 
 export async function fetchColdCallPrep(
   contactName: string,
-  company: string | null
+  company: string | null,
+  sellerId?: number | null
 ): Promise<{ content: string }> {
+  const body: { contact_name: string; company: string | null; seller_id?: number } = {
+    contact_name: contactName,
+    company: company ?? null,
+  }
+  if (sellerId != null) body.seller_id = sellerId
   const res = await fetch(`${API}/cold-call-prep`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      contact_name: contactName,
-      company: company ?? null,
-    }),
+    body: JSON.stringify(body),
   })
   if (!res.ok) {
     const data = await res.json().catch(() => ({}))

@@ -84,7 +84,7 @@ async def cmd_run_autoedit(args) -> None:
     """Run the full video processing pipeline (deprecated)."""
     print(
         "The autoedit pipeline (process_video) has been removed.\n"
-        "Use propose_cuts + scripts/apply_cuts_from_json.py for long-form → segments,\n"
+        "Use propose_cuts + src.edit.apply_cuts --json for long-form → segments,\n"
         "or interview_to_shorts for interview → N shorts."
     )
     sys.exit(1)

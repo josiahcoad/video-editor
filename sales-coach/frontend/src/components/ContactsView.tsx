@@ -9,7 +9,7 @@ import {
   updateContact,
 } from "@/lib/api"
 import { cn } from "@/lib/utils"
-import { Globe, Loader2, Phone, Plus, Trash2 } from "lucide-react"
+import { Globe, Loader2, Mail, Phone, Plus, Trash2 } from "lucide-react"
 
 const STATUS_COLORS: Record<
   string,
@@ -87,6 +87,7 @@ export function ContactsView({
   const [addName, setAddName] = useState("")
   const [addCompany, setAddCompany] = useState("")
   const [addPhone, setAddPhone] = useState("")
+  const [addEmail, setAddEmail] = useState("")
   const [addStatus, setAddStatus] = useState("prospect")
   const [addError, setAddError] = useState<string | null>(null)
   const [addSubmitting, setAddSubmitting] = useState(false)
@@ -117,11 +118,13 @@ export function ContactsView({
         name,
         company: addCompany.trim() || null,
         phone: addPhone.trim() || null,
+        email: addEmail.trim() || null,
         status: addStatus,
       })
       setAddName("")
       setAddCompany("")
       setAddPhone("")
+      setAddEmail("")
       setAddStatus("prospect")
       setShowAddForm(false)
       onContactsReload?.()
@@ -218,6 +221,18 @@ export function ContactsView({
                 value={addPhone}
                 onChange={(e) => setAddPhone(e.target.value)}
                 placeholder="+1 555 123 4567"
+                className="w-full px-3 py-2 rounded-lg bg-slate-800 border border-slate-700 text-slate-200 text-sm placeholder:text-slate-500 focus:outline-none focus:ring-1 focus:ring-cyan-500"
+              />
+            </div>
+            <div>
+              <label className="block text-xs font-medium text-slate-400 mb-1">
+                Email (optional)
+              </label>
+              <input
+                type="email"
+                value={addEmail}
+                onChange={(e) => setAddEmail(e.target.value)}
+                placeholder="name@company.com"
                 className="w-full px-3 py-2 rounded-lg bg-slate-800 border border-slate-700 text-slate-200 text-sm placeholder:text-slate-500 focus:outline-none focus:ring-1 focus:ring-cyan-500"
               />
             </div>
@@ -340,7 +355,8 @@ export function ContactsView({
                       try {
                         const res = await fetchColdCallPrep(
                           c.name,
-                          c.company ?? null
+                          c.company ?? null,
+                          c.seller_id ?? undefined
                         )
                         setColdCallPrep({
                           contactId: c.id,
@@ -368,6 +384,17 @@ export function ContactsView({
                       <Globe className="w-4 h-4" />
                     )}
                   </button>
+                  {c.email && (
+                    <a
+                      href={`mailto:${c.email}`}
+                      onClick={(e) => e.stopPropagation()}
+                      className="p-1.5 rounded text-slate-500 hover:text-sky-400 hover:bg-slate-800"
+                      title={c.email}
+                      aria-label={`Email ${c.name}`}
+                    >
+                      <Mail className="w-4 h-4" />
+                    </a>
+                  )}
                   {c.phone && (
                     <a
                       href={`tel:${c.phone}`}

@@ -393,7 +393,7 @@ async def start_and_stream(
 
     print(
         f"{RED}{BOLD}The video processing pipeline (process_video) has been removed.{RESET}\n"
-        "Use propose_cuts + scripts/apply_cuts_from_json.py or interview_to_shorts instead."
+        "Use propose_cuts + src.edit.apply_cuts --json or interview_to_shorts instead."
     )
     sys.exit(1)
 

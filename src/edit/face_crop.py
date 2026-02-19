@@ -158,6 +158,35 @@ def get_title_placement_from_face(
     return (height_percent, "bottom")
 
 
+def get_face_center_at_time(
+    video_path: Path, time_s: float, iw: int, ih: int
+) -> tuple[int, int]:
+    """Detect face center at a specific timestamp.
+
+    Returns (center_x, center_y) in pixels. Falls back to frame center (iw/2, ih/2)
+    if no face is detected.
+    """
+    cap = cv2.VideoCapture(str(video_path))
+    if not cap.isOpened():
+        return (iw // 2, ih // 2)
+
+    fps = cap.get(cv2.CAP_PROP_FPS) or 30.0
+    frame_num = int(time_s * fps)
+    cap.set(cv2.CAP_PROP_POS_FRAMES, frame_num)
+    ret, frame = cap.read()
+    cap.release()
+
+    if not ret or frame is None:
+        return (iw // 2, ih // 2)
+
+    faces = _detect_faces_mediapipe(frame, ih, iw)
+    if not faces:
+        return (iw // 2, ih // 2)
+
+    (x, y, w, h, _) = max(faces, key=lambda r: r[4])
+    return (x + w // 2, y + h // 2)
+
+
 def get_face_crop_x_at_time(
     video_path: Path, time_s: float, crop_w: int, iw: int, ih: int
 ) -> int:

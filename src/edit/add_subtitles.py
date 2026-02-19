@@ -334,7 +334,7 @@ async def main() -> None:
             "  --delay:      Suppress captions for the first N seconds (e.g. while title is showing)"
         )
         print("  --font:       Font family name (default=Roboto)")
-        print("  --font-size:  ASS font size (default=20)")
+        print("  --font-size:  ASS font size (default=15)")
         print("  --word-count: Max words per subtitle line (default=3)")
         sys.exit(1)
 
@@ -356,11 +356,11 @@ async def main() -> None:
     captions_cfg = settings.get("captions") or {}
     caption_height = int(captions_cfg.get("height_percent", 12))
     word_count = int(captions_cfg.get("word_count", 3))
-    font_size = int(captions_cfg.get("font_size", 20))
+    font_size = int(captions_cfg.get("font_size", 15))
     caption_style = (captions_cfg.get("style") or "default").lower()
     if caption_style not in ("default", "classic", "outline"):
         caption_style = "default"
-    caps = bool(captions_cfg.get("caps", True))
+    caps = bool(captions_cfg.get("caps", False))
     font_name = str(captions_cfg.get("font") or "Roboto")
 
     # Replacements: from settings.replacements, then CLI --replace
@@ -613,7 +613,7 @@ async def main() -> None:
         idx = sys.argv.index("--font")
         if idx + 1 < len(sys.argv):
             font_name = sys.argv[idx + 1]
-    effective_font_size = max(font_size, 20)
+    effective_font_size = max(font_size, 10)
 
     if caption_style == "classic":
         style_parts = [
@@ -646,6 +646,7 @@ async def main() -> None:
             "MarginR=15",
         ]
     else:
+        # No background box: outline only for readability
         style_parts = [
             "Alignment=2",
             f"FontName={font_name}",
@@ -653,10 +654,10 @@ async def main() -> None:
             f"FontSize={effective_font_size}",
             "PrimaryColour=&H00FFFFFF",  # White text (AABBGGRR)
             "OutlineColour=&H00000000",  # Black outline
-            "BackColour=&H80000000",  # Semi-transparent black background
+            "BackColour=&H80000000",  # Shadow colour (BorderStyle=1: outline only)
             "Outline=2",  # Moderate outline for readability
             "Shadow=0",
-            "BorderStyle=4",  # Background box behind each line + outline
+            "BorderStyle=1",  # Outline only, no background box
             "MarginL=15",
             "MarginR=15",
         ]

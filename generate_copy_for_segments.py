@@ -72,7 +72,7 @@ def main() -> None:
     script_dir = Path(__file__).resolve().parent
     segment_dirs = sorted(
         d for d in outputs_dir.iterdir() if d.is_dir() and d.name.startswith("segment_")
-    )[:7]
+    )
     out_dir = outputs_dir / "with_copy"
     out_dir.mkdir(parents=True, exist_ok=True)
 

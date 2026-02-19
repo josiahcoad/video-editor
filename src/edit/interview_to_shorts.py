@@ -27,7 +27,8 @@ Usage (from video-editor repo root):
       path/to/interview.mp4 \\
       path/to/project_dir/ \\
       --num-shorts 10 \\
-      --target-duration 40 \\
+      --target-duration 35 \\
+      --tolerance 15 \\
       --music-vibe "piano, corporate"
 
   # Resume from a specific phase:
@@ -62,6 +63,12 @@ from src.edit.add_background_music import add_music
 from src.edit.face_crop import face_crop_per_cut, get_portrait_crop_params
 from src.edit.get_transcript import get_transcript
 from src.edit.music_search import search_music
+from src.edit.propose_interview_cuts import (
+    DEFAULT_NUM_SHORTS,
+    DEFAULT_TARGET_DURATION,
+    DEFAULT_TOLERANCE,
+    propose_interview_cuts,
+)
 from suggest_video_title import (
     extract_seed_keywords,
     get_atp_queries,
@@ -75,8 +82,6 @@ from suggest_video_title import (
 # ---------------------------------------------------------------------------
 
 TITLE_DURATION = 4.0  # seconds to show title overlay
-DEFAULT_NUM_SHORTS = 10
-DEFAULT_TARGET_DURATION = 40  # seconds (±20)
 DEFAULT_MUSIC_VIBE = "piano, corporate"
 DEFAULT_MUSIC_TRACKS_COUNT = 4
 
@@ -101,41 +106,8 @@ def _get_llm(model: str = "google/gemini-2.5-flash") -> ChatOpenAI:
 
 
 # ---------------------------------------------------------------------------
-# Pydantic models for structured LLM output
+# Pydantic models for structured LLM output (music selection)
 # ---------------------------------------------------------------------------
-
-
-class ShortSegment(BaseModel):
-    """A single short video segment."""
-
-    segment: int = Field(description="Segment number (1-based)")
-    description: str = Field(description="Brief description of what the body covers")
-    hook: str = Field(
-        description="Timestamp range for the hook, format 'start:end' (seconds)"
-    )
-    body: str = Field(
-        description="Timestamp range for the body, format 'start:end' (seconds)"
-    )
-    cta: str = Field(
-        description="Timestamp range for the CTA, format 'start:end' (seconds)"
-    )
-
-
-class ShortsProposal(BaseModel):
-    """Complete proposal for N shorts from an interview."""
-
-    cta_range: str = Field(
-        description=(
-            "The single best CTA timestamp range, format 'start:end'. "
-            "All shorts will share this same CTA."
-        )
-    )
-    shorts: list[ShortSegment] = Field(
-        description="List of short segments, each with hook + body + cta"
-    )
-    reasoning: str = Field(
-        description="Brief explanation of why these segments were chosen"
-    )
 
 
 class MusicSelection(BaseModel):
@@ -169,148 +141,12 @@ async def transcribe_video(video_path: Path, project_dir: Path) -> tuple[Path, P
     print(f"🎙️  Transcribing {video_path.name} (with filler word detection)...")
     result = await get_transcript(video_path, filler_words=True)
 
-    if not words_path.exists():
-        raise RuntimeError(f"Transcription failed — {words_path} not created")
+    words_path.write_text(json.dumps(result["words"], indent=2))
+    utterances_path.write_text(json.dumps(result["utterances"], indent=2))
 
-    word_count = len(json.loads(words_path.read_text()))
+    word_count = len(result["words"])
     print(f"✅ Transcription complete: {word_count} words")
     return words_path, utterances_path
-
-
-async def propose_shorts(
-    words_json: Path,
-    utterances_json: Path,
-    num_shorts: int = DEFAULT_NUM_SHORTS,
-    target_duration: int = DEFAULT_TARGET_DURATION,
-) -> list[dict[str, Any]]:
-    """Use LLM to analyse transcript and propose short segments.
-
-    Returns list of segment dicts in shorts_cuts.json format.
-    """
-    # Load transcripts
-    words: list[dict] = json.loads(words_json.read_text())
-    utterances: list[dict] = json.loads(utterances_json.read_text())
-
-    # Build a readable transcript with timestamps for the LLM
-    transcript_for_llm = ""
-    for utt in utterances:
-        start = utt.get("start", 0)
-        end = utt.get("end", 0)
-        text = utt.get("text", "") or utt.get("transcript", "")
-        transcript_for_llm += f"[{start:.1f}s - {end:.1f}s] {text}\n"
-
-    # Get total duration
-    if words:
-        total_duration = words[-1].get("end", 0)
-    else:
-        total_duration = utterances[-1].get("end", 0) if utterances else 0
-
-    llm = _get_llm()
-    structured = llm.with_structured_output(ShortsProposal)
-
-    min_dur = max(20, target_duration - 20)
-    max_dur = target_duration + 20
-
-    print(
-        f"🧠 Analysing transcript ({len(utterances)} utterances, {total_duration:.0f}s)..."
-    )
-    print(f"   Target: {num_shorts} shorts, {target_duration}s each (±20s)")
-
-    response = await structured.ainvoke(
-        [
-            SystemMessage(
-                content=(
-                    "You are an expert video editor who creates viral short-form content "
-                    "from long interviews.\n\n"
-                    "You'll receive a timestamped interview transcript. Your job is to "
-                    f"identify {num_shorts} short videos, each structured as:\n"
-                    "  [HOOK] — 2-5 second attention-grabbing statement\n"
-                    "  [BODY] — 20-50 second substantive answer/insight\n"
-                    "  [CTA]  — 4-8 second call-to-action (shared across all shorts)\n\n"
-                    "INTERVIEW STRUCTURE:\n"
-                    "- The interviewee answered several questions on different topics\n"
-                    "- They also recorded multiple hook takes (short, punchy statements)\n"
-                    "- They recorded one or more CTA takes at the end\n\n"
-                    "YOUR PROCESS:\n"
-                    "1. First, find the CTA — usually near the end of the interview. "
-                    "   Pick the best/cleanest take. ALL shorts share the same CTA.\n"
-                    "2. Identify the body segments — these are substantive answers to "
-                    "   questions. Each body should cover ONE clear topic/insight.\n"
-                    "3. Match hooks to bodies — hooks should be attention-grabbing openings "
-                    "   that tease the body content. A hook can come from:\n"
-                    "   - Dedicated hook takes (short, punchy statements)\n"
-                    "   - Strong opening lines from other answers\n"
-                    "   - The same answer's first sentence (if it's compelling)\n"
-                    "4. A hook CAN be reused across 2 shorts if it fits both bodies.\n\n"
-                    "TIMESTAMP RULES:\n"
-                    "- Use the exact timestamps from the transcript (format: 'start:end')\n"
-                    "- Timestamps are in seconds (e.g. '89.60:118.66')\n"
-                    "- Start body segments at clean word boundaries (not mid-word)\n"
-                    "- Don't start a body with filler words like 'But', 'So', 'Um'\n"
-                    "- Leave ~0.5s margin at the end of each segment for the last word\n\n"
-                    f"DURATION TARGET: Each short = hook + body + CTA = {target_duration}s "
-                    f"(acceptable range: {min_dur}-{max_dur}s)\n"
-                    "- Hook: 2-5 seconds\n"
-                    f"- Body: {min_dur - 12}-{max_dur - 8} seconds\n"
-                    "- CTA: 4-8 seconds\n\n"
-                    "QUALITY CRITERIA:\n"
-                    "- Each body should contain a COMPLETE thought (not cut mid-sentence)\n"
-                    "- Hooks should create curiosity (questions, surprising statements, bold claims)\n"
-                    "- Bodies should deliver value (insights, data, actionable advice)\n"
-                    "- Avoid overlapping content between shorts\n"
-                    "- Vary the topics across shorts for a diverse content mix"
-                )
-            ),
-            HumanMessage(
-                content=(
-                    f"Here is the interview transcript ({total_duration:.0f} seconds total):\n\n"
-                    f"{transcript_for_llm}\n\n"
-                    f"Please propose {num_shorts} shorts."
-                )
-            ),
-        ]
-    )
-
-    # Convert to shorts_cuts.json format
-    segments = []
-    for short in response.shorts:
-        cta = short.cta or response.cta_range
-        seg = {
-            "segment": short.segment,
-            "title": "",  # Will be generated in Phase 2
-            "description": short.description,
-            "hook": short.hook,
-            "body": short.body,
-            "cta": cta,
-            "cuts": f"{short.hook},{short.body},{cta}",
-        }
-        segments.append(seg)
-
-    print(f"\n📋 Proposed {len(segments)} shorts:")
-    for seg in segments:
-        hook_dur = _range_duration(seg["hook"])
-        body_dur = _range_duration(seg["body"])
-        cta_dur = _range_duration(seg["cta"])
-        total = hook_dur + body_dur + cta_dur
-        print(
-            f"   {seg['segment']:2d}. [{total:.0f}s] "
-            f"hook={hook_dur:.1f}s body={body_dur:.1f}s cta={cta_dur:.1f}s — "
-            f"{seg['description'][:60]}"
-        )
-
-    print(f"\n💡 Reasoning: {response.reasoning}")
-    return segments
-
-
-def _range_duration(range_str: str) -> float:
-    """Parse 'start:end' and return duration."""
-    parts = range_str.split(":")
-    if len(parts) != 2:
-        return 0
-    try:
-        return float(parts[1]) - float(parts[0])
-    except ValueError:
-        return 0
 
 
 # ---------------------------------------------------------------------------
@@ -343,17 +179,30 @@ async def generate_titles(
 
     for seg in segments:
         num = seg["segment"]
-        body_range = seg.get("body", "")
-        if not body_range:
+        body_ranges_str = seg.get("body", "")
+        if not body_ranges_str:
             continue
 
-        start_str, end_str = body_range.split(":", 1)
-        body_text = " ".join(
-            w["word"]
-            for w in all_words
-            if w["start"] >= float(start_str) - 0.05
-            and w["end"] <= float(end_str) + 0.05
-        )
+        # Body can be single "start:end" or comma-separated "start:end,start:end,..."
+        body_text_parts: list[str] = []
+        for part in body_ranges_str.split(","):
+            part = part.strip()
+            if not part or ":" not in part:
+                continue
+            start_str, end_str = part.split(":", 1)
+            try:
+                start_t = float(start_str)
+                end_t = float(end_str)
+            except ValueError:
+                continue
+            body_text_parts.append(
+                " ".join(
+                    w["word"]
+                    for w in all_words
+                    if w["start"] >= start_t - 0.05 and w["end"] <= end_t + 0.05
+                )
+            )
+        body_text = " ".join(body_text_parts)
         if not body_text.strip():
             print(f"   Short {num}: no body text found, using description")
             seg["title"] = seg.get("description", f"Short {num}")
@@ -652,7 +501,7 @@ def render_short(
             "run",
             "python",
             "-m",
-            "src.edit.apply_jump_cuts",
+            "src.edit.add_jump_cuts",
             str(portrait_mp4),
             str(jump_mp4),
             "--gap-threshold",
@@ -721,7 +570,7 @@ def render_short(
                 "--anchor",
                 "top",
                 "--height",
-                "90",
+                "95",
             ],
             check=True,
         )
@@ -764,8 +613,10 @@ def render_short(
 async def run_pipeline(
     video_path: Path,
     project_dir: Path,
-    num_shorts: int = DEFAULT_NUM_SHORTS,
-    target_duration: int = DEFAULT_TARGET_DURATION,
+    num_shorts: int | None = None,
+    cuts_per_question: int | None = None,
+    target_duration: float = DEFAULT_TARGET_DURATION,
+    tolerance: float = DEFAULT_TOLERANCE,
     music_vibe: str = DEFAULT_MUSIC_VIBE,
     from_phase: int = 1,
     from_short: int = 1,
@@ -799,8 +650,13 @@ async def run_pipeline(
             print(f"   (Delete it to re-propose cuts)")
             segments = json.loads(cuts_json.read_text())
         else:
-            segments = await propose_shorts(
-                words_json, utterances_json, num_shorts, target_duration
+            segments = await propose_interview_cuts(
+                words_json,
+                utterances_json,
+                num_shorts=num_shorts,
+                cuts_per_question=cuts_per_question,
+                duration=target_duration,
+                tolerance=tolerance,
             )
             cuts_json.write_text(json.dumps(segments, indent=4))
             print(f"\n✅ Cuts written to {cuts_json}")
@@ -954,14 +810,26 @@ def main() -> int:
     parser.add_argument(
         "--num-shorts",
         type=int,
-        default=DEFAULT_NUM_SHORTS,
-        help=f"Number of shorts to create (default: {DEFAULT_NUM_SHORTS})",
+        default=None,
+        help=f"Number of shorts (default: {DEFAULT_NUM_SHORTS}). Ignored if --cuts-per-question is set.",
+    )
+    parser.add_argument(
+        "--cuts-per-question",
+        type=int,
+        default=None,
+        help="Propose this many shorts per identified question/topic (LLM identifies number_questions)",
     )
     parser.add_argument(
         "--target-duration",
-        type=int,
+        type=float,
         default=DEFAULT_TARGET_DURATION,
         help=f"Target duration per short in seconds (default: {DEFAULT_TARGET_DURATION})",
+    )
+    parser.add_argument(
+        "--tolerance",
+        type=float,
+        default=DEFAULT_TOLERANCE,
+        help=f"Duration tolerance ± seconds, e.g. 35±15 (default: {DEFAULT_TOLERANCE})",
     )
     parser.add_argument(
         "--music-vibe",
@@ -993,8 +861,12 @@ def main() -> int:
         run_pipeline(
             video_path=args.video.resolve(),
             project_dir=args.project_dir.resolve(),
-            num_shorts=args.num_shorts,
+            num_shorts=args.num_shorts
+            if args.num_shorts is not None
+            else DEFAULT_NUM_SHORTS,
+            cuts_per_question=args.cuts_per_question,
             target_duration=args.target_duration,
+            tolerance=args.tolerance,
             music_vibe=args.music_vibe,
             from_phase=args.from_phase,
             from_short=args.from_short,

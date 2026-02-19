@@ -330,6 +330,18 @@ export function ContactDetail({
                   </a>
                 </>
               )}
+              {contact.email && (
+                <>
+                  Email:{" "}
+                  <a
+                    href={`mailto:${contact.email}`}
+                    onClick={(e) => e.stopPropagation()}
+                    className="text-cyan-400 hover:text-cyan-300 underline"
+                  >
+                    {contact.email}
+                  </a>
+                </>
+              )}
               <button
                   type="button"
                   onClick={async () => {
@@ -339,7 +351,8 @@ export function ContactDetail({
                     try {
                       const res = await fetchColdCallPrep(
                         contact.name,
-                        contact.company ?? null
+                        contact.company ?? null,
+                        contact.seller_id ?? undefined
                       )
                       setResearchContent(res.content)
                     } catch (e) {

@@ -16,13 +16,16 @@ from deepgram import DeepgramClient
 API_KEY = "37e776c73c0de03eeacfaa9635e26ce6787bcf74"
 
 
-async def get_transcript(video_path: Path, filler_words: bool = False) -> dict:
+async def get_transcript(
+    video_path: Path, filler_words: bool = False, max_duration: float | None = None
+) -> dict:
     """Get word-level and utterance-level transcript from video.
 
     Args:
         video_path: Path to the video file.
         filler_words: If True, enable Deepgram filler-word detection so that
             "uh", "um", "mhmm" etc. appear as explicit word entries.
+        max_duration: If set, only transcribe the first N seconds (cheaper for long videos).
 
     Returns:
         Dict with keys: 'words', 'utterances', 'transcript'
@@ -39,21 +42,24 @@ async def get_transcript(video_path: Path, filler_words: bool = False) -> dict:
     try:
         print(f"🔧 DEBUG [deepgram]: Extracting audio to: {audio_path}")
         audio_extract_start = time.time()
+        ffmpeg_cmd = [
+            "ffmpeg",
+            "-y",
+            "-i",
+            str(video_path),
+            "-vn",  # No video
+            "-ac",
+            "1",  # Mono
+            "-ar",
+            "16000",  # 16kHz sample rate (sufficient for speech)
+            "-b:a",
+            "16k",  # 16kbps bitrate (very small, sufficient for Deepgram)
+        ]
+        if max_duration is not None:
+            ffmpeg_cmd.extend(["-t", str(max_duration)])
+        ffmpeg_cmd.append(str(audio_path))
         subprocess.run(
-            [
-                "ffmpeg",
-                "-y",
-                "-i",
-                str(video_path),
-                "-vn",  # No video
-                "-ac",
-                "1",  # Mono
-                "-ar",
-                "16000",  # 16kHz sample rate (sufficient for speech)
-                "-b:a",
-                "16k",  # 16kbps bitrate (very small, sufficient for Deepgram)
-                str(audio_path),
-            ],
+            ffmpeg_cmd,
             check=True,
             capture_output=True,
         )
@@ -87,7 +93,7 @@ async def get_transcript(video_path: Path, filler_words: bool = False) -> dict:
         try:
             transcribe_kwargs: dict = dict(
                 request=audio_bytes,
-                model="nova-2",
+                model="nova-3",
                 smart_format=True,
                 punctuate=True,
                 utterances=True,

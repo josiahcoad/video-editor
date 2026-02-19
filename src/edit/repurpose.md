@@ -21,7 +21,7 @@ dotenvx run -f .env -f ../fast-backend/.env -f ../fast-backend/.env.prod -- uv r
 dotenvx run -f .env -f ../fast-backend/.env -- uv run python -m src.locate.idea_generator [args]
 ```
 
-**Required env vars:** `DEEPGRAM_API_KEY`, `OPENROUTER_API_KEY`, `GEMINI_API_KEY`, `ELEVENLABS_API_KEY`, `SUPABASE_URL`, `SUPABASE_API_KEY`, `RAPIDAPI_KEY` (for topic research). For b-roll: `PEXELS_API_KEY`. For scheduling: `MARKY_BUSINESS_ID` or `business_id` in project `editing/settings.json` (see Per-project settings).
+**Required env vars:** `DEEPGRAM_API_KEY`, `OPENROUTER_API_KEY`, `GEMINI_API_KEY`, `ELEVENLABS_API_KEY`, `SUPABASE_URL`, `SUPABASE_API_KEY`, `RAPIDAPI_KEY` (for topic research). For b-roll: `PEXELS_API_KEY`. For whiteboard overlay: `GEMINI_API_KEY` (or `GOOGLE_API_KEY`), `OPENROUTER_API_KEY` (for window selection). For scheduling: `MARKY_BUSINESS_ID` or `business_id` in project `editing/settings.json` (see Per-project settings).
 
 ## Terminology
 
@@ -54,12 +54,13 @@ src/
     get_transcript.py     # Transcription (Deepgram)
     propose_cuts.py       # LLM-powered segment planning
     apply_cuts.py         # Cut segments from source
-    apply_speedup.py      # WPM normalization
-    apply_jump_cuts.py    # Dead space removal + zoom cuts
+    add_speedup.py      # WPM normalization
+    add_jump_cuts.py    # Dead space removal + zoom cuts
     add_title.py          # Title overlay
     add_subtitles.py      # Caption burn-in
     add_emojis.py         # LLM-picked emoji overlays at key moments
     add_infographic.py   # LLM-planned infographic overlay (Pillow templates)
+    add_whiteboard_overlay.py  # Whiteboard graphic + hand-doodle animation + face bubble (see Phase 7b)
     add_broll.py         # Pexels b-roll inserts (LLM + transcript → 3 clips × 3s)
     enhance_voice.py      # Podcast-style audio processing
     voice_isolation.py    # ElevenLabs noise removal
@@ -251,19 +252,16 @@ Scripts are standalone tools driven entirely by flags — they don't require a s
 
 ## Phase 0: Download Source Video (if YouTube)
 
-If the source is a YouTube URL, download it using `yt-dlp` from the fast-backend virtualenv:
+Use the video-editor download script (uses yt-dlp from this repo; no fast-backend needed):
 
 ```bash
-cd /Users/apple/Documents/code/marky/marky-app/fast-backend
-.venv/bin/yt-dlp --cookies-from-browser safari \
-  -f "bestvideo[ext=mp4][height<=1080]+bestaudio[ext=m4a]/best[ext=mp4]/best" \
-  -o "/Users/apple/Documents/code/marky/marky-app/video-editor/%(title)s.%(ext)s" \
-  "<youtube-url>"
+# From video-editor repo root
+dotenvx run -f .env -- uv run python src/edit/download_yt.py "https://www.youtube.com/watch?v=VIDEO_ID" -o projects/MyProject/editing/videos/source/
 ```
 
-- **`--cookies-from-browser safari`** is usually required — YouTube blocks raw downloads with 403 errors without it.
-- If downloads still fail, update yt-dlp first: `uv pip install --upgrade yt-dlp` (the fast-backend venv). YouTube frequently changes its anti-bot measures and older versions stop working.
-- `yt-dlp` is installed in the fast-backend virtualenv, not video-editor. Always use `.venv/bin/yt-dlp` from the fast-backend directory.
+- **Cookies from Safari** are used by default so YouTube is less likely to block. Use `--no-cookies` to skip (often gets 403). Use `--cookies-from chrome` (or another browser) if you prefer.
+- Output: single merged MP4 (best video ≤1080p + best audio). Default filename is `%(id)s.%(ext)s` (e.g. `VIDEO_ID.mp4`).
+- If downloads fail, update yt-dlp: `uv add yt-dlp@latest` (YouTube often changes and older yt-dlp can break).
 
 ---
 
@@ -401,7 +399,7 @@ If you do use speedup, run it **before** jump cuts because:
 - If you jump-cut first then speed up, remaining 0.4s gaps compress to ~0.3s (tighter than intended) and 5s segments shrink to ~3.8s (more jarring than intended)
 
 ```bash
-python src/edit/apply_speedup.py <segment.mp4> <segment-fast.mp4> --wpm 220
+python src/edit/add_speedup.py <segment.mp4> <segment-fast.mp4> --wpm 220
 ```
 
 - Transcribes the video, calculates current WPM, derives the speedup multiplier.
@@ -422,7 +420,7 @@ Aggressive post-processing to create punchy, fast-paced short-form content. Comb
 # The script auto-discovers 01_cut.boundaries.json (written by
 # apply_cuts.py) in the same directory and suppresses zoom toggles
 # near content-cut join points to avoid "double jumps".
-python src/edit/apply_jump_cuts.py <segment-fast.mp4> <segment-jumpcut.mp4> \
+python src/edit/add_jump_cuts.py <segment-fast.mp4> <segment-jumpcut.mp4> \
   --gap-threshold 0.4 --max-cut-duration 5.0 --zoom-factor 1.2
 ```
 
@@ -484,7 +482,7 @@ ffmpeg -y -i inputs/hook.mov -ss <start> -to <end> \
 **The hook MUST be sped up to match the main segment's target WPM (e.g. 220).** A pacing mismatch between hook and main segment is jarring — the viewer feels the tempo shift.
 
 ```bash
-python src/edit/apply_speedup.py outputs/segment_XX/04_hook_raw.mp4 /tmp/hook_fast.mp4 --wpm 220
+python src/edit/add_speedup.py outputs/segment_XX/04_hook_raw.mp4 /tmp/hook_fast.mp4 --wpm 220
 ```
 
 ### Step 3c: Trim the hook tightly
@@ -567,7 +565,7 @@ ffmpeg -i <segment-isolated.mp4> -vf "crop=ih*9/16:ih" \
 
 - This center-crops to 9:16, keeping the full height and taking the middle vertical slice.
 - Works well when the speaker is centered. If the speaker is off-center, you'll need to adjust the crop offset (add `:x_offset:0` to the crop filter).
-- **All subsequent steps (check_placement, add_title, add_subtitles) must run on the cropped version.** Their placement values will be completely different for 9:16 vs 16:9.
+- **All subsequent steps (suggest_onscreen_text_placement, add_title, add_subtitles) must run on the cropped version.** Their placement values will be completely different for 9:16 vs 16:9.
 
 ---
 
@@ -576,7 +574,7 @@ ffmpeg -i <segment-isolated.mp4> -vf "crop=ih*9/16:ih" \
 ### Step 5a: Determine placement
 
 ```bash
-python src/edit/check_placement.py <segment-isolated.mp4>
+python src/edit/suggest_onscreen_text_placement.py <segment-isolated.mp4>
 ```
 
 **Run this PER video.** Different video layouts need different placements:
@@ -646,7 +644,7 @@ python src/edit/add_subtitles.py <titled.mp4> \
 ```
 
 - Read `settings.json` → `captions.style`, `captions.height_percent`, `captions.font_size`, `captions.caps`, `title.duration` (for `--delay`), and `replacements` (or pass `--settings <path>` so the script loads them). Pass as flags.
-- `--height` sets the caption vertical position (0=bottom, 100=top). **Default is 12%** (captions sit further below the face). Lower value = closer to bottom of frame. Use the value from `check_placement.py` (`CAPTION_HEIGHT_PERCENT`) if overriding.
+- `--height` sets the caption vertical position (0=bottom, 100=top). **Default is 12%** (captions sit further below the face). Lower value = closer to bottom of frame. Use the value from `suggest_onscreen_text_placement.py` (`CAPTION_HEIGHT_PERCENT`) if overriding.
 - `--style` — caption visual preset: `default` (white on dark box), `classic` (black on white box), `outline` (white text + outline + shadow, no box).
 - `--caps` / `--no-caps` — force ALL CAPS or sentence case.
 - `--delay` — suppress captions for the first N seconds (use `title.duration` so captions don't overlap the title).
@@ -800,7 +798,7 @@ Create a **shorter cut** of each segment’s final infographic video for platfor
 - **Input:** `09_infographic.mp4` (and optionally `07_music-words.json` or the infographic video’s word transcript).
 - **Output:** e.g. `09_infographic_35s.mp4` (or keep a single convention like `09_infographic_short.mp4`).
 
-- **Short versions:** The former `trim_smart` and `scripts/trim_short_versions_all_segments.sh` have been removed. To create a short cut of a segment (e.g. 35s ±10s), use **propose_cuts** with a word-level transcript for that segment and target_duration/tolerance, then **apply_cuts** (or `scripts/apply_cuts_from_json.py`) to render. For infographic segments, ensure the chosen cuts include the infographic range (add_infographic writes `09_infographic.plan.json` with start_time/end_time).
+- **Short versions:** The former `trim_smart` and `scripts/trim_short_versions_all_segments.sh` have been removed. To create a short cut of a segment (e.g. 35s ±10s), use **propose_cuts** with a word-level transcript for that segment and target_duration/tolerance, then **apply_cuts** (or `python -m src.edit.apply_cuts --json ...`) to render. For infographic segments, ensure the chosen cuts include the infographic range (add_infographic writes `09_infographic.plan.json` with start_time/end_time).
 
 ---
 
@@ -845,6 +843,81 @@ done
 - Music starts 5 seconds into the track to skip intros.
 - **Single track:** reuse the same file for all segments for consistency. **Multiple tracks:** use round-robin so each segment gets a different track in rotation (e.g. 5 tracks → segments 1–5 get 01–05, segments 6–10 repeat 01–05).
 - If the client has no `editing/music/` folder yet, use `--tags` to search Openverse, present options to the user, then download approved tracks into the folder. Check `preferences.md` (and `docs/findmusic.md` for profile→music mapping) for guidelines on what to search for.
+
+---
+
+## Phase 7b: Whiteboard Overlay (optional — when a diagram reinforces the message)
+
+Add a **hand-drawn whiteboard graphic** that appears for a ~12s window over the talking head, with the speaker’s face in a circle bubble (bottom-right). Best when the speaker explains a concept, list, or process that benefits from a single visual diagram.
+
+**Input:** 9:16 talking-head video (e.g. `06_music.mp4` or `06_captioned.mp4`).  
+**Output:** Same directory: `whiteboard_image.png` (4:5), `whiteboard_overlay.mp4` (4:5 doodle video), `<stem>_whiteboard.mp4` (final 9:16 composite).
+
+### Invocation
+
+```bash
+# Full run: LLM picks window + generates image + doodle + composite + Gemini QC
+dotenvx run -f .env -f ../fast-backend/.env -- uv run python -m src.edit.add_whiteboard_overlay \
+  projects/<Client>/editing/videos/<session>/outputs/segment_XX/06_music.mp4
+
+# Override overlay window (re-animates existing whiteboard_image.png if present)
+dotenvx run -f .env -f ../fast-backend/.env -- uv run python -m src.edit.add_whiteboard_overlay \
+  projects/.../segment_XX/06_music.mp4 --start 2 --end 14
+
+# Skip image/overlay generation — reuse existing whiteboard_overlay.mp4 (composite only)
+dotenvx run -f .env -f ../fast-backend/.env -- uv run python -m src.edit.add_whiteboard_overlay \
+  projects/.../segment_XX/06_music.mp4 --skip-generation
+```
+
+**Arguments:**
+
+| Flag | Purpose |
+|------|--------|
+| `video` | Input 9:16 talking-head video (required). |
+| `-o` / `--output` | Final composite path (default: `<input_stem>_whiteboard.mp4`). |
+| `--skip-generation` | Do not generate or re-animate; use existing `whiteboard_overlay.mp4` and only re-composite. |
+| `--start`, `--end` | Override overlay window (seconds). If set, window has no `prompt` → script re-animates `whiteboard_image.png` if it exists; otherwise errors. |
+| `--reveal` | Doodle reveal: `zigzag` (default), `rows`, or `knn`. |
+| `--angle` | Zigzag stroke angle 0–90 (default 15). |
+| `--image-model` | `pro` (Gemini Pro with Flash fallback) or `fast` (Flash only). Default `pro`. |
+
+### How it works
+
+1. **Transcript:** Uses cached `<stem>-words.json` or `05_captioned-words.json` in the same directory, or runs Deepgram.
+2. **Window:** LLM (OpenRouter + Gemini) picks a ~12s window where a diagram would help and returns a **image generation prompt** (flat whiteboard-style graphic, 4:5, hand-drawn look).
+3. **Image:** Gemini generates a 4:5 image from the prompt; saved as `whiteboard_image.png`.
+4. **Doodle:** `doodle_animate` animates the image with a hand-drawing reveal (no padding to 9:16 — hand stays in 4:5 area). Output: `whiteboard_overlay.mp4` (4:5).
+5. **Letterbox:** Bottom strip of the 4:5 image is averaged and replicated vertically to fill the space below the 4:5 content in 9:16 (so the letterbox matches the graphic’s bottom edge, not a solid color).
+6. **Composite:** Whiteboard (scaled to full width, top-aligned) + letterbox below → vstack to 9:16; overlaid on talking head; circle-cropped face bubble (bottom-right) on top. Fades in/out at window start/end.
+7. **QC:** Script uploads the final video to Gemini and prints a short QC review (timing, visual quality, face bubble, transitions).
+
+### Env and dependencies
+
+- **GEMINI_API_KEY** (or **GOOGLE_API_KEY**): image generation and QC.
+- **OPENROUTER_API_KEY**: LLM for window + prompt selection.
+- **DEEPGRAM**: only if no cached word-level transcript.
+- **doodle_animate** (in `src/edit/`): hand-drawing animation; whiteboard image stays 4:5.
+
+### When to use
+
+- Speaker explains a **concept, list, comparison, or process** that benefits from one clear diagram.
+- You want a **single, focused graphic** (not multiple infographic slides or emojis).
+
+### When to skip
+
+- **Purely conversational** content with no diagrammable idea.
+- **Screen demos / product walkthroughs** — the screen is the visual.
+- **Already heavy overlays** (infographic + whiteboard would be redundant).
+
+### QC
+
+- Script runs Gemini QC at the end; read the printed feedback.
+- **Verify dimensions:** `whiteboard_overlay.mp4` should be 4:5 (e.g. 928×1152). Final composite should be 9:16 (e.g. 606×1080). Use `ffprobe` if needed.
+- **Spot-check:** Play the overlay window; letterbox under the graphic should match the image’s bottom edge (replicated strip), not a solid block. Face bubble should not cover key diagram elements.
+
+### Re-running only composite
+
+If you change overlay start/end or talking-head file and already have `whiteboard_overlay.mp4`, use `--start` and `--end` so the script re-animates from `whiteboard_image.png` and re-composites. To keep the same overlay clip and only re-composite (e.g. different output path), use `--skip-generation`.
 
 ---
 
@@ -1096,11 +1169,11 @@ PRODUCTION (per recording session — scripts in src/edit/):
   3.  Quality review       (agent reviews: standalone? cold open? single vs multi?)
   3b. Text verification    Phase 2b — extract text for each timestamp range, verify sentence boundaries (MANDATORY)
   4.  Cut segments         apply_cuts.py (one per segment; prepend cold open if applicable)
-  4b. Speedup to target WPM   apply_speedup.py --wpm 220 (BEFORE jump cuts; use settings.json speedup.target_wpm)
-  4c. Jump cuts + dead space apply_jump_cuts.py (auto-transcribes the sped-up video)
+  4b. Speedup to target WPM   add_speedup.py --wpm 220 (BEFORE jump cuts; use settings.json speedup.target_wpm)
+  4c. Jump cuts + dead space add_jump_cuts.py (auto-transcribes the sped-up video)
   4d. Propose hooks         propose_hooks.py → user records → cut → speedup → trim → compose (OPTIONAL)
   5.  Crop to 9:16         ffmpeg crop (if targeting TikTok/Reels/Shorts — BEFORE overlays)
-  6.  Check placement      check_placement.py (on the CROPPED version — DO NOT SKIP)
+  6.  Check placement      suggest_onscreen_text_placement.py (on the CROPPED version — DO NOT SKIP)
   7.  Voice enhancement    enhance_voice.py (ALWAYS — podcast-style warmth + compression)
   7b. Voice isolation      voice_isolation.py (OPTIONAL — only if audio is noisy)
   8.  Add title            add_title.py --duration N --height N --anchor X (flags from settings.json)
@@ -1110,6 +1183,7 @@ PRODUCTION (per recording session — scripts in src/edit/):
   9c. Infographic overlay  add_infographic.py --transcript --dry-run first (OPTIONAL — abstract concepts)
   9d. Final transcript QC  get_transcript.py <final-video> → read full transcript; verify pristine & coherent (MANDATORY — see "Final transcript QC" below)
   10. Add music            enhance_voice 06_captioned → 06_enhanced; then add_background_music 06_enhanced → 07_music (use <client>/editing/music/ with --segment N for round-robin)
+  10b. Whiteboard overlay  add_whiteboard_overlay 06_music.mp4 → 06_music_whiteboard.mp4 (optional; when a diagram reinforces the message)
   11. Generate copy        write_copy.py --platform short/twitter/linkedin (one per platform)
   12. Schedule shorts      schedule_post.py --video --caption --title --override twitter/linkedIn
   13. YouTube long-form    Title + description + thumbnail (see <client>/editing/voices/marky_youtube.md)
@@ -1147,6 +1221,7 @@ Every script in this pipeline produces output that can fail in subtle ways — w
 | Emoji overlays | Emojis reinforce spoken content, spaced 5s+ apart, don't overlap captions/title | **Run `--dry-run` first and read each rationale. After render, scrub to each timestamp — emoji should appear as the keyword is spoken, not before or after.** |
 | Infographic overlay | Concept is accurate, template fits content, timing matches spoken explanation | **Run `--dry-run` first — inspect the preview image at phone size. Is the text readable? Does the layout make sense? Does start_time align with when the speaker discusses the concept?** |
 | Add music | Voice is dominant, music is subtle, no audio clipping | Listen to the first 10-15 seconds. |
+| Whiteboard overlay | Overlay is 4:5, final composite 9:16; letterbox matches image bottom; face bubble doesn’t cover key graphic | Read script’s Gemini QC output. Optionally ffprobe whiteboard_overlay.mp4 (4:5) and final mp4 (9:16). Spot-check letterbox and face placement. |
 | Caption/title text | Tone matches <client>/editing/voices/marky_default.md, no buzzwords, appropriate for platform | Read every caption. Would the founder actually say this? |
 | Carousel slides | No misspellings, no duplicated words, correct handle, consistent style | **View every slide image.** Text rendering is the weakest link. |
 | YouTube thumbnail | Face is recognizable, text is ≤3 bold words, high contrast, pairs with title | **View the generated image.** 2-step generation (portrait → composition) — inspect both. |
@@ -1275,9 +1350,9 @@ These are places where intelligent judgment is needed (not just running scripts)
 
 1. **How many segments to cut?** Fewer, higher-quality segments beat many thin ones. If a topic doesn't have enough substance for a 30-40s standalone short, skip it.
 
-2. **Title placement:** Always run `check_placement.py`. The same `--height` value does NOT work across different video layouts.
+2. **Title placement:** Always run `suggest_onscreen_text_placement.py`. The same `--height` value does NOT work across different video layouts.
 
-3. **Caption placement:** Use the `CAPTION_HEIGHT_PERCENT` from `check_placement.py`. Split-screen layouts need different values than full-screen.
+3. **Caption placement:** Use the `CAPTION_HEIGHT_PERCENT` from `suggest_onscreen_text_placement.py`. Split-screen layouts need different values than full-screen.
 
 4. **Word replacements:** Check the transcript for common misheard words (brand names, proper nouns). Add them to `--replace`.
 
@@ -1289,9 +1364,11 @@ These are places where intelligent judgment is needed (not just running scripts)
 
 8. **Cold open hook:** Before finalizing cuts, read the transcript for a soundbite that would hook a cold viewer. If one exists, prepend it to the segment. See the "Cold Open Hooks" section for criteria.
 
-9. **Single vs. multi-segment:** Not every video should be split into multiple shorts. Linear procedures, short source videos (<5 min), and content without distinct sub-topics are better as a single condensed short or posted in full.
+9. **Whiteboard vs infographic:** Whiteboard = one hand-drawn diagram for a ~12s window, with face bubble. Infographic = one full-screen Pillow-rendered slide (funnel, list, etc.) for a shorter display. Use whiteboard when the moment benefits from a single diagram and a “drawn live” feel; use infographic when you need a templated layout (comparison, big stat, list). Don’t add both to the same segment unless the user asks.
 
-10. **Outro handling (short-form vs. long-form):** Most source videos have an outro ("thanks for watching, follow me on socials, see you next time"). For **short-form**, exclude long wind-down outros (15-20s "thanks for sticking around" kills retention). However, a **punchy ~3s CTA** ("follow me for more" / "follow me at [handle]") is fine — it's short enough that viewers don't swipe, and it gives a clear call to action. Extract just the CTA portion from the source, speed it up to match the main video's pace, and concat. Skip captions on the outro — it's too short to matter and avoids re-running the subtitle pipeline. For **YouTube long-form**, keep the full outro — it matches the format's pacing and gives viewers a clear exit point.
+10. **Single vs. multi-segment:** Not every video should be split into multiple shorts. Linear procedures, short source videos (<5 min), and content without distinct sub-topics are better as a single condensed short or posted in full.
+
+11. **Outro handling (short-form vs. long-form):** Most source videos have an outro ("thanks for watching, follow me on socials, see you next time"). For **short-form**, exclude long wind-down outros (15-20s "thanks for sticking around" kills retention). However, a **punchy ~3s CTA** ("follow me for more" / "follow me at [handle]") is fine — it's short enough that viewers don't swipe, and it gives a clear call to action. Extract just the CTA portion from the source, speed it up to match the main video's pace, and concat. Skip captions on the outro — it's too short to matter and avoids re-running the subtitle pipeline. For **YouTube long-form**, keep the full outro — it matches the format's pacing and gives viewers a clear exit point.
 
 ---
 
@@ -1299,7 +1376,7 @@ These are places where intelligent judgment is needed (not just running scripts)
 
 | Pitfall | Prevention |
 |---------|-----------|
-| Title on face (split-screen) | Run `check_placement.py` per video |
+| Title on face (split-screen) | Run `suggest_onscreen_text_placement.py` per video |
 | Title clipped by platform chrome | Never go below `--height 8` with `--anchor bottom` |
 | Captions say "Markey" or "Marquee" instead of "Marky" | Add to `settings.replacements` (e.g. `{"Markey": "Marky", "Marquee": "Marky"}`) and pass `--settings <path>`, or use `--replace "Markey:Marky,Marquee:Marky"` |
 | Caption timing drift / out-of-sync captions | **Re-transcribe after any step that changes the audio timeline** (jump cuts, compose, trim). The caption transcript must come from the video being captioned (or an audio-identical ancestor like the pre-title version). A transcript from before jump cuts will be out of sync because dead space removal shifts all timestamps. |
@@ -1311,16 +1388,17 @@ These are places where intelligent judgment is needed (not just running scripts)
 | Overlays burned before cropping | Always crop to 9:16 BEFORE adding titles/captions |
 | Splitting a linear procedure into fragments | Ask: would a cold viewer understand segment 2 alone? If not, make one condensed short |
 | Missing cold open opportunity | Read the transcript for standout soundbites before finalizing cuts |
-| Hook not sped up before compose | **Always** `apply_speedup.py --wpm 220` (or settings target) on the hook before composing. Pacing mismatch is jarring. |
-| First word clipped after compose | `apply_jump_cuts.py` pads 0.12s before first word for consonant onset. If original cut has < 0.12s lead-in, re-cut from source with 0.2s buffer. |
+| Hook not sped up before compose | **Always** `add_speedup.py --wpm 220` (or settings target) on the hook before composing. Pacing mismatch is jarring. |
+| First word clipped after compose | `add_jump_cuts.py` pads 0.12s before first word for consonant onset. If original cut has < 0.12s lead-in, re-cut from source with 0.2s buffer. |
 | Dead gap at hook-to-segment join | Trim hook trailing silence to `last_word_end + 0.06s`. Always transcribe to find actual end. Target: total gap at join 0.15s or less. |
 | Framerate mismatch in concat | Never stream-copy concat clips with different framerates. Always use `filter_complex` with `fps=30`. Stream copy produces wrong durations silently. |
 | Long outro in short-form | Exclude 15-20s wind-down outros from shorts. A punchy ~3s CTA ("follow me for more") is fine — extract, speedup to match, concat. Skip captions on the outro. |
 | Cut starts at exact word boundary | Always add 0.15-0.2s buffer before the first word in `--cuts`. Plosives start before the transcription timestamp and get clipped without margin. |
 | Jump cuts with stale or mismatched transcript | Let the script auto-transcribe (omit `--transcript` and `--speedup`). Passing the full original transcript against a cut/sped-up video requires complex timestamp remapping and is error-prone. Auto-transcription costs ~$0.01 for shorts and gives timestamps that match the actual video. |
-| Double jump at content-cut boundaries | `apply_jump_cuts.py` auto-discovers `*.boundaries.json` from `apply_cuts.py` and suppresses zoom toggles near join points. If you see double jumps, check that the boundaries file exists. |
-| Video ends abruptly on last frame | `apply_jump_cuts.py` pads 0.25s after the last word. Also ensure `apply_cuts` extends the last cut ~0.3s past the final word end so there's source material for the pad. |
-| CTA/ending removed by jump cuts | Let `apply_jump_cuts.py` auto-transcribe (omit `--transcript`). If you must pass a transcript, ensure it matches the actual input video. A stale transcript from before re-cutting will cause new segments to be treated as silence and trimmed. |
+| Double jump at content-cut boundaries | `add_jump_cuts.py` auto-discovers `*.boundaries.json` from `apply_cuts.py` and suppresses zoom toggles near join points. If you see double jumps, check that the boundaries file exists. |
+| Video ends abruptly on last frame | `add_jump_cuts.py` pads 0.25s after the last word. Also ensure `apply_cuts` extends the last cut ~0.3s past the final word end so there's source material for the pad. |
+| CTA/ending removed by jump cuts | Let `add_jump_cuts.py` auto-transcribe (omit `--transcript`). If you must pass a transcript, ensure it matches the actual input video. A stale transcript from before re-cutting will cause new segments to be treated as silence and trimmed. |
+| Whiteboard run without cached transcript | Script looks for `05_captioned-words.json` or `<stem>-words.json` in the video’s directory. If you run on `06_music.mp4` before captions exist, ensure a transcript for that file (or an audio-identical ancestor) is present, or the script will call Deepgram. |
 | Captions overlapping speaker's face | **Never use `--height 43` for talking heads.** Use `--height 30` (chest level). Always extract frames and verify captions sit BELOW the chin line. If they touch face/chin/jaw, lower by 5-10% and re-render. |
 | Segment starts mid-sentence or with "Also"/"So"/"And" | **Read the first 5-10 words of every segment (and of every section, e.g. body after a hook) aloud.** If they're a fragment or start with a continuation word ("Also", "So", "And", "But"), the cut is wrong. Either extend/move the cut so the opener is a full sentence start, or advance the section start past the conjunction. `propose_cuts.py` enforces this in the prompt and in boundary verification (auto-advances body sections that start with continuation words); Phase 2b and Final transcript QC must still verify. |
 | Same line said twice (hook + body duplicate) | **Read the full segment transcript (all sections).** If the same sentence or near-identical phrase appears in two sections (e.g. hook and body both say "everyone thinks you need a perfect credit score to buy a house"), the cuts are wrong. Trim the body start to after the duplicate so the viewer only hears the idea once. `propose_cuts.py` now detects duplicate 6+ word phrases across sections and emits a warning; Phase 2b and Final transcript QC must still verify. |

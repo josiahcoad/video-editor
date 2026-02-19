@@ -4,6 +4,8 @@ export interface ContactSummary {
   name: string
   company: string | null
   phone: string | null
+  email: string | null
+  seller_id?: number | null
   status: string
   next_step: string | null
   open_hesitation_count: number
@@ -19,10 +21,12 @@ export interface ContactOption {
   name: string
   company: string | null
   phone: string | null
+  email: string | null
 }
 
 /** Contact detail (single contact with conversations) */
 export interface ContactDetail extends ContactOption {
+  seller_id?: number | null
   status: string
   next_step: string | null
   notes: string | null
@@ -44,6 +48,10 @@ export interface ConversationSummary {
   started_at: string | null
   mode: string
   next_step: string | null
+  /** When set, this conversation's "next step" is linked to this todo. */
+  next_step_todo_id: number | null
+  /** 1–10 effectiveness from post-call review. */
+  review_score: number | null
   final_close_score: number | null
   final_steps_to_close: number | null
   review_generated_at: string | null
@@ -69,6 +77,8 @@ export interface CoachingTip {
   number: number
   turn: number
   advice: string
+  /** Time from turn end to advice ready (ms). */
+  latency_ms?: number | null
   close_score: number
   steps_to_close: number
   is_custom?: boolean
@@ -91,6 +101,18 @@ export interface Review {
 }
 
 // ── Home / Sales Reps ────────────────────────────────────────────
+
+export type TodoType = "email" | "call" | "other"
+
+export interface TodoItem {
+  id: number
+  seller_id: number
+  type: TodoType
+  title: string
+  contact_id: number | null
+  contact_name: string | null
+  created_at: string | null
+}
 
 export interface PipelineStage {
   status: string
@@ -116,6 +138,7 @@ export interface HomeData {
     id: number
     first_name: string
     last_name: string
+    company_info: string | null
   }
   pipeline: PipelineStage[]
   total_contacts: number
@@ -139,6 +162,8 @@ export type WsMessage =
       number: number
       turn: number
       advice: string
+      /** Time from turn end to advice ready (ms). */
+      latency_ms?: number
       close_score?: number
       steps_to_close?: number
       is_custom?: boolean

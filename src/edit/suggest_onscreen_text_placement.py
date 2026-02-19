@@ -7,8 +7,8 @@ grid so the LLM has spatial reference, sends them to Gemini, and returns
 placement recommendations.
 
 Usage:
-  python check_placement.py <video_file>
-  python check_placement.py <video_file> --timestamps 0 3 10
+  python suggest_onscreen_text_placement.py <video_file>
+  python suggest_onscreen_text_placement.py <video_file> --timestamps 0 3 10
 """
 
 import argparse

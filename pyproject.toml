@@ -23,6 +23,8 @@ dependencies = [
     "fastapi>=0.115.0",
     "uvicorn[standard]>=0.30.0",
     "aiosqlite>=0.20.0",
+    "rapidfuzz>=3.14.3",
+    "yt-dlp>=2024.1.0",
 ]
 
 [tool.uv]

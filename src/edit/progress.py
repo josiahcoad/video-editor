@@ -8,7 +8,27 @@ Shows estimated time remaining and progress bar based on task completion.
 import time
 from typing import Callable
 
-from .duration_tracker import estimate_duration, get_stats, record_run
+
+def _estimate_duration(
+    input_duration: float, speedup: float = 1.0, target_duration: int = 60
+) -> float:
+    """Fallback estimate when no duration history: ~2x real-time."""
+    return input_duration * 0.5
+
+
+def _get_stats() -> dict:
+    """No persistence; return empty stats."""
+    return {"total_runs": 0}
+
+
+def _record_run(
+    input_duration: float,
+    processing_duration: float,
+    speedup: float = 1.0,
+    target_duration: int = 60,
+) -> None:
+    """No-op when duration tracking is disabled."""
+    pass
 
 
 class ProgressTracker:
@@ -35,7 +55,7 @@ class ProgressTracker:
         self.total_tasks = total_tasks
         self.completed_tasks = 0
         self.start_time = time.time()
-        self.estimated_total = estimate_duration(input_duration, speedup, target_duration)
+        self.estimated_total = _estimate_duration(input_duration, speedup, target_duration)
 
     def start_task(self, task_name: str) -> None:
         """Mark a task as starting."""
@@ -61,8 +81,7 @@ class ProgressTracker:
         """Mark the entire process as complete."""
         total_time = time.time() - self.start_time
 
-        # Record in database for future estimates
-        record_run(
+        _record_run(
             input_duration=self.input_duration,
             processing_duration=total_time,
             speedup=self.speedup,
@@ -91,8 +110,8 @@ class ProgressTracker:
 
 def get_initial_estimate(input_duration: float, speedup: float, target_duration: int) -> dict:
     """Get initial time estimate before starting."""
-    estimated = estimate_duration(input_duration, speedup, target_duration)
-    stats = get_stats()
+    estimated = _estimate_duration(input_duration, speedup, target_duration)
+    stats = _get_stats()
 
     return {
         "estimated_seconds": estimated,
