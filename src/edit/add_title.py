@@ -16,12 +16,13 @@ import tempfile
 from pathlib import Path
 
 from PIL import Image, ImageDraw, ImageFont
-from deepgram import DeepgramClient
 from langchain_core.messages import HumanMessage, SystemMessage
 from langchain_openai import ChatOpenAI
 
 from .encode_common import H264_SOCIAL_COLOR_ARGS
+from .remove_filler_words import transcribe_with_filler_words
 from .settings_loader import load_settings
+from .suggest_video_title import suggest_title as suggest_title_atp
 
 
 # Try to load from .env file if available
@@ -31,31 +32,6 @@ try:
     load_dotenv()
 except ImportError:
     pass
-
-API_KEY = "37e776c73c0de03eeacfaa9635e26ce6787bcf74"
-
-
-async def transcribe_video(audio_path: Path) -> str:
-    """Transcribe audio file using Deepgram and return transcript."""
-    client = DeepgramClient(api_key=API_KEY)
-
-    with audio_path.open("rb") as audio_file:
-        audio_bytes = audio_file.read()
-
-    response = client.listen.v1.media.transcribe_file(
-        request=audio_bytes,
-        model="nova-2",
-        smart_format=True,
-        punctuate=True,
-    )
-
-    if not response or not response.results:
-        raise RuntimeError("Deepgram returned empty response")
-
-    channel = response.results.channels[0]
-    alternative = channel.alternatives[0]
-
-    return alternative.transcript or ""
 
 
 async def generate_title_from_transcript(
@@ -570,57 +546,78 @@ async def main() -> None:
 
     # Generate title from transcript if not provided
     if not title_text:
-        transcript = None
-
-        if transcript_file:
-            print(f"Reading transcript from file: {transcript_file}")
-            transcript = read_transcript_file(transcript_file)
-        else:
-            print(
-                "No title or transcript file provided. Generating title from video transcript..."
-            )
-
-            # Extract audio
-            with tempfile.NamedTemporaryFile(suffix=".wav", delete=False) as audio_tmp:
-                audio_path = Path(audio_tmp.name)
-
-            try:
-                print("Extracting audio from video...")
-                subprocess.run(
-                    [
-                        "ffmpeg",
-                        "-y",
-                        "-i",
-                        str(video_path),
-                        "-vn",
-                        "-acodec",
-                        "pcm_s16le",
-                        "-ar",
-                        "16000",
-                        "-ac",
-                        "1",
-                        str(audio_path),
-                    ],
-                    check=True,
-                    capture_output=True,
+        use_suggest = True
+        try:
+            count = 3 if dry_run else 1
+            if transcript_file:
+                result = await suggest_title_atp(
+                    transcript_path=transcript_file, count=count
                 )
-
-                print("Transcribing with Deepgram...")
-                transcript = await transcribe_video(audio_path)
-
-            finally:
-                audio_path.unlink(missing_ok=True)
-
-        print("Generating title with LLM (Gemini 3 Flash)...")
-        if dry_run:
-            titles = await generate_title_from_transcript(
-                transcript, count=3, voice_file=voice_file
+            else:
+                print(
+                    "No title or transcript file provided. Using suggest_title (ATP) from video..."
+                )
+                result = await suggest_title_atp(
+                    video_path=video_path, count=count
+                )
+            if dry_run:
+                print("\n🔍 DRY RUN: Title suggestions (ATP):")
+                for i, t in enumerate(result.titles, 1):
+                    print(f"   {i}. {t.title}")
+                    if t.inspired_by or t.rationale:
+                        print(f"      Inspired by: {', '.join(t.inspired_by)} — {t.rationale}")
+                return
+            title_text = result.best_title
+            print(f"Generated title (ATP): '{title_text}'")
+        except (ValueError, RuntimeError, OSError) as e:
+            use_suggest = False
+            print(
+                f"suggest_title failed ({e}), falling back to LLM title from transcript..."
             )
-            print("\n🔍 DRY RUN: Top 3 title suggestions:")
-            for i, title in enumerate(titles, 1):
-                print(f"   {i}. {title}")
-            return
-        else:
+
+        if not use_suggest or not title_text:
+            transcript = None
+            if transcript_file:
+                print(f"Reading transcript from file: {transcript_file}")
+                transcript = read_transcript_file(transcript_file)
+            else:
+                print("Extracting audio from video...")
+                with tempfile.NamedTemporaryFile(suffix=".wav", delete=False) as audio_tmp:
+                    audio_path = Path(audio_tmp.name)
+                try:
+                    subprocess.run(
+                        [
+                            "ffmpeg",
+                            "-y",
+                            "-i",
+                            str(video_path),
+                            "-vn",
+                            "-acodec",
+                            "pcm_s16le",
+                            "-ar",
+                            "16000",
+                            "-ac",
+                            "1",
+                            str(audio_path),
+                        ],
+                        check=True,
+                        capture_output=True,
+                    )
+                    print("Transcribing with Deepgram...")
+                    result = await transcribe_with_filler_words(audio_path)
+                    transcript = result["transcript"]
+                finally:
+                    audio_path.unlink(missing_ok=True)
+
+            print("Generating title with LLM (Gemini 3 Flash)...")
+            if dry_run:
+                titles = await generate_title_from_transcript(
+                    transcript, count=3, voice_file=voice_file
+                )
+                print("\n🔍 DRY RUN: Top 3 title suggestions:")
+                for i, title in enumerate(titles, 1):
+                    print(f"   {i}. {title}")
+                return
             title_text = await generate_title_from_transcript(
                 transcript, voice_file=voice_file
             )

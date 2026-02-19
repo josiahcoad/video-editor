@@ -314,6 +314,196 @@ def add_srt_from_utterances(
 # - Option to use ASS instead of SRT when --word-highlight flag is provided
 
 
+async def add_subtitle(
+    video_path: Path,
+    output_path: Path | None = None,
+    transcript_path: Path | None = None,
+    settings_overrides: dict[str, Any] | None = None,
+) -> Path:
+    """Add subtitles to video (module entry point).
+
+    Uses load_settings(video_path) for caption style, position, etc.
+    Pass settings_overrides to override (e.g. captions.style, captions.height_percent).
+    Returns path to output video.
+    """
+    settings = load_settings(video_path)
+    if settings_overrides:
+        settings = deep_merge(settings, settings_overrides)
+    return await _add_subtitle_impl(
+        video_path,
+        output_path or (video_path.parent / f"{video_path.stem}-subtitled.mp4"),
+        transcript_path,
+        settings,
+        cli_overrides=None,
+    )
+
+
+async def _add_subtitle_impl(
+    video_path: Path,
+    output_video: Path,
+    transcript_file: Path | None,
+    settings: dict[str, Any],
+    cli_overrides: dict[str, Any] | None,
+) -> Path:
+    """Shared implementation for add_subtitle and CLI. cli_overrides from argv when run as script."""
+    o = cli_overrides or {}
+    captions_cfg = settings.get("captions") or {}
+    caption_height = int(captions_cfg.get("height_percent", 12))
+    if o and "height_percent" in o:
+        caption_height = int(o["height_percent"])
+    word_count = int(captions_cfg.get("word_count", 3))
+    if o and "word_count" in o:
+        word_count = int(o["word_count"])
+    font_size = int(captions_cfg.get("font_size", 15))
+    if o and "font_size" in o:
+        font_size = int(o["font_size"])
+    caption_style = (captions_cfg.get("style") or "default").lower()
+    if o and "style" in o:
+        caption_style = (o["style"] or "default").lower()
+    if caption_style not in ("default", "classic", "outline"):
+        caption_style = "default"
+    caps = bool(captions_cfg.get("caps", False))
+    if o and "caps" in o:
+        caps = bool(o["caps"])
+    font_name = str(captions_cfg.get("font") or "Roboto")
+    if o and "font_name" in o:
+        font_name = str(o["font_name"])
+    replacements = {}
+    for wrong, right in settings.get("replacements", {}).items():
+        if isinstance(wrong, str) and isinstance(right, str):
+            replacements[wrong.strip().lower()] = right.strip()
+    if o and o.get("replace_str"):
+        for k, v in parse_replacements(o["replace_str"]).items():
+            replacements[k] = v
+    title_text = o.get("title_text") if o else None
+    caption_delay = float(o.get("delay", 0.0)) if o and "delay" in o else 0.0
+
+    if transcript_file:
+        print(f"Loading word-level transcript from: {transcript_file}")
+        words_data = json.loads(transcript_file.read_text())
+        utterances_data: list[dict] = []
+        stem = transcript_file.stem
+        if stem.endswith("-words"):
+            utterances_path = transcript_file.parent / f"{stem.replace('-words', '-utterances')}.json"
+            if utterances_path.exists():
+                utterances_data = json.loads(utterances_path.read_text())
+                print(f"Loaded {len(utterances_data)} utterances from {utterances_path.name}")
+            else:
+                print(f"No utterances file found at {utterances_path.name} — falling back to word-based captioning")
+        result: dict[str, Any] = {
+            "words": words_data,
+            "transcript": " ".join([w["word"] for w in words_data]),
+            "utterances": utterances_data,
+        }
+    else:
+        print("Transcribing with Deepgram...")
+        result = await get_transcript(video_path)
+
+    print(f"Found {len(result['words'])} words")
+    if result.get("utterances"):
+        print(f"Found {len(result['utterances'])} utterances")
+    if replacements:
+        print(f"Word replacements: {replacements}")
+        result["words"] = apply_replacements(result["words"], replacements)
+        result["transcript"] = " ".join([w["word"] for w in result["words"]])
+
+    srt_file = output_video.parent / f"{output_video.stem}.srt"
+    word_transcript_file = output_video.parent / f"{output_video.stem}-words.json"
+    utterance_transcript_file = output_video.parent / f"{output_video.stem}-utterances.json"
+
+    if not transcript_file:
+        word_transcript_file.write_text(json.dumps(result["words"], indent=2))
+        print(f"Word-level transcript written: {word_transcript_file}")
+        if result.get("utterances"):
+            utterance_transcript_file.write_text(json.dumps(result["utterances"], indent=2))
+            print(f"Utterance-level transcript written: {utterance_transcript_file}")
+
+    if caption_delay > 0:
+        print(f"Caption delay: {caption_delay}s (captions suppressed while title is showing)")
+
+    if result.get("utterances"):
+        srt_content = add_srt_from_utterances(
+            result["utterances"], result["words"],
+            word_count=word_count, size=font_size, replacements=replacements,
+            caps=caps, delay=caption_delay,
+        )
+    else:
+        srt_content = add_srt(
+            result["words"], word_count=word_count, size=font_size,
+            caps=caps, delay=caption_delay,
+        )
+
+    srt_file.write_text(srt_content)
+    print(f"SRT file written: {srt_file}")
+
+    filter_parts = []
+    if title_text:
+        words_list = title_text.upper().split()
+        lines, current_line, current_length = [], [], 0
+        for word in words_list:
+            word_len = len(word)
+            if current_length + word_len + 1 > 30 and current_line:
+                lines.append(" ".join(current_line))
+                current_line = [word]
+                current_length = word_len
+            else:
+                current_line.append(word)
+                current_length += word_len + (1 if current_line else 0)
+        if current_line:
+            lines.append(" ".join(current_line))
+        title_font_size, line_spacing = 50, 60
+        total_height = len(lines) * line_spacing
+        roboto_bold_path = "/Users/apple/Downloads/Roboto/static/Roboto-Bold.ttf"
+        for i, line in enumerate(lines):
+            escaped = line.replace("'", "\\'").replace(":", "\\:").replace("\\", "\\\\")
+            y_pos = f"h/2-{total_height}/2+{i * line_spacing}"
+            filter_parts.append(
+                f"drawtext=text='{escaped}':fontfile='{roboto_bold_path}':fontsize={title_font_size}:"
+                f"fontcolor=black:box=1:boxcolor=white@1.0:boxborderw=15:text_align=center:x=(w-text_w)/2:y={y_pos}:enable='between(t,0,2)'"
+            )
+
+    effective_font_size = max(font_size, 10)
+    if caption_style == "classic":
+        style_parts = [
+            "Alignment=2", f"FontName={font_name}", "Bold=1", f"FontSize={effective_font_size}",
+            "PrimaryColour=&H00000000", "OutlineColour=&H00FFFFFF", "BackColour=&H00FFFFFF",
+            "Outline=0", "Shadow=0", "BorderStyle=4", "MarginL=15", "MarginR=15",
+        ]
+    elif caption_style == "outline":
+        style_parts = [
+            "Alignment=2", f"FontName={font_name}", "Bold=1", f"FontSize={effective_font_size}",
+            "PrimaryColour=&H00FFFFFF", "OutlineColour=&H00000000", "BackColour=&H80000000",
+            "Outline=3", "Shadow=2", "BorderStyle=1", "MarginL=15", "MarginR=15",
+        ]
+    else:
+        style_parts = [
+            "Alignment=2", f"FontName={font_name}", "Bold=1", f"FontSize={effective_font_size}",
+            "PrimaryColour=&H00FFFFFF", "OutlineColour=&H00000000", "BackColour=&H80000000",
+            "Outline=2", "Shadow=0", "BorderStyle=1", "MarginL=15", "MarginR=15",
+        ]
+    ASS_PLAY_RES_Y = 288
+    margin_v = max(10, min(ASS_PLAY_RES_Y - 20, int(caption_height * ASS_PLAY_RES_Y / 100)))
+    style_parts.append(f"MarginV={margin_v}")
+    roboto_font_dir = "/Users/apple/Downloads/Roboto/static"
+    filter_parts.append(f"subtitles={srt_file}:fontsdir='{roboto_font_dir}':force_style='{','.join(style_parts)}'")
+
+    vf_filter = ",".join(filter_parts)
+    print("Burning subtitles into video...")
+    if title_text:
+        print(f"Adding title overlay: '{title_text.upper()}' (first 2 seconds)")
+    subprocess.run(
+        [
+            "ffmpeg", "-y", "-i", str(video_path), "-vf", vf_filter,
+            "-c:v", "h264_videotoolbox", *H264_SOCIAL_COLOR_ARGS, "-c:a", "copy",
+            str(output_video),
+        ],
+        check=True,
+    )
+    print(f"✅ Output video: {output_video}")
+    print(f"✅ SRT file: {srt_file}")
+    return output_video
+
+
 async def main() -> None:
     """Main entry point."""
     if len(sys.argv) < 2:
@@ -352,364 +542,54 @@ async def main() -> None:
             if settings_path.exists():
                 settings = deep_merge(settings, json.loads(settings_path.read_text()))
 
-    # Defaults from settings.captions (CLI flags override)
-    captions_cfg = settings.get("captions") or {}
-    caption_height = int(captions_cfg.get("height_percent", 12))
-    word_count = int(captions_cfg.get("word_count", 3))
-    font_size = int(captions_cfg.get("font_size", 15))
-    caption_style = (captions_cfg.get("style") or "default").lower()
-    if caption_style not in ("default", "classic", "outline"):
-        caption_style = "default"
-    caps = bool(captions_cfg.get("caps", False))
-    font_name = str(captions_cfg.get("font") or "Roboto")
-
-    # Replacements: from settings.replacements, then CLI --replace
-    replacements = {}
-    for wrong, right in settings.get("replacements", {}).items():
-        if isinstance(wrong, str) and isinstance(right, str):
-            replacements[wrong.strip().lower()] = right.strip()
-
-    # Parse title from command line
-    title_text = None
-    if "--title" in sys.argv:
-        idx = sys.argv.index("--title")
+    output_video = video_path.parent / f"{video_path.stem}-subtitled.mp4"
+    if "--output" in sys.argv:
+        idx = sys.argv.index("--output")
         if idx + 1 < len(sys.argv):
-            title_text = sys.argv[idx + 1]
+            output_video = Path(sys.argv[idx + 1])
 
-    # Override with CLI --height
-    if "--height" in sys.argv:
-        idx = sys.argv.index("--height")
-        if idx + 1 < len(sys.argv):
-            try:
-                caption_height = int(sys.argv[idx + 1])
-            except ValueError:
-                pass
-
-    # Get transcript (check if transcript file provided, otherwise transcribe)
     transcript_file = None
     if "--transcript" in sys.argv:
         idx = sys.argv.index("--transcript")
         if idx + 1 < len(sys.argv):
             transcript_file = Path(sys.argv[idx + 1])
 
-    if transcript_file:
-        print(f"Loading word-level transcript from: {transcript_file}")
-        words_data = json.loads(transcript_file.read_text())
-
-        # Auto-discover sibling utterances file for smart captioning.
-        # If transcript is "foo-words.json", look for "foo-utterances.json".
-        utterances_data: list[dict] = []
-        stem = transcript_file.stem  # e.g. "02_fast-words"
-        if stem.endswith("-words"):
-            utterances_path = (
-                transcript_file.parent / f"{stem.replace('-words', '-utterances')}.json"
-            )
-            if utterances_path.exists():
-                utterances_data = json.loads(utterances_path.read_text())
-                print(
-                    f"Loaded {len(utterances_data)} utterances from {utterances_path.name}"
-                )
-            else:
-                print(
-                    f"No utterances file found at {utterances_path.name} — falling back to word-based captioning"
-                )
-
-        result = {
-            "words": words_data,
-            "transcript": " ".join([w["word"] for w in words_data]),
-            "utterances": utterances_data,
-        }
-    else:
-        print("Transcribing with Deepgram...")
-        result = await get_transcript(video_path)
-
-    print(f"Found {len(result['words'])} words")
-    if result.get("utterances"):
-        print(f"Found {len(result['utterances'])} utterances")
-
-    # Override with CLI --replace (merge into replacements from settings)
-    if "--replace" in sys.argv:
-        idx = sys.argv.index("--replace")
+    def _arg(key: str, fn=(lambda x: x)):
+        if key not in sys.argv:
+            return None
+        idx = sys.argv.index(key)
         if idx + 1 < len(sys.argv):
-            for k, v in parse_replacements(sys.argv[idx + 1]).items():
-                replacements[k] = v
-    if replacements:
-        print(f"Word replacements: {replacements}")
-        result["words"] = apply_replacements(result["words"], replacements)
-        result["transcript"] = " ".join([w["word"] for w in result["words"]])
+            try:
+                return fn(sys.argv[idx + 1])
+            except (ValueError, TypeError):
+                pass
+        return None
 
-    # Determine output paths
-    output_video = video_path.parent / f"{video_path.stem}-subtitled.mp4"
-    srt_file = video_path.parent / f"{video_path.stem}.srt"
-    word_transcript_file = video_path.parent / f"{video_path.stem}-words.json"
-    utterance_transcript_file = video_path.parent / f"{video_path.stem}-utterances.json"
-
-    # Check for --output flag
-    if "--output" in sys.argv:
-        idx = sys.argv.index("--output")
-        if idx + 1 < len(sys.argv):
-            output_video = Path(sys.argv[idx + 1])
-            # Update transcript file names to match output video base name
-            base_name = output_video.stem
-            word_transcript_file = output_video.parent / f"{base_name}-words.json"
-            utterance_transcript_file = (
-                output_video.parent / f"{base_name}-utterances.json"
-            )
-            srt_file = output_video.parent / f"{base_name}.srt"
-
-    # Write word-level transcript (JSON) - only if we transcribed (not from file)
-    if not transcript_file:
-        word_transcript_file.write_text(json.dumps(result["words"], indent=2))
-        print(f"Word-level transcript written: {word_transcript_file}")
-
-        # Write utterance-level transcript (JSON)
-        if result.get("utterances"):
-            utterance_transcript_file.write_text(
-                json.dumps(result["utterances"], indent=2)
-            )
-            print(f"Utterance-level transcript written: {utterance_transcript_file}")
-
-    # Override with CLI --word-count, --font-size, --style, --caps
-    if "--word-count" in sys.argv:
-        idx = sys.argv.index("--word-count")
-        if idx + 1 < len(sys.argv):
-            word_count = int(sys.argv[idx + 1])
-
-    if "--font-size" in sys.argv:
-        idx = sys.argv.index("--font-size")
-        if idx + 1 < len(sys.argv):
-            font_size = int(sys.argv[idx + 1])
-
-    if "--style" in sys.argv:
-        idx = sys.argv.index("--style")
-        if idx + 1 < len(sys.argv):
-            caption_style = sys.argv[idx + 1].lower()
-            if caption_style not in ("default", "classic", "outline"):
-                print(f"⚠️  Unknown style '{caption_style}', falling back to 'default'")
-                caption_style = "default"
-
+    cli_overrides: dict[str, Any] = {}
+    if _arg("--title") is not None:
+        cli_overrides["title_text"] = _arg("--title")
+    if _arg("--height", int) is not None:
+        cli_overrides["height_percent"] = _arg("--height", int)
+    if _arg("--word-count", int) is not None:
+        cli_overrides["word_count"] = _arg("--word-count", int)
+    if _arg("--font-size", int) is not None:
+        cli_overrides["font_size"] = _arg("--font-size", int)
+    if _arg("--style") is not None:
+        cli_overrides["style"] = _arg("--style")
     if "--caps" in sys.argv:
-        caps = True
+        cli_overrides["caps"] = True
     if "--no-caps" in sys.argv:
-        caps = False
+        cli_overrides["caps"] = False
+    if _arg("--font") is not None:
+        cli_overrides["font_name"] = _arg("--font")
+    if _arg("--delay", float) is not None:
+        cli_overrides["delay"] = _arg("--delay", float)
+    if _arg("--replace") is not None:
+        cli_overrides["replace_str"] = _arg("--replace")
 
-    # Override with CLI --delay
-    caption_delay = 0.0
-    if "--delay" in sys.argv:
-        idx = sys.argv.index("--delay")
-        if idx + 1 < len(sys.argv):
-            caption_delay = float(sys.argv[idx + 1])
-    if caption_delay > 0:
-        print(
-            f"Caption delay: {caption_delay}s (captions suppressed while title is showing)"
-        )
-
-    # Use smart utterance-based captioning if utterances are available
-    if result.get("utterances"):
-        print(
-            f"Generating smart SRT subtitle file from utterances (max {word_count} words per line, splits at punctuation, font size {font_size}, caps={caps})..."
-        )
-        srt_content = add_srt_from_utterances(
-            result["utterances"],
-            result["words"],
-            word_count=word_count,
-            size=font_size,
-            replacements=replacements,
-            caps=caps,
-            delay=caption_delay,
-        )
-    else:
-        print(
-            f"Generating SRT subtitle file ({word_count} words per line, font size {font_size}, caps={caps})..."
-        )
-        print(
-            "⚠️  Note: No utterance data available - using simple word-based captioning. For smart captioning with punctuation, ensure Deepgram returns utterances."
-        )
-        srt_content = add_srt(
-            result["words"],
-            word_count=word_count,
-            size=font_size,
-            caps=caps,
-            delay=caption_delay,
-        )
-
-    # Write SRT file
-    srt_file.write_text(srt_content)
-    print(f"SRT file written: {srt_file}")
-
-    # Build video filter chain
-    filter_parts = []
-
-    # Add title overlay if provided
-    if title_text:
-        # Split long titles into multiple lines (max ~30 chars per line)
-        words = title_text.upper().split()
-        lines = []
-        current_line = []
-        current_length = 0
-
-        for word in words:
-            word_len = len(word)
-            # If adding this word would exceed ~30 chars, start new line
-            if current_length + word_len + 1 > 30 and current_line:
-                lines.append(" ".join(current_line))
-                current_line = [word]
-                current_length = word_len
-            else:
-                current_line.append(word)
-                current_length += word_len + (1 if current_line else 0)
-
-        if current_line:
-            lines.append(" ".join(current_line))
-
-        # Use multiple drawtext filters (one per line) since \n doesn't work reliably
-        # Escape special characters for each line
-        title_font_size = 50
-        line_spacing = 60  # Spacing between lines
-        num_lines = len(lines)
-        # Total height of all lines
-        total_height = num_lines * line_spacing
-
-        for i, line in enumerate(lines):
-            # Escape special characters for ffmpeg drawtext
-            escaped_line = (
-                line.replace("'", "\\'").replace(":", "\\:").replace("\\", "\\\\")
-            )
-
-            # Calculate y position for this line
-            # Center the block: h/2 - total_height/2 + (line_index * line_spacing)
-            y_offset = i * line_spacing
-            y_pos = f"h/2-{total_height}/2+{y_offset}"
-
-            # Create drawtext filter for this line
-            roboto_bold_path = "/Users/apple/Downloads/Roboto/static/Roboto-Bold.ttf"
-            title_filter = (
-                f"drawtext=text='{escaped_line}':"
-                f"fontfile='{roboto_bold_path}':"  # Custom Roboto Bold font
-                f"fontsize={title_font_size}:"
-                f"fontcolor=black:"
-                f"box=1:"
-                f"boxcolor=white@1.0:"
-                f"boxborderw=15:"
-                f"text_align=center:"
-                f"x=(w-text_w)/2:"  # Center horizontally
-                f"y={y_pos}:"  # Position vertically
-                f"enable='between(t,0,2)'"  # Show for first 2 seconds
-            )
-            filter_parts.append(title_filter)
-
-    # Add subtitle filter (SRT)
-    # caption_height: 0-100 = % from bottom. ASS MarginV = pixels from bottom (only for bottom-aligned subs).
-    # Per ASS spec: MarginV is ignored for midtitles (vertically centered). Set Alignment=2 (bottom center)
-    # so MarginV is always respected: https://stackoverflow.com/questions/57869367/ffmpeg-subtitles-alignment-and-position
-    #
-    # ASS PlayRes defaults (set by ffmpeg SRT→ASS conversion):
-    #   PlayResX=384, PlayResY=288
-    # All margin/size values below are in these units and scale to actual video resolution.
-    print(f"Caption style: {caption_style}")
-
-    # Override with CLI --font
-    if "--font" in sys.argv:
-        idx = sys.argv.index("--font")
-        if idx + 1 < len(sys.argv):
-            font_name = sys.argv[idx + 1]
-    effective_font_size = max(font_size, 10)
-
-    if caption_style == "classic":
-        style_parts = [
-            "Alignment=2",
-            f"FontName={font_name}",
-            "Bold=1",
-            f"FontSize={effective_font_size}",
-            "PrimaryColour=&H00000000",  # Black text (AABBGGRR)
-            "OutlineColour=&H00FFFFFF",  # White outline (matches box)
-            "BackColour=&H00FFFFFF",  # Solid white background box
-            "Outline=0",  # No outline — clean box edge
-            "Shadow=0",
-            "BorderStyle=4",  # Background box behind each line
-            "MarginL=15",
-            "MarginR=15",
-        ]
-    elif caption_style == "outline":
-        style_parts = [
-            "Alignment=2",
-            f"FontName={font_name}",
-            "Bold=1",
-            f"FontSize={effective_font_size}",
-            "PrimaryColour=&H00FFFFFF",  # White text (AABBGGRR)
-            "OutlineColour=&H00000000",  # Black outline
-            "BackColour=&H80000000",  # Shadow colour (semi-transparent black)
-            "Outline=3",  # Thick outline for readability without a box
-            "Shadow=2",  # Drop shadow offset (px in ASS units)
-            "BorderStyle=1",  # Outline + shadow only, NO background box
-            "MarginL=15",
-            "MarginR=15",
-        ]
-    else:
-        # No background box: outline only for readability
-        style_parts = [
-            "Alignment=2",
-            f"FontName={font_name}",
-            "Bold=1",
-            f"FontSize={effective_font_size}",
-            "PrimaryColour=&H00FFFFFF",  # White text (AABBGGRR)
-            "OutlineColour=&H00000000",  # Black outline
-            "BackColour=&H80000000",  # Shadow colour (BorderStyle=1: outline only)
-            "Outline=2",  # Moderate outline for readability
-            "Shadow=0",
-            "BorderStyle=1",  # Outline only, no background box
-            "MarginL=15",
-            "MarginR=15",
-        ]
-
-    # MarginV is interpreted relative to ASS PlayResY, NOT the actual video height.
-    # ffmpeg's SRT→ASS conversion uses PlayResY=288 (verified from ffmpeg output header).
-    # So we scale caption_height (0-100%) against PlayResY to get correct placement.
-    ASS_PLAY_RES_Y = 288
-    margin_v = int(caption_height * ASS_PLAY_RES_Y / 100)
-    margin_v = max(10, min(ASS_PLAY_RES_Y - 20, margin_v))
-    style_parts.append(f"MarginV={margin_v}")
-    print(
-        f"Caption position: {caption_height}% from bottom → MarginV={margin_v} (ASS PlayResY={ASS_PLAY_RES_Y})"
+    await _add_subtitle_impl(
+        video_path, output_video, transcript_file, settings, cli_overrides
     )
-
-    style_str = ",".join(style_parts)
-    # Use fontsdir to point to Roboto font directory for ASS subtitles
-    roboto_font_dir = "/Users/apple/Downloads/Roboto/static"
-    filter_parts.append(
-        f"subtitles={srt_file}:fontsdir='{roboto_font_dir}':force_style='{style_str}'"
-    )
-
-    # Combine filters
-    vf_filter = ",".join(filter_parts)
-
-    # Burn subtitles (and title if provided) into video
-    print("Burning subtitles into video...")
-    if title_text:
-        print(f"Adding title overlay: '{title_text.upper()}' (first 2 seconds)")
-
-    subprocess.run(
-        [
-            "ffmpeg",
-            "-y",
-            "-i",
-            str(video_path),
-            "-vf",
-            vf_filter,
-            "-c:v",
-            "h264_videotoolbox",
-            *H264_SOCIAL_COLOR_ARGS,
-            "-c:a",
-            "copy",
-            str(output_video),
-        ],
-        check=True,
-    )
-
-    print(f"✅ Output video: {output_video}")
-    print(f"✅ SRT file: {srt_file}")
-    print(f"✅ Word-level transcript: {word_transcript_file}")
-    print(f"✅ Utterance-level transcript: {utterance_transcript_file}")
 
 
 if __name__ == "__main__":

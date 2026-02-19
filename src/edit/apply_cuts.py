@@ -144,6 +144,34 @@ def write_cut_output(video: Path, output: Path, segments: list[dict]) -> None:
     output.parent.mkdir(parents=True, exist_ok=True)
     trim_video_segments(video, output, segments)
 
+
+def apply_cuts(
+    video_path: Path, cuts_path: Path, outputs_dir: Path
+) -> None:
+    """Apply cuts from a cuts JSON to segment outputs (module entry point).
+
+    Reads cuts_path (JSON array of segment dicts with 'segment' and 'cuts'),
+    writes one file per segment under outputs_dir (e.g. segment_01/01_cut.mp4).
+    """
+    if not video_path.exists():
+        raise FileNotFoundError(f"Video file not found: {video_path}")
+    if not cuts_path.exists():
+        raise FileNotFoundError(f"Cuts JSON not found: {cuts_path}")
+    payload = json.loads(cuts_path.read_text())
+    if not isinstance(payload, list) or not payload:
+        raise ValueError("Cuts JSON must be a non-empty array of segments")
+    for seg in payload:
+        num = seg.get("segment")
+        cuts_str = seg.get("cuts")
+        if num is None or not cuts_str:
+            raise ValueError(
+                f"Invalid segment entry (requires 'segment' and 'cuts'): {seg}"
+            )
+        out = outputs_dir / f"segment_{int(num):02d}" / "01_cut.mp4"
+        print(f"Segment {int(num)}: {out.relative_to(outputs_dir)}")
+        write_cut_output(video_path, out, parse_cuts([cuts_str]))
+    print(f"Done: {len(payload)} segments written under {outputs_dir}")
+
     # Write cut-boundary sidecar: timestamps in the OUTPUT timeline where
     # consecutive source segments are joined, plus the source ranges used.
     boundaries: list[float] = []
@@ -235,26 +263,11 @@ def main() -> None:
     if not cuts_path.exists():
         print(f"Error: cuts JSON not found: {cuts_path}", file=sys.stderr)
         sys.exit(1)
-    payload = json.loads(cuts_path.read_text())
-    if not isinstance(payload, list) or not payload:
-        print(
-            "Error: cuts JSON must be a non-empty array of segments",
-            file=sys.stderr,
-        )
+    try:
+        apply_cuts(video, cuts_path, outputs_dir)
+    except (FileNotFoundError, ValueError) as e:
+        print(f"Error: {e}", file=sys.stderr)
         sys.exit(1)
-    for seg in payload:
-        num = seg.get("segment")
-        cuts_str = seg.get("cuts")
-        if num is None or not cuts_str:
-            print(
-                f"Error: invalid segment entry (requires 'segment' and 'cuts'): {seg}",
-                file=sys.stderr,
-            )
-            sys.exit(1)
-        out = outputs_dir / f"segment_{int(num):02d}" / "01_cut.mp4"
-        print(f"Segment {int(num)}: {out.relative_to(outputs_dir)}")
-        write_cut_output(video, out, parse_cuts([cuts_str]))
-    print(f"Done: {len(payload)} segments written under {outputs_dir}")
 
 
 if __name__ == "__main__":

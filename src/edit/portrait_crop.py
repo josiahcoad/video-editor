@@ -313,6 +313,10 @@ def portrait_crop_per_cut(
     return output_path
 
 
+# Module entry point: same as portrait_crop_per_cut (process one video to 9:16 crop).
+portrait_crop = portrait_crop_per_cut
+
+
 def main() -> None:
     import argparse
     import sys

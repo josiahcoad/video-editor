@@ -2,7 +2,7 @@
 
 Uses word-level and utterance-level transcripts to suggest timestamp ranges
 for each short. Output format matches shorts_cuts.json consumed by
-interview_to_shorts and apply_cuts.
+longform_to_clips and apply_cuts.
 
 Duration/tolerance work like propose_cuts: e.g. duration=35, tolerance=15
 → acceptable range 20–50s per short.

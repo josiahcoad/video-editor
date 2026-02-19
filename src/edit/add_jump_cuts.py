@@ -614,6 +614,10 @@ def apply_jump_cuts(
     return output_video
 
 
+# Module entry point (same as apply_jump_cuts).
+add_jump_cuts = apply_jump_cuts
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(
         description="Remove dead space + apply zoom-based jump cuts"

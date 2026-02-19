@@ -109,6 +109,27 @@ def silence_to_keep_segments(
     return segments
 
 
+def remove_silences(
+    input_path: Path,
+    output_path: Path,
+    min_duration: float = 0.2,
+) -> None:
+    """Remove silences >= min_duration from video (module entry point)."""
+    duration = get_video_duration(input_path)
+    silences = detect_silence_ranges(input_path, min_duration=min_duration)
+    total_removed = sum(e - s for s, e in silences)
+    print(f"Duration: {duration:.1f}s, found {len(silences)} silences >= {min_duration}s")
+    print(f"Removing {total_removed:.1f}s of silence")
+    for i, (s, e) in enumerate(silences[:10]):
+        print(f"  {i+1}. {s:.2f}s - {e:.2f}s ({e-s:.2f}s)")
+    if len(silences) > 10:
+        print(f"  ... and {len(silences) - 10} more")
+    segments = silence_to_keep_segments(silences, duration)
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    trim_video_segments(input_path, output_path, segments)
+    print(f"Done: {output_path}")
+
+
 def trim_video_segments(
     video_path: Path, output_path: Path, segments: list[dict]
 ) -> None:
@@ -182,21 +203,7 @@ def main() -> None:
     if not args.input.exists():
         raise SystemExit(f"Input not found: {args.input}")
 
-    duration = get_video_duration(args.input)
-    silences = detect_silence_ranges(args.input, min_duration=args.min)
-    total_removed = sum(e - s for s, e in silences)
-
-    print(f"Duration: {duration:.1f}s, found {len(silences)} silences >= {args.min}s")
-    print(f"Removing {total_removed:.1f}s of silence")
-    for i, (s, e) in enumerate(silences[:10]):
-        print(f"  {i+1}. {s:.2f}s - {e:.2f}s ({e-s:.2f}s)")
-    if len(silences) > 10:
-        print(f"  ... and {len(silences) - 10} more")
-
-    segments = silence_to_keep_segments(silences, duration)
-    args.output.parent.mkdir(parents=True, exist_ok=True)
-    trim_video_segments(args.input, args.output, segments)
-    print(f"Done: {args.output}")
+    remove_silences(args.input, args.output, min_duration=args.min)
 
 
 if __name__ == "__main__":

@@ -385,31 +385,12 @@ python src/edit/apply_cuts.py <video.mp4> <output_segment.mp4> --cuts "0.8:7.06,
 - `--cuts` takes comma-separated `start:end` timestamp ranges (in seconds).
 - These come directly from the propose_cuts output (each segment's sections).
 - The script concatenates the specified ranges into one continuous clip.
-- **Add 0.15-0.2s buffer before the first word's start timestamp.** The LLM proposes cuts at exact word boundaries, but plosive consonants (p, t, k, b, d, g) start 50-100ms before the transcription timestamp. Without buffer, the first syllable gets partially swallowed — especially after speedup compresses the margin further. Example: if the first word starts at 12.08s, use `11.90:...` not `12.08:...`.
 
 ---
 
-## Phase 3b: Speedup to 220 WPM (optional)
+## Phase 3b: Jump Cuts + Dead Space Removal
 
-**You can skip this step** and run jump cuts (Phase 3c) directly on the cut segment — jump cuts alone often provide enough pacing. Use speedup when you want a stricter 220 WPM target on top of dead-space removal.
-
-If you do use speedup, run it **before** jump cuts because:
-- The 0.4s gap threshold should apply at the **final playback pace**, not the original pace
-- The 5s max cut duration should match the **viewer's experience**, not the raw timing
-- If you jump-cut first then speed up, remaining 0.4s gaps compress to ~0.3s (tighter than intended) and 5s segments shrink to ~3.8s (more jarring than intended)
-
-```bash
-python src/edit/add_speedup.py <segment.mp4> <segment-fast.mp4> --wpm 220
-```
-
-- Transcribes the video, calculates current WPM, derives the speedup multiplier.
-- If already at/above 220 WPM, no speedup is applied.
-
----
-
-## Phase 3c: Jump Cuts + Dead Space Removal
-
-Aggressive post-processing to create punchy, fast-paced short-form content. Combines dead space removal and artificial zoom-based jump cuts in a single pass. **Run on the cut segment from Phase 3 (or on the sped-up file if you ran Phase 3b).**
+Aggressive post-processing to create punchy, fast-paced short-form content. Combines dead space removal and artificial zoom-based jump cuts in a single pass. **Run on the cut segment from Phase 3.**
 
 **Goal:** No more than **0.4s** of dead time between words. No continuous shot longer than **5 seconds** without a visual cut.
 
@@ -420,7 +401,7 @@ Aggressive post-processing to create punchy, fast-paced short-form content. Comb
 # The script auto-discovers 01_cut.boundaries.json (written by
 # apply_cuts.py) in the same directory and suppresses zoom toggles
 # near content-cut join points to avoid "double jumps".
-python src/edit/add_jump_cuts.py <segment-fast.mp4> <segment-jumpcut.mp4> \
+python src/edit/add_jump_cuts.py <segment.mp4> <segment-jumpcut.mp4> \
   --gap-threshold 0.4 --max-cut-duration 5.0 --zoom-factor 1.2
 ```
 
@@ -607,7 +588,7 @@ python src/edit/add_title.py <segment.mp4> "Title Text Here" <output.mp4> \
 - `--duration 6` — show the title for 6 seconds (not 20 — that's too long for a short).
 - Default: white rounded rectangle with black bold text.
 - `--dark` — black rounded rectangle with white bold text. Use for split-screen screen demos where the title is centered and needs to contrast with bright screen content.
-- If no title text is provided, the script will auto-generate one from the transcript via LLM.
+- If no title text is provided, the script uses **suggest_title** (ATP pipeline in `suggest_video_title.py`) to generate a search-optimised title; if that fails (e.g. no ATP results or missing `RAPID_API_KEY`), it falls back to generating one from the transcript via LLM. Transcription for the fallback path uses the same Deepgram pipeline as `remove_filler_words` (word-level).
 
 ### Title constraints
 
@@ -1026,7 +1007,7 @@ The base `--caption` is used as the default for any platform without an override
 
 ```bash
 # 1. Get ATP-backed search queries (RAPID_API_KEY required)
-uv run python suggest_video_title.py --transcript <words.json> --save outputs/atp_context.json
+python src/edit/suggest_video_title.py --transcript <words.json> --save outputs/atp_context.json
 
 # 2. Generate copy using those queries so captions match what people search for
 python src/edit/write_copy.py --transcript <words.json> --voice <client>/editing/voices/marky_default.md \
@@ -1389,11 +1370,10 @@ These are places where intelligent judgment is needed (not just running scripts)
 | Splitting a linear procedure into fragments | Ask: would a cold viewer understand segment 2 alone? If not, make one condensed short |
 | Missing cold open opportunity | Read the transcript for standout soundbites before finalizing cuts |
 | Hook not sped up before compose | **Always** `add_speedup.py --wpm 220` (or settings target) on the hook before composing. Pacing mismatch is jarring. |
-| First word clipped after compose | `add_jump_cuts.py` pads 0.12s before first word for consonant onset. If original cut has < 0.12s lead-in, re-cut from source with 0.2s buffer. |
+| First word clipped after compose | `add_jump_cuts.py` pads 0.12s before first word for consonant onset. If still clipped, re-cut from source with a slightly earlier start. |
 | Dead gap at hook-to-segment join | Trim hook trailing silence to `last_word_end + 0.06s`. Always transcribe to find actual end. Target: total gap at join 0.15s or less. |
 | Framerate mismatch in concat | Never stream-copy concat clips with different framerates. Always use `filter_complex` with `fps=30`. Stream copy produces wrong durations silently. |
 | Long outro in short-form | Exclude 15-20s wind-down outros from shorts. A punchy ~3s CTA ("follow me for more") is fine — extract, speedup to match, concat. Skip captions on the outro. |
-| Cut starts at exact word boundary | Always add 0.15-0.2s buffer before the first word in `--cuts`. Plosives start before the transcription timestamp and get clipped without margin. |
 | Jump cuts with stale or mismatched transcript | Let the script auto-transcribe (omit `--transcript` and `--speedup`). Passing the full original transcript against a cut/sped-up video requires complex timestamp remapping and is error-prone. Auto-transcription costs ~$0.01 for shorts and gives timestamps that match the actual video. |
 | Double jump at content-cut boundaries | `add_jump_cuts.py` auto-discovers `*.boundaries.json` from `apply_cuts.py` and suppresses zoom toggles near join points. If you see double jumps, check that the boundaries file exists. |
 | Video ends abruptly on last frame | `add_jump_cuts.py` pads 0.25s after the last word. Also ensure `apply_cuts` extends the last cut ~0.3s past the final word end so there's source material for the pad. |

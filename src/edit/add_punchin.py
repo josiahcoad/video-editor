@@ -306,6 +306,10 @@ def apply_punchin(
     return output_video
 
 
+# Module entry point (same as apply_punchin).
+add_punchin = apply_punchin
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(
         description="Apply face-aware punch-in zoom effect"

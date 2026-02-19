@@ -769,7 +769,7 @@ async def qc_video(video_path: Path) -> str:
 # ---------------------------------------------------------------------------
 
 
-async def run(
+async def add_whiteboard_overlay(
     video_path: Path,
     output_path: Path | None = None,
     skip_generation: bool = False,
@@ -779,7 +779,7 @@ async def run(
     angle: float = 15.0,
     image_model: str = "pro",
 ) -> Path:
-    """Full pipeline: transcript → window → generate → composite → QC."""
+    """Full pipeline: transcript → window → generate → composite → QC (module entry point)."""
     info = _get_video_info(video_path)
     print(f"Input: {video_path}", flush=True)
     print(
@@ -907,7 +907,7 @@ def main() -> None:
         sys.exit(1)
 
     asyncio.run(
-        run(
+        add_whiteboard_overlay(
             args.video,
             args.output,
             args.skip_generation,
