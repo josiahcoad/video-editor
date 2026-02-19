@@ -34,7 +34,7 @@ from langchain_openai import ChatOpenAI
 from PIL import Image, ImageDraw
 
 from .doodle_animate import animate_image
-from .face_crop import _detect_faces_mediapipe
+from .face_detect import detect_faces_mediapipe
 from .get_transcript import get_transcript, read_word_transcript_file
 
 
@@ -376,7 +376,7 @@ def _detect_face_rect(
     if not ret or frame is None:
         return None
     ih, iw = frame.shape[:2]
-    faces = _detect_faces_mediapipe(frame, ih, iw)
+    faces = detect_faces_mediapipe(frame, ih, iw)
     if not faces:
         return None
     x, y, w, h, _ = max(faces, key=lambda f: f[4])

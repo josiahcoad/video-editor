@@ -16,7 +16,7 @@ Pipeline:
 
   Phase 3 — Rendering (per short)
     6. apply_cuts   → stitch hook + body + CTA
-    7. face_crop    → 9:16 portrait crop
+    7. portrait_crop → 9:16 portrait crop
     8. jump_cuts    → remove dead air + filler words + zoom effects
     9. add_music    → mix in background music (round-robin)
    10. add_subtitles → auto-transcribe + burn captions
@@ -43,15 +43,10 @@ Requires: OPENROUTER_API_KEY, DEEPGRAM_API_KEY, RAPID_API_KEY
 import argparse
 import asyncio
 import json
-import os
 import subprocess
 import sys
 from pathlib import Path
 from typing import Any
-
-from langchain_core.messages import HumanMessage, SystemMessage
-from langchain_openai import ChatOpenAI
-from pydantic import BaseModel, Field
 
 # Ensure repo root is importable
 _REPO_ROOT = Path(__file__).resolve().parents[2]
@@ -60,9 +55,9 @@ if str(_REPO_ROOT) not in sys.path:
 
 from src.edit.add_background_music import _get_duration as get_music_duration
 from src.edit.add_background_music import add_music
-from src.edit.face_crop import face_crop_per_cut, get_portrait_crop_params
+from src.edit.portrait_crop import get_portrait_crop_params, portrait_crop_per_cut
 from src.edit.get_transcript import get_transcript
-from src.edit.music_search import search_music
+from src.edit.music_search import search_and_select_music
 from src.edit.propose_interview_cuts import (
     DEFAULT_NUM_SHORTS,
     DEFAULT_TARGET_DURATION,
@@ -87,36 +82,6 @@ DEFAULT_MUSIC_TRACKS_COUNT = 4
 
 # Filler words passed to jump-cut removal
 FILLER_WORDS = {"uh", "um", "mhmm", "mm-mm", "uh-uh", "uh-huh", "nuh-uh"}
-
-
-# ---------------------------------------------------------------------------
-# LLM helper
-# ---------------------------------------------------------------------------
-
-
-def _get_llm(model: str = "google/gemini-2.5-flash") -> ChatOpenAI:
-    api_key = os.getenv("OPENROUTER_API_KEY")
-    if not api_key:
-        raise ValueError("OPENROUTER_API_KEY not set")
-    return ChatOpenAI(
-        model=model,
-        base_url="https://openrouter.ai/api/v1",
-        api_key=api_key,
-    )
-
-
-# ---------------------------------------------------------------------------
-# Pydantic models for structured LLM output (music selection)
-# ---------------------------------------------------------------------------
-
-
-class MusicSelection(BaseModel):
-    """LLM-selected music tracks from search results."""
-
-    selected_indices: list[int] = Field(
-        description="Indices (0-based) of the best tracks from the search results"
-    )
-    reasoning: str = Field(description="Why these tracks were selected")
 
 
 # ---------------------------------------------------------------------------
@@ -224,157 +189,6 @@ async def generate_titles(
     return segments
 
 
-async def search_and_select_music(
-    music_dir: Path,
-    music_vibe: str,
-    num_tracks: int = DEFAULT_MUSIC_TRACKS_COUNT,
-) -> list[str]:
-    """Search Openverse for music, use LLM to select best tracks, download them.
-
-    Returns list of filenames (saved in music_dir).
-    """
-    music_dir.mkdir(parents=True, exist_ok=True)
-
-    # Check if music already exists
-    existing = sorted(music_dir.glob("*.mp3"))
-    if existing:
-        names = [f.name for f in existing]
-        print(f"✅ Music already exists ({len(names)} tracks): {names}")
-        return names
-
-    # Parse vibe into search terms
-    vibes = [v.strip() for v in music_vibe.split(",") if v.strip()]
-
-    print(f"\n🎵 Searching for music: {vibes}")
-    all_results: list[dict] = []
-    for vibe in vibes:
-        # Search multiple variations
-        search_terms = [vibe, f"{vibe} instrumental", f"{vibe} background"]
-        for term in search_terms:
-            try:
-                results = await search_music(term, count=5)
-                all_results.extend(results)
-            except Exception as e:
-                print(f"   Search failed for '{term}': {e}")
-
-    if not all_results:
-        print("   ⚠️  No music found. Pipeline will continue without music.")
-        return []
-
-    # Deduplicate by URL
-    seen_urls: set[str] = set()
-    unique_results: list[dict] = []
-    for r in all_results:
-        url = r.get("url", "")
-        if url and url not in seen_urls:
-            seen_urls.add(url)
-            unique_results.append(r)
-
-    # Use LLM to select the best tracks
-    print(
-        f"\n🤖 Selecting best {num_tracks} tracks from {len(unique_results)} results..."
-    )
-    results_text = ""
-    for i, r in enumerate(unique_results):
-        results_text += (
-            f"[{i}] \"{r.get('title', 'Unknown')}\" by {r.get('creator', 'Unknown')} "
-            f"— duration: {r.get('duration', '?')}s, license: {r.get('license', '?')}\n"
-        )
-
-    llm = _get_llm()
-    structured = llm.with_structured_output(MusicSelection)
-
-    response = await structured.ainvoke(
-        [
-            SystemMessage(
-                content=(
-                    "You are selecting background music for short-form videos.\n\n"
-                    f"Desired vibe: {music_vibe}\n"
-                    "Requirements:\n"
-                    "- Instrumental only (no vocals)\n"
-                    "- Not too intense or distracting\n"
-                    "- Professional/clean feel\n"
-                    "- Variety: pick tracks with different feels\n"
-                    f"- Select exactly {num_tracks} tracks\n\n"
-                    "Prefer tracks that are 30-180 seconds long."
-                )
-            ),
-            HumanMessage(
-                content=f"Available tracks:\n\n{results_text}\n\nSelect {num_tracks} tracks."
-            ),
-        ]
-    )
-
-    # Download selected tracks
-    selected_filenames: list[str] = []
-    for idx in response.selected_indices[:num_tracks]:
-        if idx < 0 or idx >= len(unique_results):
-            continue
-        track = unique_results[idx]
-        url = track.get("url", "")
-        title = track.get("title", "unknown").lower()
-        creator = track.get("creator", "unknown").lower()
-
-        # Sanitize filename
-        safe_title = "".join(c if c.isalnum() or c in "-_ " else "" for c in title)
-        safe_title = safe_title.strip().replace(" ", "-")[:30]
-        safe_creator = "".join(c if c.isalnum() or c in "-_ " else "" for c in creator)
-        safe_creator = safe_creator.strip().replace(" ", "-")[:20]
-
-        num = len(selected_filenames) + 1
-        filename = f"{num:02d}_{safe_title}_{safe_creator}.mp3"
-        filepath = music_dir / filename
-
-        print(f"   Downloading: {filename}")
-        try:
-            result = subprocess.run(
-                ["curl", "-sL", "-o", str(filepath), url],
-                check=True,
-                capture_output=True,
-                timeout=60,
-            )
-            selected_filenames.append(filename)
-            print(f"   ✅ Saved: {filepath.name}")
-        except Exception as e:
-            print(f"   ❌ Failed to download: {e}")
-
-    # Write preferences.md
-    _write_music_preferences(
-        music_dir, music_vibe, unique_results, response, selected_filenames
-    )
-
-    print(f"\n✅ {len(selected_filenames)} music tracks ready")
-    return selected_filenames
-
-
-def _write_music_preferences(
-    music_dir: Path,
-    vibe: str,
-    all_results: list[dict],
-    selection: MusicSelection,
-    filenames: list[str],
-) -> None:
-    """Write a preferences.md documenting the music selection."""
-    prefs_path = music_dir / "preferences.md"
-    lines = [
-        f"# Music Preferences\n",
-        f"\n## Vibe\n- {vibe}\n",
-        f"\n## Approved Tracks\n",
-        f"\n| File | Title | Artist | License | Duration |",
-        f"\n|------|-------|--------|---------|----------|",
-    ]
-    for i, idx in enumerate(selection.selected_indices):
-        if idx < len(all_results) and i < len(filenames):
-            track = all_results[idx]
-            lines.append(
-                f"\n| {filenames[i]} | {track.get('title', '?')} | "
-                f"{track.get('creator', '?')} | {track.get('license', '?')} | "
-                f"{track.get('duration', '?')}s |"
-            )
-    lines.append(f"\n\n## Selection Reasoning\n{selection.reasoning}\n")
-    prefs_path.write_text("".join(lines))
-
-
 # ---------------------------------------------------------------------------
 # Phase 3: Render pipeline (per short)
 # ---------------------------------------------------------------------------
@@ -459,13 +273,13 @@ def render_short(
 
         # ── Step 2: 9:16 portrait crop ──
         boundaries_json = cut_mp4.with_suffix(".boundaries.json")
-        print(f"\n--- {label} Step 2: 9:16 face crop ---")
+        print(f"\n--- {label} Step 2: 9:16 portrait crop ---")
         try:
             boundaries_data = json.loads(boundaries_json.read_text())
             boundaries = boundaries_data.get("boundaries", [])
-            face_crop_per_cut(cut_mp4.resolve(), portrait_mp4, boundaries)
+            portrait_crop_per_cut(cut_mp4.resolve(), portrait_mp4, boundaries)
         except Exception as e:
-            print(f"  Per-cut face crop failed, falling back: {e}")
+            print(f"  Per-cut portrait crop failed, falling back: {e}")
             try:
                 crop_x, crop_w, crop_h = get_portrait_crop_params(cut_mp4.resolve())
                 crop_vf = f"crop={crop_w}:{crop_h}:{crop_x}:0"

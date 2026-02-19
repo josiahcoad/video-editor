@@ -7,13 +7,12 @@ Outputs JSON files with timestamps that can be reused by other scripts.
 
 import asyncio
 import json
+import os
 import sys
 import tempfile
 from pathlib import Path
 
 from deepgram import DeepgramClient
-
-API_KEY = "37e776c73c0de03eeacfaa9635e26ce6787bcf74"
 
 
 async def get_transcript(
@@ -70,7 +69,10 @@ async def get_transcript(
 
         print(f"🔧 DEBUG [deepgram]: Initializing Deepgram client...")
         client_init_start = time.time()
-        client = DeepgramClient(api_key=API_KEY)
+        api_key = os.environ.get("DEEPGRAM_API_KEY")
+        if not api_key:
+            raise ValueError("DEEPGRAM_API_KEY environment variable must be set")
+        client = DeepgramClient(api_key=api_key)
         client_init_duration = time.time() - client_init_start
         print(
             f"🔧 DEBUG [deepgram]: Deepgram client initialized ({client_init_duration:.2f}s)"

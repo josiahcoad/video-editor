@@ -21,7 +21,7 @@ import subprocess
 import sys
 from pathlib import Path
 
-from src.edit.face_crop import get_face_center_at_time
+from src.edit.portrait_crop import get_face_center_at_time
 
 
 def _get_video_dimensions(video_path: Path) -> tuple[int, int]:
