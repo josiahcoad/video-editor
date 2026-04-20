@@ -84,7 +84,7 @@ def add_srt(
     words: list[dict[str, Any]],
     word_count: int = 3,
     size: int = 14,
-    caps: bool = True,
+    caps: bool = False,
     delay: float = 0.0,
 ) -> str:
     """Generate SRT subtitle file with specified words per subtitle.
@@ -93,7 +93,7 @@ def add_srt(
         words: List of word dicts with 'word', 'start', 'end' keys
         word_count: Number of words per subtitle (default: 3)
         size: Font size for subtitles (default: 14)
-        caps: If True, convert text to uppercase (default: True)
+        caps: If True, convert text to uppercase (default: False)
         delay: Suppress captions before this timestamp (seconds). Useful to
                avoid overlapping with a title overlay.
 
@@ -146,7 +146,7 @@ def add_srt_from_utterances(
     word_count: int = 3,
     size: int = 14,
     replacements: dict[str, str] | None = None,
-    caps: bool = True,
+    caps: bool = False,
     delay: float = 0.0,
 ) -> str:
     """Generate SRT subtitle file from utterances, splitting at punctuation.
@@ -159,7 +159,7 @@ def add_srt_from_utterances(
         words: List of word dicts with 'word', 'start', 'end' keys (for precise timing)
         word_count: Maximum words per subtitle (default: 3)
         size: Font size for subtitles (default: 14, unused but kept for compatibility)
-        caps: If True, convert text to uppercase (default: True)
+        caps: If True, convert text to uppercase (default: False)
         delay: Suppress captions before this timestamp (seconds).
 
     Returns:
@@ -348,20 +348,28 @@ async def _add_subtitle_impl(
     """Shared implementation for add_subtitle and CLI. cli_overrides from argv when run as script."""
     o = cli_overrides or {}
     captions_cfg = settings.get("captions") or {}
-    caption_height = int(captions_cfg.get("height_percent", 12))
+    # Default captions sit between 1/3 and 1/2 of the way up the frame so
+    # the text lands above chin/shoulder level without floating into the
+    # subject's eyeline. 40% → ~42% from bottom once libass renders it
+    # (PlayResY=288, Alignment=2, MarginV=115). Verified on 1080x1920.
+    caption_height = int(captions_cfg.get("height_percent", 40))
     if o and "height_percent" in o:
         caption_height = int(o["height_percent"])
     word_count = int(captions_cfg.get("word_count", 3))
     if o and "word_count" in o:
         word_count = int(o["word_count"])
-    font_size = int(captions_cfg.get("font_size", 15))
+    font_size = int(captions_cfg.get("font_size", 11))
     if o and "font_size" in o:
         font_size = int(o["font_size"])
-    caption_style = (captions_cfg.get("style") or "default").lower()
+    caption_style = (captions_cfg.get("style") or "huffines").lower()
     if o and "style" in o:
-        caption_style = (o["style"] or "default").lower()
-    if caption_style not in ("default", "classic", "outline"):
-        caption_style = "default"
+        caption_style = (o["style"] or "huffines").lower()
+    # "default" is a legacy alias for "huffines" (white text, black outline,
+    # semi-transparent black box, Roboto Bold, sentence case, ~40% from bottom).
+    if caption_style == "default":
+        caption_style = "huffines"
+    if caption_style not in ("huffines", "classic", "outline"):
+        caption_style = "huffines"
     caps = bool(captions_cfg.get("caps", False))
     if o and "caps" in o:
         caps = bool(o["caps"])
@@ -384,12 +392,18 @@ async def _add_subtitle_impl(
         utterances_data: list[dict] = []
         stem = transcript_file.stem
         if stem.endswith("-words"):
-            utterances_path = transcript_file.parent / f"{stem.replace('-words', '-utterances')}.json"
+            utterances_path = (
+                transcript_file.parent / f"{stem.replace('-words', '-utterances')}.json"
+            )
             if utterances_path.exists():
                 utterances_data = json.loads(utterances_path.read_text())
-                print(f"Loaded {len(utterances_data)} utterances from {utterances_path.name}")
+                print(
+                    f"Loaded {len(utterances_data)} utterances from {utterances_path.name}"
+                )
             else:
-                print(f"No utterances file found at {utterances_path.name} — falling back to word-based captioning")
+                print(
+                    f"No utterances file found at {utterances_path.name} — falling back to word-based captioning"
+                )
         result: dict[str, Any] = {
             "words": words_data,
             "transcript": " ".join([w["word"] for w in words_data]),
@@ -409,28 +423,41 @@ async def _add_subtitle_impl(
 
     srt_file = output_video.parent / f"{output_video.stem}.srt"
     word_transcript_file = output_video.parent / f"{output_video.stem}-words.json"
-    utterance_transcript_file = output_video.parent / f"{output_video.stem}-utterances.json"
+    utterance_transcript_file = (
+        output_video.parent / f"{output_video.stem}-utterances.json"
+    )
 
     if not transcript_file:
         word_transcript_file.write_text(json.dumps(result["words"], indent=2))
         print(f"Word-level transcript written: {word_transcript_file}")
         if result.get("utterances"):
-            utterance_transcript_file.write_text(json.dumps(result["utterances"], indent=2))
+            utterance_transcript_file.write_text(
+                json.dumps(result["utterances"], indent=2)
+            )
             print(f"Utterance-level transcript written: {utterance_transcript_file}")
 
     if caption_delay > 0:
-        print(f"Caption delay: {caption_delay}s (captions suppressed while title is showing)")
+        print(
+            f"Caption delay: {caption_delay}s (captions suppressed while title is showing)"
+        )
 
     if result.get("utterances"):
         srt_content = add_srt_from_utterances(
-            result["utterances"], result["words"],
-            word_count=word_count, size=font_size, replacements=replacements,
-            caps=caps, delay=caption_delay,
+            result["utterances"],
+            result["words"],
+            word_count=word_count,
+            size=font_size,
+            replacements=replacements,
+            caps=caps,
+            delay=caption_delay,
         )
     else:
         srt_content = add_srt(
-            result["words"], word_count=word_count, size=font_size,
-            caps=caps, delay=caption_delay,
+            result["words"],
+            word_count=word_count,
+            size=font_size,
+            caps=caps,
+            delay=caption_delay,
         )
 
     srt_file.write_text(srt_content)
@@ -465,27 +492,61 @@ async def _add_subtitle_impl(
     effective_font_size = max(font_size, 10)
     if caption_style == "classic":
         style_parts = [
-            "Alignment=2", f"FontName={font_name}", "Bold=1", f"FontSize={effective_font_size}",
-            "PrimaryColour=&H00000000", "OutlineColour=&H00FFFFFF", "BackColour=&H00FFFFFF",
-            "Outline=0", "Shadow=0", "BorderStyle=4", "MarginL=15", "MarginR=15",
+            "Alignment=2",
+            f"FontName={font_name}",
+            "Bold=1",
+            f"FontSize={effective_font_size}",
+            "PrimaryColour=&H00000000",
+            "OutlineColour=&H00FFFFFF",
+            "BackColour=&H00FFFFFF",
+            "Outline=0",
+            "Shadow=0",
+            "BorderStyle=4",
+            "MarginL=15",
+            "MarginR=15",
         ]
     elif caption_style == "outline":
         style_parts = [
-            "Alignment=2", f"FontName={font_name}", "Bold=1", f"FontSize={effective_font_size}",
-            "PrimaryColour=&H00FFFFFF", "OutlineColour=&H00000000", "BackColour=&H80000000",
-            "Outline=3", "Shadow=2", "BorderStyle=1", "MarginL=15", "MarginR=15",
+            "Alignment=2",
+            f"FontName={font_name}",
+            "Bold=1",
+            f"FontSize={effective_font_size}",
+            "PrimaryColour=&H00FFFFFF",
+            "OutlineColour=&H00000000",
+            "BackColour=&H80000000",
+            "Outline=3",
+            "Shadow=2",
+            "BorderStyle=1",
+            "MarginL=15",
+            "MarginR=15",
         ]
     else:
+        # "huffines" — named after the test video this style was dialed in on.
+        # White Roboto Bold text, black outline, semi-transparent black box,
+        # sentence case, ~40% from bottom (chest/neck area, 1/3–1/2 up).
         style_parts = [
-            "Alignment=2", f"FontName={font_name}", "Bold=1", f"FontSize={effective_font_size}",
-            "PrimaryColour=&H00FFFFFF", "OutlineColour=&H00000000", "BackColour=&H80000000",
-            "Outline=2", "Shadow=0", "BorderStyle=1", "MarginL=15", "MarginR=15",
+            "Alignment=2",
+            f"FontName={font_name}",
+            "Bold=1",
+            f"FontSize={effective_font_size}",
+            "PrimaryColour=&H00FFFFFF",
+            "OutlineColour=&H00000000",
+            "BackColour=&H80000000",
+            "Outline=2",
+            "Shadow=0",
+            "BorderStyle=1",
+            "MarginL=15",
+            "MarginR=15",
         ]
     ASS_PLAY_RES_Y = 288
-    margin_v = max(10, min(ASS_PLAY_RES_Y - 20, int(caption_height * ASS_PLAY_RES_Y / 100)))
+    margin_v = max(
+        10, min(ASS_PLAY_RES_Y - 20, int(caption_height * ASS_PLAY_RES_Y / 100))
+    )
     style_parts.append(f"MarginV={margin_v}")
     roboto_font_dir = "/Users/apple/Downloads/Roboto/static"
-    filter_parts.append(f"subtitles={srt_file}:fontsdir='{roboto_font_dir}':force_style='{','.join(style_parts)}'")
+    filter_parts.append(
+        f"subtitles={srt_file}:fontsdir='{roboto_font_dir}':force_style='{','.join(style_parts)}'"
+    )
 
     vf_filter = ",".join(filter_parts)
     print("Burning subtitles into video...")
@@ -493,8 +554,17 @@ async def _add_subtitle_impl(
         print(f"Adding title overlay: '{title_text.upper()}' (first 2 seconds)")
     subprocess.run(
         [
-            "ffmpeg", "-y", "-i", str(video_path), "-vf", vf_filter,
-            "-c:v", "h264_videotoolbox", *H264_SOCIAL_COLOR_ARGS, "-c:a", "copy",
+            "ffmpeg",
+            "-y",
+            "-i",
+            str(video_path),
+            "-vf",
+            vf_filter,
+            "-c:v",
+            "h264_videotoolbox",
+            *H264_SOCIAL_COLOR_ARGS,
+            "-c:a",
+            "copy",
             str(output_video),
         ],
         check=True,
@@ -510,13 +580,13 @@ async def main() -> None:
         print(
             "Usage: python add_subtitles.py <video_file> [--output <output_file>] [--title <title_text>] [--height <0-100>] [--replace <replacements>] [--settings <path>] [--style ...] [--caps] [--delay <seconds>]"
         )
-        print("  --height:     Vertical position (0=bottom, 100=top, default=12)")
+        print("  --height:     Vertical position (0=bottom, 100=top, default=40)")
         print("  --replace:    Word replacements (e.g., 'Marquee:Marky,Josiah:Josia')")
         print(
             '  --settings:   Path to settings.json; uses settings.replacements ({"Markey": "Marky", ...}) if present. Merged with --replace.'
         )
         print(
-            "  --style:      Caption preset — 'default' (white on dark box), 'classic' (black on white box), 'outline' (white text, black outline + drop shadow, no box)"
+            "  --style:      Caption preset — 'huffines' (white on dark box, default), 'classic' (black on white box), 'outline' (white text, black outline + drop shadow, no box)"
         )
         print("  --caps:       Force ALL CAPS captions")
         print("  --no-caps:    Force sentence case captions")
@@ -524,7 +594,7 @@ async def main() -> None:
             "  --delay:      Suppress captions for the first N seconds (e.g. while title is showing)"
         )
         print("  --font:       Font family name (default=Roboto)")
-        print("  --font-size:  ASS font size (default=15)")
+        print("  --font-size:  ASS font size (default=11)")
         print("  --word-count: Max words per subtitle line (default=3)")
         sys.exit(1)
 

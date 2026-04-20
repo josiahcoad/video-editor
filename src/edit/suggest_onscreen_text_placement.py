@@ -203,7 +203,9 @@ def parse_placement_text(text: str) -> dict[str, int | str]:
     out = {
         "title_height_percent": 20,
         "title_anchor": "bottom",
-        "caption_height_percent": 30,
+        # Default captions sit ~40% from bottom so text lands between 1/3
+        # and 1/2 of the way up the frame (above chin, below eye line).
+        "caption_height_percent": 40,
     }
     for line in text.splitlines():
         line = line.strip()

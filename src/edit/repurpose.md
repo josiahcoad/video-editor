@@ -635,15 +635,16 @@ python src/edit/add_subtitles.py <titled.mp4> \
 
 ### Caption placement guidelines
 
-- **Default:** `height_percent` defaults to **12%** (captions ~1/5 lower than previous 15%), so they sit further below the face without overlapping chin/jaw.
-- Lower `--height` = captions closer to bottom of frame (further below face). Higher = closer to center.
+- **Default:** `height_percent` defaults to **40%** — captions land between 1/3 and 1/2 of the way up the frame, above chin/shoulder level but below the eyeline.
+- Lower `--height` = captions closer to bottom of frame. Higher = closer to center / toward the face.
 
 | Layout | Caption height | Why |
 |--------|---------------|-----|
-| Full-screen talking head | **12% (default)** or 15–30% | Default 12% keeps captions well below face. Use 15–30% if you need them slightly higher (e.g. chest level). |
+| Full-screen talking head | **40% (default)** or 33–50% | Sits in the upper-torso / lower-face gap. Most readable without covering the mouth. |
+| Shoulder-framed (head + shoulders near top) | 30–35% | Pull captions down if the speaker is very tall in frame. |
 | Split-screen | 45% | Sits in the gap between graph and face |
 
-**IMPORTANT:** 43% was an old recommendation and often overlapped the speaker's chin/jaw. **12% default** or **30%** keeps captions below the face. If the speaker is unusually tall in the frame, stay at 12% or lower.
+**Tip:** With libass + PlayResY=288 and Alignment=2 (bottom-center), `MarginV = height_percent * 2.88`. Verified on 1080×1920 — height_percent=40 renders at ~42% from the bottom (dead-center of the 33–50% target zone).
 
 **Known issue:** In split-screen layouts, captions at 45% can still overlap the forehead during speaking sections. There's no perfect solution — the face and the content compete for the same vertical space. This is a content/framing issue, not a tools issue.
 
