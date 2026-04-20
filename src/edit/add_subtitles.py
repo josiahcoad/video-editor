@@ -368,7 +368,7 @@ async def _add_subtitle_impl(
     # semi-transparent black box, Roboto Bold, sentence case, ~40% from bottom).
     if caption_style == "default":
         caption_style = "huffines"
-    if caption_style not in ("huffines", "classic", "outline"):
+    if caption_style not in ("huffines", "classic", "outline", "jo"):
         caption_style = "huffines"
     caps = bool(captions_cfg.get("caps", False))
     if o and "caps" in o:
@@ -505,6 +505,26 @@ async def _add_subtitle_impl(
             "MarginL=15",
             "MarginR=15",
         ]
+    elif caption_style == "jo":
+        # "jo" — big bold black text in a white hugging box. Each line sized to
+        # its own text (libass BorderStyle=3). Padding comes from Outline.
+        # Overrides font_size upward if caller didn't bump it; the look needs
+        # to pop.
+        jo_font_size = max(font_size, 18)
+        style_parts = [
+            "Alignment=2",
+            f"FontName={font_name}",
+            "Bold=1",
+            f"FontSize={jo_font_size}",
+            "PrimaryColour=&H00000000",
+            "OutlineColour=&H00FFFFFF",
+            "BackColour=&H00FFFFFF",
+            "Outline=6",
+            "Shadow=0",
+            "BorderStyle=3",
+            "MarginL=15",
+            "MarginR=15",
+        ]
     elif caption_style == "outline":
         style_parts = [
             "Alignment=2",
@@ -586,7 +606,7 @@ async def main() -> None:
             '  --settings:   Path to settings.json; uses settings.replacements ({"Markey": "Marky", ...}) if present. Merged with --replace.'
         )
         print(
-            "  --style:      Caption preset — 'huffines' (white on dark box, default), 'classic' (black on white box), 'outline' (white text, black outline + drop shadow, no box)"
+            "  --style:      Caption preset — 'huffines' (white on dark box, default), 'jo' (big black on white hug box), 'classic' (black on white box), 'outline' (white text, black outline + drop shadow, no box)"
         )
         print("  --caps:       Force ALL CAPS captions")
         print("  --no-caps:    Force sentence case captions")
